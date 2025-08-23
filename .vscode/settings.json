@@ -58,6 +58,7 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "stdlib.h": "c",
-    "mlx42.h": "c"
+    "mlx42.h": "c",
+    "unistd.h": "c"
   }
 }

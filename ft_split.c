@@ -6,11 +6,11 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 21:33:01 by fbenalla          #+#    #+#             */
-/*   Updated: 2024/11/06 16:10:27 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/23 21:18:49 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minirt.h"
 
 static int	count_words(const char *s, char sep)
 {

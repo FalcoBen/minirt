@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -fsanitize=address -g3 
 RM = rm -f
 NAME = miniRT
-SRCF = main.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c linked_list.c
+SRCF = main.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c linked_list.c ft_split.c
 OBJS = $(SRCF:.c=.o)
 LIBFT = libft/libft.a
 

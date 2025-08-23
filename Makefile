@@ -1,29 +1,25 @@
-CC      = cc
-CFLAGS  =  -I MLX42/include -fsanitize=address -g3
-NAME    = game
-RM      = rm -f
-SRCF    = chess_board.c #coordonne.c 
-OBJS    = $(SRCF:.c=.o) 
+CC = cc
+CFLAGS = -fsanitize=address -g3 
+RM = rm -f
+NAME = miniRT
+SRCF = main.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c linked_list.c
+OBJS = $(SRCF:.c=.o)
+LIBFT = libft/libft.a
 
-LIBMLX  = MLX42/build/libmlx42.a
-LIBS = -L$(HOME)/goinfre/homebrew/lib -lglfw -ldl -lm
+all : $(NAME) 
 
+# $(LIBFT) :
+# 	make -C libft
 
+$(NAME) : $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-all: $(NAME)
-
-$(NAME): $(OBJS) $(LIBMLX)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBMLX) $(LIBS) -o $(NAME)
-
-%.o: %.c
+%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
-
-clean:
+clean :
 	$(RM) $(OBJS)
 
-fclean: clean
+fclean : clean
 	$(RM) $(NAME)
 
-re: fclean all
-
-
+re : fclean all

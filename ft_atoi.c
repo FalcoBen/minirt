@@ -6,11 +6,11 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/24 18:46:32 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/24 22:00:45 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minirt.h"
 
 static	int	ft_check(int signe)
 {
@@ -48,8 +48,3 @@ int	ft_atoi(const char *str)
 	return ((int)nb);
 }
 
-
-int main()
-{
-	
-}

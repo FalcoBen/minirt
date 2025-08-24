@@ -59,6 +59,8 @@
   "files.associations": {
     "stdlib.h": "c",
     "mlx42.h": "c",
-    "unistd.h": "c"
+    "unistd.h": "c",
+    "minirt.h": "c",
+    "get_next_line.h": "c"
   }
 }

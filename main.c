@@ -11,7 +11,6 @@ bool check_extension(char *str)
 	char *input_extension = strrchr(str, '.');
 	if(strncmp(input_extension, extension, strlen(input_extension)) == 0)
 		return true;
-	// free(input_extension);
 	return false;
 }
 
@@ -30,7 +29,6 @@ int main(int ac, char **av)
 	int fd = open(file_name, O_RDONLY, 0644);
 	if(fd < 0)
 	{
-		free(file_name);
 		printf("failed to open file\n");
 		return 2;
 	}
@@ -41,28 +39,49 @@ int main(int ac, char **av)
 	while(line != NULL)
 	{
 		list = ft_lstnew(line);
+		// free(line);
 		ft_lstadd_back(&head, list);
 		counter++;
 		line = get_next_line(fd);
-	}
-	printf("%d\n", counter);
+	}         
+	char ***tokens = malloc(sizeof(char **) * (counter + 1));
+	t_container *curr = head;
 	int i = 0;
-	// while(i < counter)
-	// {
-	// 	tokens[i] = ft_split(head->line, '\n');
-	// 	head = head->next;
-	// 	i++;
-	// }
-	// tokens[i] = NULL;
-	// for(int i = 0;tokens[i] != NULL; i++)
-	// 	printf("--%s\n", tokens[i]);
-
-
-	// t_container *tmp = head;
-	// while(tmp)
-	// {
-	// 	printf("--%s\n", tmp->line);
-	// 	tmp = tmp->next;
-	// }
+	while(curr)
+	{
+		tokens[i] = ft_split_white(curr->line);
+		i++;
+		curr = curr->next;
+	}
+	int x = 0;
+	int z = 0;
+	while(x < counter)
+	{
+		z = 0;
+		while(tokens[x][z])
+		{
+			printf("token[%i][%i] = %s\n", x, z, tokens[x][z]);
+			z++;
+		}
+		x++;
+	}
+	tokens[x] = NULL;
+	t_objects *input_data = malloc(sizeof(t_objects) * (counter + 2));
+	t_scene *scene = malloc(sizeof(t_scene));
+	init_objects(input_data);
+	int column = 0;
+	while(input_data[column].identifier)
+	{
+		for(int x = 0;x < counter; x++)
+		{
+			for(int z = 0; tokens[x][z]; z++)
+			{
+				if(strcmp(tokens[x][0], input_data[column].identifier) == 0)
+				{
+					input_data[column].assign_object(tokens[x], scene);
+				}
+			}
+		}
+	}
 	return 0;
 }

@@ -8,6 +8,12 @@
 #include <unistd.h>
 #include <libc.h>
 #include <stdbool.h>
+typedef struct s_scene t_scene;
+typedef struct s_objects
+{
+	char *identifier;
+	void (*assign_object)(char **data, t_scene *scene);
+} t_objects;
 
 typedef struct s_container
 {
@@ -68,7 +74,8 @@ typedef struct s_cylinder
 	t_coordonnate coor_cylinder;
 	t_coordonnate vector_cylinder;
 	double diameter_cylinder;
-	t_color color_cylinder
+	double height_cylinder;
+	t_color color_cylinder;
 }	t_cylinder;
 
 typedef struct s_scene
@@ -83,9 +90,23 @@ typedef struct s_scene
 
 void	ft_lstadd_back(t_container **lst, t_container *new);
 void	ft_lstadd_front(t_container **lst, t_container *new);
-void	ft_lstclear(t_container **lst, void (*del)(void *));
 t_container	*ft_lstnew(void *content);
 t_container	*ft_lstlast(t_container *lst);
 char	**ft_split(char const *s, char c);
+char **ft_split_white(char *str);
+/*-------------objects--------------*/
+void	init_objects(t_objects *input_data);
+double	ft_atoi_double(const char *str);
+int	ft_atoi(const char *str);
 
-#endif
+
+
+
+void	ft_ambient_light(char **data, t_scene *scene);
+void	ft_cylinder(char **data, t_scene *scene);
+void	ft_camera(char **data, t_scene *scene);
+void	ft_sphere(char **data, t_scene *scene);
+void	ft_plane(char **data, t_scene *scene);
+void	ft_light(char **data, t_scene *scene);
+
+#endif    

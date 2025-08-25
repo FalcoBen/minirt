@@ -6,16 +6,16 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 08:33:58 by fbenalla          #+#    #+#             */
-/*   Updated: 2024/11/10 04:32:59 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/25 20:03:48 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+// #include "libft.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
-{
-	if (!lst || !del)
-		return ;
-	del(lst->content);
-	free(lst);
-}
+// void	ft_lstdelone(t_list *lst, void (*del)(void *))
+// {
+// 	if (!lst || !del)
+// 		return ;
+// 	del(lst->content);
+// 	free(lst);
+// }

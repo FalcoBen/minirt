@@ -88,11 +88,15 @@ typedef struct s_scene
 	t_cylinder *cylinder;
 	struct s_scene *next;
 }	t_scene;
+/*-----------linked list----------------------*/
 
 void	ft_lstadd_back(t_container **lst, t_container *new);
 void	ft_lstadd_front(t_container **lst, t_container *new);
 t_container	*ft_lstnew(void *content);
 t_container	*ft_lstlast(t_container *lst);
+void	ft_lstclear(t_container **lst, void (*del)(void *));
+void	ft_lstdelone(t_container *lst, void (*del)(void *));
+/*------------------------------------------------------*/
 char	**ft_split(char const *s, char c);
 char **ft_split_white(char *str);
 /*-------------objects--------------*/

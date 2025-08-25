@@ -40,6 +40,17 @@ void initialize_scenes(t_scene *scene)
 	initialize_spher(scene);
 	initialize_cylinder(scene);
 }
+void del(void *content)
+{
+    free(content);
+}
+
+void	ft_free_split(char **str)
+{
+	for(int i = 0; str[i]; i++)
+		free(str[i]);
+	free(str);
+}
 
 int main(int ac, char **av)
 {
@@ -62,14 +73,15 @@ int main(int ac, char **av)
 	t_container *head = NULL;
 	char *line = get_next_line(fd);
 	int counter = 0;
-	while(line != NULL)
-	{
-		list = ft_lstnew(line);
-		// free(line);
-		ft_lstadd_back(&head, list);
-		counter++;
-		line = get_next_line(fd);
-	}         
+	while (line != NULL)
+    {
+        list = ft_lstnew(line);
+        ft_lstadd_back(&head, list);
+        counter++;
+        free(line);
+        line = get_next_line(fd);
+    }       
+	close(fd);
 	char ***tokens = malloc(sizeof(char **) * (counter + 1));
 	t_container *curr = head;
 	int i = 0;
@@ -111,8 +123,22 @@ int main(int ac, char **av)
 		}
 		column++;
 	}
-	// printf("-----------------------------------------------\n");
-	// printer(scene);
+	for (int i = 0; i < counter; i++)
+        ft_free_split(tokens[i]); // Assuming ft_free_split is implemented
+    free(tokens);
+    ft_lstclear(&head, del); // Free the linked list
+    free(input_data);
+	// free(scene->ambient_light);
+	// free(scene->camera);
+	// free(scene->light);
+	// free(scene->plane);
+	// free(scene->sphere);
+	// free(scene->cylinder);
+	// free(scene);
+	// ft_lstclear(&head, del);
+
+	printf("-----------------------------------------------\n");
+	printer(scene);
 
 	return 0;
 }

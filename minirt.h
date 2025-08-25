@@ -31,7 +31,7 @@ typedef struct s_color
 typedef struct s_ambient_light
 {
 	double bright_ambient_light;
-	t_color color_ambient_light;
+	t_color *color_ambient_light;
 }	t_ambient_light;
 
 typedef struct s_coordonnate
@@ -52,13 +52,13 @@ typedef struct s_light
 {
 	t_coordonnate coor_light;
 	double bright_light;
-	t_color color_light;
+	t_color *color_light;
 }	t_light;
 
 typedef struct s_plane
 {
 	t_coordonnate coor_plane;
-	t_color color_plane;
+	t_color *color_plane;
 	t_coordonnate vector_plane;
 }	t_plane;
 
@@ -66,7 +66,7 @@ typedef struct s_sphere
 {
 	t_coordonnate coor_sphere;
 	double diameter_sphere;
-	t_color color_sphere;
+	t_color *color_sphere;
 }	t_sphere;
 
 typedef struct s_cylinder
@@ -75,7 +75,7 @@ typedef struct s_cylinder
 	t_coordonnate vector_cylinder;
 	double diameter_cylinder;
 	double height_cylinder;
-	t_color color_cylinder;
+	t_color *color_cylinder;
 }	t_cylinder;
 
 typedef struct s_scene
@@ -86,6 +86,7 @@ typedef struct s_scene
 	t_plane *plane;
 	t_sphere *sphere;
 	t_cylinder *cylinder;
+	struct s_scene *next;
 }	t_scene;
 
 void	ft_lstadd_back(t_container **lst, t_container *new);
@@ -108,5 +109,14 @@ void	ft_camera(char **data, t_scene *scene);
 void	ft_sphere(char **data, t_scene *scene);
 void	ft_plane(char **data, t_scene *scene);
 void	ft_light(char **data, t_scene *scene);
+/*********initiaie_scenes***************/
+void	initialize_ambient_light(t_scene *scene);
+void	initialize_light(t_scene *scene);
+void	initialize_plane(t_scene *scene);
+void	initialize_spher(t_scene *scene);
+void	initialize_cylinder(t_scene *scene);
+void	initialize_camera(t_scene *scene);
 
+/************************/
+void	printer(t_scene *scene);
 #endif    

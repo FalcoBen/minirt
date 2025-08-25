@@ -14,6 +14,32 @@ bool check_extension(char *str)
 	return false;
 }
 
+// void	initialize_scenes(t_scene *scene)
+// {
+// 	// initialize_ambient_light(scene);
+// 	// initialize_camera(scene);
+// 	// initialize_light(scene);
+// 	// initialize_plane(scene);
+// 	// initialize_cylinder(scene);
+// 	scene->ambient_light = malloc(sizeof(scene->ambient_light));
+// 	scene->ambient_light->color_ambient_light = malloc(sizeof(scene->ambient_light->color_ambient_light));
+
+// 	scene->camera = malloc(sizeof(scene->camera));
+// 	scene->light = malloc(sizeof(scene->light));
+// 	scene->plane = malloc(sizeof(scene->plane));
+// 	scene->sphere = malloc(sizeof(scene->sphere));
+// 	scene->cylinder = malloc(sizeof(scene->cylinder));
+// }
+
+void initialize_scenes(t_scene *scene)
+{
+	initialize_ambient_light(scene);
+	initialize_camera(scene);
+	initialize_light(scene);
+	initialize_plane(scene);
+	initialize_spher(scene);
+	initialize_cylinder(scene);
+}
 
 int main(int ac, char **av)
 {
@@ -53,22 +79,23 @@ int main(int ac, char **av)
 		i++;
 		curr = curr->next;
 	}
-	int x = 0;
-	int z = 0;
-	while(x < counter)
-	{
-		z = 0;
-		while(tokens[x][z])
-		{
-			printf("token[%i][%i] = %s\n", x, z, tokens[x][z]);
-			z++;
-		}
-		x++;
-	}
-	tokens[x] = NULL;
+	// int x = 0;
+	// int z = 0;
+	// while(x < counter)
+	// {
+	// 	z = 0;
+	// 	while(tokens[x][z])
+	// 	{
+	// 		printf("token[%i][%i] = %s\n", x, z, tokens[x][z]);
+	// 		z++;
+	// 	}
+	// 	x++;
+	// }
+	// tokens[x] = NULL;
 	t_objects *input_data = malloc(sizeof(t_objects) * (counter + 2));
 	t_scene *scene = malloc(sizeof(t_scene));
 	init_objects(input_data);
+	initialize_scenes(scene);
 	int column = 0;
 	while(input_data[column].identifier)
 	{
@@ -82,6 +109,10 @@ int main(int ac, char **av)
 				}
 			}
 		}
+		column++;
 	}
+	// printf("-----------------------------------------------\n");
+	// printer(scene);
+
 	return 0;
 }

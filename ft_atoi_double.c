@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/24 19:43:41 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/25 16:46:56 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ double	ft_atoi_double(const char *str)
 		nb = nb * 10 + (str[i] - '0');
 		i++;
 	}
-	if (str[i] == ',')
+	if (str[i] == '.')
 	{
 		i++;
 		while (str[i] >= '0' && str[i] <= '9')

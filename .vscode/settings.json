@@ -62,6 +62,7 @@
     "unistd.h": "c",
     "minirt.h": "c",
     "get_next_line.h": "c",
-    "algorithm": "c"
+    "algorithm": "c",
+    "sstream": "c"
   }
 }

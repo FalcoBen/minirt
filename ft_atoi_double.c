@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/25 16:46:56 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/28 12:38:15 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,27 @@ static	int	ft_check(int signe)
 	return (-1);
 }
 
-double	ft_atoi_double(const char *str)
+bool	non_num_chara(char *str, int i)
+{
+	int	j;
+
+	j = i;
+	while (str[j])
+	{
+		if (!((str[j] >= '0' && str[j] <= '9') || str[j] == '.' || str[j] == ' ' || str[j] == '\t' || str[j] == '\n'))
+				return (true);
+		j++;
+	}
+	// skip_spaces(str, &j);
+	return (false);
+}
+void	exit_error(char *str, char *scene)
+{
+	printf("Error\n%s in %s\n", str, scene);
+	// cleanup
+	exit(1);
+}
+double	ft_atoi_double(char *str)
 {
 	int						i;
 	int						signe;
@@ -40,6 +60,10 @@ double	ft_atoi_double(const char *str)
 		if (str[i] == '-')
 			signe++;
 		i++;
+	}
+	if (non_num_chara(str, i))
+	{
+		exit_error("invalid character");
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
@@ -64,7 +88,7 @@ double	ft_atoi_double(const char *str)
 
 // int main()
 // {
-// 	char *str = "10,12345";
+// 	char *str = "80";
 // 	printf("[%f]\n", ft_atoi_double(str));
 	
 	

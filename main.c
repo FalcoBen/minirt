@@ -33,6 +33,12 @@ bool check_extension(char *str)
 
 void initialize_scenes(t_scene *scene)
 {
+	// scene->ambient_light = NULL;
+	// scene->camera = NULL;
+	// scene->light = NULL;
+	// scene->plane = NULL;
+	// scene->sphere = NULL;
+	// scene->cylinder = NULL;
 	initialize_ambient_light(scene);
 	initialize_camera(scene);
 	initialize_light(scene);
@@ -105,8 +111,9 @@ int main(int ac, char **av)
 	// }
 	// tokens[x] = NULL;
 	t_objects *input_data = malloc(sizeof(t_objects) * (counter + 2));
+	// printf("==============counter = %d\n", counter);
 	t_scene *scene = malloc(sizeof(t_scene));
-	init_objects(input_data);
+	init_objects(input_data, tokens, counter);
 	initialize_scenes(scene);
 	int column = 0;
 	while(input_data[column].identifier)

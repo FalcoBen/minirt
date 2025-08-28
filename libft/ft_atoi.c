@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/24 18:46:32 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/28 12:21:24 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static	int	ft_check(int signe)
 	return (-1);
 }
 
-int	ft_atoi(const char *str)
+int	ft_atoi_color(const char *str)
 {
 	int						i;
 	int						signe;

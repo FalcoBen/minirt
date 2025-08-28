@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atoi_color.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/24 22:00:45 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/28 12:37:44 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static	int	ft_check(int signe)
 	return (-1);
 }
 
-int	ft_atoi(const char *str)
+int	ft_atoi_color(char *str, char *scene)
 {
 	int						i;
 	int						signe;
@@ -45,6 +45,8 @@ int	ft_atoi(const char *str)
 	}
 	if (signe % 2 != 0)
 		nb *= -1;
+	if(nb <= 0 || nb >= 255)
+		exit_error("invalid range color", str);
 	return ((int)nb);
 }
 

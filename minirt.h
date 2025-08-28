@@ -13,6 +13,7 @@ typedef struct s_objects
 {
 	char *identifier;
 	void (*assign_object)(char **data, t_scene *scene);
+	struct s_objects *next;
 } t_objects;
 
 typedef struct s_container
@@ -43,36 +44,36 @@ typedef struct s_coordonnate
 
 typedef struct s_camera
 {
-	t_coordonnate coor_camera;
-	t_coordonnate vector_camera;
+	t_coordonnate *coor_camera;
+	t_coordonnate *vector_camera;
 	double angle_view;
 }	t_camera;
 
 typedef struct s_light
 {
-	t_coordonnate coor_light;
+	t_coordonnate *coor_light;
 	double bright_light;
 	t_color *color_light;
 }	t_light;
 
 typedef struct s_plane
 {
-	t_coordonnate coor_plane;
+	t_coordonnate *coor_plane;
 	t_color *color_plane;
-	t_coordonnate vector_plane;
+	t_coordonnate *vector_plane;
 }	t_plane;
 
 typedef struct s_sphere
 {
-	t_coordonnate coor_sphere;
+	t_coordonnate *coor_sphere;
 	double diameter_sphere;
 	t_color *color_sphere;
 }	t_sphere;
 
 typedef struct s_cylinder
 {
-	t_coordonnate coor_cylinder;
-	t_coordonnate vector_cylinder;
+	t_coordonnate *coor_cylinder;
+	t_coordonnate *vector_cylinder;
 	double diameter_cylinder;
 	double height_cylinder;
 	t_color *color_cylinder;
@@ -100,11 +101,12 @@ void	ft_lstdelone(t_container *lst, void (*del)(void *));
 char	**ft_split(char const *s, char c);
 char **ft_split_white(char *str);
 /*-------------objects--------------*/
-void	init_objects(t_objects *input_data);
-double	ft_atoi_double(const char *str);
-int	ft_atoi(const char *str);
-
-
+void	init_objects(t_objects *input_data, char ***tokens,int counter);
+double	ft_atoi_double(char *str);
+int		ft_atoi_color(char *str, char *scene);
+bool	non_num_chara(char *str, int i);
+void	skip_spaces(char *str, int *i);
+void	exit_error(char *str, char *scene);
 
 
 void	ft_ambient_light(char **data, t_scene *scene);

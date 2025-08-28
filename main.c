@@ -137,7 +137,7 @@ int main(int ac, char **av)
 		{
 			if(current_obj->identifier && strcmp(tokens[x][0], current_obj->identifier) == 0)
 			{
-				printf("Calling assign_object for: %s\n", current_obj->identifier);
+				// printf("Calling assign_object for: %s\n", current_obj->identifier);
 				current_obj->assign_object(tokens[x], scene);
 				break;
 			}

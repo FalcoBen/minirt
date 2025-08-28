@@ -18,7 +18,7 @@ void	initialize_ambient_light(t_scene *scene)
 {
     scene->ambient_light = malloc(sizeof(*(scene->ambient_light)));
     scene->ambient_light->color_ambient_light = malloc(sizeof(*(scene->ambient_light->color_ambient_light)));
-	// scene->ambient_light = 0;
+	scene->ambient_light->bright_ambient_light = 0.0;
 	scene->ambient_light->color_ambient_light->r = 0;
 	scene->ambient_light->color_ambient_light->g = 0;
 	scene->ambient_light->color_ambient_light->b = 0;

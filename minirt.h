@@ -49,6 +49,7 @@ typedef struct s_camera
 	t_coordonnate *coor_camera;
 	t_coordonnate *vector_camera;
 	double angle_view;
+	struct s_camera *next;
 }	t_camera;
 
 typedef struct s_light
@@ -56,6 +57,7 @@ typedef struct s_light
 	t_coordonnate *coor_light;
 	double bright_light;
 	t_color *color_light;
+	struct s_light *next;
 }	t_light;
 
 typedef struct s_plane
@@ -63,6 +65,7 @@ typedef struct s_plane
 	t_coordonnate *coor_plane;
 	t_color *color_plane;
 	t_coordonnate *vector_plane;
+	struct s_plane *next;
 }	t_plane;
 
 typedef struct s_sphere
@@ -70,6 +73,7 @@ typedef struct s_sphere
 	t_coordonnate *coor_sphere;
 	double diameter_sphere;
 	t_color *color_sphere;
+	struct s_sphere *next;
 }	t_sphere;
 
 typedef struct s_cylinder
@@ -79,6 +83,7 @@ typedef struct s_cylinder
 	double diameter_cylinder;
 	double height_cylinder;
 	t_color *color_cylinder;
+	struct s_cylinder *next;
 }	t_cylinder;
 
 typedef struct s_scene

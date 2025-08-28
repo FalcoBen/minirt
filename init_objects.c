@@ -58,8 +58,6 @@ void init_objects(t_objects **input_data, char ***tokens, int counter)
         }
         i++;
     }
-    // Remove these problematic lines:
-    // *input_data = (*input_data)->next;  // This breaks everything!
 }
 bool	check_colors_args(char **colors)
 {
@@ -71,30 +69,70 @@ bool	check_colors_args(char **colors)
 	return true;
 }
 
-void	ft_ambient_light(char **data, t_scene *scene)
+void ft_ambient_light(char **data, t_scene *scene)
 {
-	int i = 0;
-	if(!scene->ambient_light)
-	{	
-		puts("-----------------------filled-----------------------\n");
-		// ft_ambient_light(data, scene);
-		// scene = scene->next;
-	}
-	while(data[i])
-		i++;
-	if(i != 3)
-		exit_error("invalid arguments", "in L");
-	scene->ambient_light->bright_ambient_light = ft_atoi_double(data[1]);
-	if(scene->ambient_light->bright_ambient_light < 0 || scene->ambient_light->bright_ambient_light > 1)
-		exit_error("invalid range ambient light", "A");
+    int i = 0;
+    while(data[i])
+        i++;
+    if(i != 3)
+        exit_error("invalid arguments", "in A");
 
-	char **colors = ft_split(data[2], ',');
-	if(!check_colors_args(colors))
-		exit_error("some color is missing", "in A");
-	scene->ambient_light->color_ambient_light->r = ft_atoi_color(colors[0], "ambient light r");
-	scene->ambient_light->color_ambient_light->g = ft_atoi_color(colors[1], "ambient light g");
-	scene->ambient_light->color_ambient_light->b = ft_atoi_color(colors[2], "ambient light b");
+    // Create new ambient light node
+    t_ambient_light *new_ambient = malloc(sizeof(t_ambient_light));
+    new_ambient->color_ambient_light = malloc(sizeof(t_color));
+    new_ambient->next = NULL;
+    
+    new_ambient->bright_ambient_light = ft_atoi_double(data[1]);
+    if(new_ambient->bright_ambient_light < 0 || new_ambient->bright_ambient_light > 1)
+        exit_error("invalid range ambient light", "A");
+
+    char **colors = ft_split(data[2], ',');
+    if(!check_colors_args(colors))
+        exit_error("some color is missing", "in A");
+    
+    new_ambient->color_ambient_light->r = ft_atoi_color(colors[0], "ambient light r");
+    new_ambient->color_ambient_light->g = ft_atoi_color(colors[1], "ambient light g");
+    new_ambient->color_ambient_light->b = ft_atoi_color(colors[2], "ambient light b");
+
+    if(scene->ambient_light == NULL)
+    {
+        scene->ambient_light = new_ambient;
+    }
+    else
+    {
+        t_ambient_light *current = scene->ambient_light;
+        // FIX: Check if current is not NULL before accessing next
+        while(current && current->next)
+            current = current->next;
+        current->next = new_ambient;
+    }
 }
+
+// void	ft_ambient_light(char **data, t_scene *scene)
+// {
+// 	int i = 0;
+// 	if(!scene->ambient_light)
+// 	{	
+// 		puts("-----------------------filled-----------------------\n");
+// 		// ft_ambient_light(data, scene);
+// 		// scene = scene->next;
+// 	}
+// 	while(data[i])
+// 		i++;
+// 	if(i != 3)
+// 		exit_error("invalid arguments", "in L");
+// 	scene->ambient_light->bright_ambient_light = ft_atoi_double(data[1]);
+// 	if(scene->ambient_light->bright_ambient_light < 0 || scene->ambient_light->bright_ambient_light > 1)
+// 		exit_error("invalid range ambient light", "A");
+
+// 	char **colors = ft_split(data[2], ',');
+// 	if(!check_colors_args(colors))
+// 		exit_error("some color is missing", "in A");
+// 	scene->ambient_light->color_ambient_light->r = ft_atoi_color(colors[0], "ambient light r");
+// 	scene->ambient_light->color_ambient_light->g = ft_atoi_color(colors[1], "ambient light g");
+// 	scene->ambient_light->color_ambient_light->b = ft_atoi_color(colors[2], "ambient light b");
+	
+// }
 void	ft_camera(char **data, t_scene *scene)
 {
 	int i;
@@ -166,9 +204,9 @@ void	ft_plane(char **data, t_scene *scene)
 	scene->plane->vector_plane->z = ft_atoi_double(vects[2]);
 
 	double range_x = scene->plane->vector_plane->x;
-	double range_y = scene->plane->vector_plane->x;
-	double range_z = scene->plane->vector_plane->x;
-	if(range_x <= -1 || range_x >= 1 || range_y <= -1 || range_y >= 1 || range_z <= -1 || range_z >= 1)
+	double range_y = scene->plane->vector_plane->y;
+	double range_z = scene->plane->vector_plane->z;
+	if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
 			exit_error("invalid range vectors", "PL");
 
 	char **colors = ft_split(data[3], ',');
@@ -219,8 +257,8 @@ void	ft_cylinder(char **data, t_scene *scene)
 	scene->cylinder->vector_cylinder->z = ft_atoi_double(vects[2]);
 
 	double range_x = scene->cylinder->vector_cylinder->x;
-	double range_y = scene->cylinder->vector_cylinder->x;
-	double range_z = scene->cylinder->vector_cylinder->x;
+	double range_y = scene->cylinder->vector_cylinder->y;
+	double range_z = scene->cylinder->vector_cylinder->z;
 	if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
 			exit_error("invalid range vectors", "CY");
 

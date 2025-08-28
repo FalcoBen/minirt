@@ -30,6 +30,10 @@ bool check_extension(char *str)
 // 	scene->sphere = malloc(sizeof(scene->sphere));
 // 	scene->cylinder = malloc(sizeof(scene->cylinder));
 // }
+void	check_scenes_args(t_scene	*scene)
+{
+
+}
 
 void initialize_scenes(t_scene *scene)
 {
@@ -45,6 +49,7 @@ void initialize_scenes(t_scene *scene)
 	initialize_plane(scene);
 	initialize_spher(scene);
 	initialize_cylinder(scene);
+	check_scenes_args(scene);
 }
 void del(void *content)
 {
@@ -110,30 +115,41 @@ int main(int ac, char **av)
 	// 	x++;
 	// }
 	// tokens[x] = NULL;
-	t_objects *input_data = malloc(sizeof(t_objects) * (counter + 2));
-	// printf("==============counter = %d\n", counter);
+	t_objects *input_data = malloc(sizeof(t_objects));
+	input_data->assign_object = NULL;
+	input_data->identifier = NULL;
+	input_data->nb = 0;
+	input_data->next = NULL;
+	printf("==============counter = %d\n", counter);
 	t_scene *scene = malloc(sizeof(t_scene));
-	init_objects(input_data, tokens, counter);
+	int a = 0;
+	int b = 0;
 	initialize_scenes(scene);
-	int column = 0;
-	while(input_data[column].identifier)
+	
+	init_objects(&input_data, tokens, counter);
+
+	for(int x = 0; x < counter; x++)
 	{
-		for(int x = 0;x < counter; x++)
+		if(!tokens[x] || !tokens[x][0]) 
+			continue;
+		t_objects *current_obj = input_data;
+		while(current_obj)
 		{
-			for(int z = 0; tokens[x][z]; z++)
+			if(current_obj->identifier && strcmp(tokens[x][0], current_obj->identifier) == 0)
 			{
-				if(strcmp(tokens[x][0], input_data[column].identifier) == 0)
-				{
-					input_data[column].assign_object(tokens[x], scene);
-				}
+				printf("Calling assign_object for: %s\n", current_obj->identifier);
+				current_obj->assign_object(tokens[x], scene);
+				break;
 			}
+			current_obj = current_obj->next;
 		}
-		column++;
 	}
+
+
 	for (int i = 0; i < counter; i++)
-        ft_free_split(tokens[i]); // Assuming ft_free_split is implemented
+        ft_free_split(tokens[i]);
     free(tokens);
-    ft_lstclear(&head, del); // Free the linked list
+    ft_lstclear(&head, del);
     free(input_data);
 	// free(scene->ambient_light);
 	// free(scene->camera);
@@ -149,3 +165,10 @@ int main(int ac, char **av)
 
 	return 0;
 }
+
+	// while(a < counter)
+	// {
+	// 	printf("[[[%s]]], [[%d]]\n", input_data[a].identifier, input_data[a].nb);
+	// 	// input_data = input_data->next;
+	// 	a++;
+	// }

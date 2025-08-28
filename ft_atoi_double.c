@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/28 12:38:15 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/28 12:43:14 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ bool	non_num_chara(char *str, int i)
 }
 void	exit_error(char *str, char *scene)
 {
+	if(!scene)
+		scene = "double";
 	printf("Error\n%s in %s\n", str, scene);
 	// cleanup
 	exit(1);
@@ -63,7 +65,7 @@ double	ft_atoi_double(char *str)
 	}
 	if (non_num_chara(str, i))
 	{
-		exit_error("invalid character");
+		exit_error("invalid character", NULL);
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{

@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/28 12:37:44 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/08/28 12:58:23 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ int	ft_atoi_color(char *str, char *scene)
 	}
 	if (signe % 2 != 0)
 		nb *= -1;
-	if(nb <= 0 || nb >= 255)
-		exit_error("invalid range color", str);
+	if((int)nb < 0 || (int)nb > 255)
+	{
+		printf("[[%d]]\n", (int)nb);
+		exit_error("invalid range color", scene);
+	}
 	return ((int)nb);
 }
 

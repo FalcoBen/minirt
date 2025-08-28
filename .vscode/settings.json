@@ -63,6 +63,7 @@
     "minirt.h": "c",
     "get_next_line.h": "c",
     "algorithm": "c",
-    "sstream": "c"
+    "sstream": "c",
+    "iterator": "c"
   }
 }

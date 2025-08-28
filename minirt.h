@@ -12,6 +12,7 @@ typedef struct s_scene t_scene;
 typedef struct s_objects
 {
 	char *identifier;
+	int nb;
 	void (*assign_object)(char **data, t_scene *scene);
 	struct s_objects *next;
 } t_objects;
@@ -33,6 +34,7 @@ typedef struct s_ambient_light
 {
 	double bright_ambient_light;
 	t_color *color_ambient_light;
+	struct s_ambient_light *next;
 }	t_ambient_light;
 
 typedef struct s_coordonnate
@@ -81,6 +83,7 @@ typedef struct s_cylinder
 
 typedef struct s_scene
 {
+	t_objects *object;
 	t_ambient_light *ambient_light;
 	t_camera *camera;
 	t_light *light;
@@ -101,7 +104,7 @@ void	ft_lstdelone(t_container *lst, void (*del)(void *));
 char	**ft_split(char const *s, char c);
 char **ft_split_white(char *str);
 /*-------------objects--------------*/
-void	init_objects(t_objects *input_data, char ***tokens,int counter);
+void	init_objects(t_objects **input_data, char ***tokens,int counter);
 double	ft_atoi_double(char *str);
 int		ft_atoi_color(char *str, char *scene);
 bool	non_num_chara(char *str, int i);

@@ -19,9 +19,8 @@ void	initialize_ambient_light(t_scene *scene)
     scene->ambient_light = malloc(sizeof(*(scene->ambient_light)));
     scene->ambient_light->color_ambient_light = malloc(sizeof(*(scene->ambient_light->color_ambient_light)));
 	scene->ambient_light->bright_ambient_light = 0.0;
-	scene->ambient_light->color_ambient_light->r = 0;
-	scene->ambient_light->color_ambient_light->g = 0;
-	scene->ambient_light->color_ambient_light->b = 0;
+	initialize_colors(scene->ambient_light->color_ambient_light);
+	scene->ambient_light->next = NULL;
 }
 void	initialize_camera(t_scene *scene)
 {
@@ -31,6 +30,7 @@ void	initialize_camera(t_scene *scene)
 	scene->camera->angle_view = 0;
 	initialize_coordinate(scene->camera->coor_camera);
 	initialize_coordinate(scene->camera->vector_camera);
+	scene->camera->next = NULL;
 }
 void	initialize_light(t_scene *scene)
 {
@@ -41,6 +41,7 @@ void	initialize_light(t_scene *scene)
 	initialize_colors(scene->light->color_light);
 	initialize_coordinate(scene->light->coor_light);
 	scene->light->bright_light = 0;
+	scene->light->next = NULL;
 }
 void	initialize_plane(t_scene *scene)
 {
@@ -53,6 +54,7 @@ void	initialize_plane(t_scene *scene)
 	initialize_coordinate(scene->plane->vector_plane);
 	initialize_coordinate(scene->plane->coor_plane);
 	initialize_colors(scene->plane->color_plane);
+	scene->plane->next = NULL;
 }
 void	initialize_spher(t_scene *scene)
 {
@@ -61,8 +63,7 @@ void	initialize_spher(t_scene *scene)
     scene->sphere->coor_sphere = malloc(sizeof(*(scene->sphere->coor_sphere)));
 	initialize_colors(scene->sphere->color_sphere);
 	initialize_coordinate(scene->sphere->coor_sphere);
-
-
+	scene->sphere->next = NULL;
 }
 void	initialize_cylinder(t_scene *scene)
 {
@@ -75,4 +76,5 @@ void	initialize_cylinder(t_scene *scene)
 	initialize_colors(scene->cylinder->color_cylinder);
 	initialize_coordinate(scene->cylinder->coor_cylinder);
 	initialize_coordinate(scene->cylinder->vector_cylinder);
+	scene->cylinder->next = NULL;
 }

@@ -89,12 +89,12 @@ typedef struct s_cylinder
 typedef struct s_scene
 {
 	t_objects *object;
-	t_ambient_light *ambient_light;
-	t_camera *camera;
-	t_light *light;
-	t_plane *plane;
-	t_sphere *sphere;
-	t_cylinder *cylinder;
+	t_ambient_light *ambient_light; //single instance
+	t_camera *camera; //single instance
+	t_light *light; // llinked list
+	t_plane *plane; // llinked list
+	t_sphere *sphere; // llinked list
+	t_cylinder *cylinder;  // llinked list
 	struct s_scene *next;
 }	t_scene;
 /*-----------linked list----------------------*/
@@ -133,4 +133,8 @@ void	initialize_camera(t_scene *scene);
 
 /************************/
 void	printer(t_scene *scene);
+void process_scene_tokens(char ***tokens, int counter, t_scene *scene);
+void init_object_dispatch_table(t_objects **dispatch_table);
+void add_object(t_objects **head, char *identifier, void (*assign_object)(char **, t_scene *));
+
 #endif    

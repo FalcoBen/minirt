@@ -16,11 +16,11 @@ bool check_extension(char *str)
 
 // void	initialize_scenes(t_scene *scene)
 // {
-// 	// initialize_ambient_light(scene);
-// 	// initialize_camera(scene);
-// 	// initialize_light(scene);
-// 	// initialize_plane(scene);
-// 	// initialize_cylinder(scene);
+	// initialize_ambient_light(scene);
+	// initialize_camera(scene);
+	// initialize_light(scene);
+	// initialize_plane(scene);
+	// initialize_cylinder(scene);
 // 	scene->ambient_light = malloc(sizeof(scene->ambient_light));
 // 	scene->ambient_light->color_ambient_light = malloc(sizeof(scene->ambient_light->color_ambient_light));
 
@@ -30,27 +30,33 @@ bool check_extension(char *str)
 // 	scene->sphere = malloc(sizeof(scene->sphere));
 // 	scene->cylinder = malloc(sizeof(scene->cylinder));
 // }
-void	check_scenes_args(t_scene	*scene)
-{
-
-}
 
 void initialize_scenes(t_scene *scene)
 {
+    scene->ambient_light = NULL;
+    scene->camera = NULL;           
+    scene->light = NULL;          
+    scene->plane = NULL;          
+    scene->sphere = NULL;         
+    scene->cylinder = NULL;       
+}
+
+// void initialize_scenes(t_scene *scene)
+// {
 	// scene->ambient_light = NULL;
 	// scene->camera = NULL;
 	// scene->light = NULL;
 	// scene->plane = NULL;
 	// scene->sphere = NULL;
 	// scene->cylinder = NULL;
-	initialize_ambient_light(scene);
-	initialize_camera(scene);
-	initialize_light(scene);
-	initialize_plane(scene);
-	initialize_spher(scene);
-	initialize_cylinder(scene);
-	check_scenes_args(scene);
-}
+	// initialize_ambient_light(scene);
+	// initialize_camera(scene);
+	// initialize_light(scene);
+	// initialize_plane(scene);
+	// initialize_spher(scene);
+	// initialize_cylinder(scene);
+	// check_scenes_args(scene);
+// }
 void del(void *content)
 {
     free(content);
@@ -102,6 +108,53 @@ int main(int ac, char **av)
 		i++;
 		curr = curr->next;
 	}
+	t_objects *input_data = malloc(sizeof(t_objects));
+	input_data->assign_object = NULL;
+	input_data->identifier = NULL;
+	input_data->nb = 0;
+	input_data->next = NULL;
+
+	// printf("==============counter = %d\n", counter);
+
+	t_objects *dispatch_table = NULL;
+    init_object_dispatch_table(&dispatch_table);
+    
+	t_scene *scene = malloc(sizeof(t_scene));
+    initialize_scenes(scene);
+    
+    for(int x = 0; x < counter; x++)
+    {
+        if(!tokens[x] || !tokens[x][0]) 
+            continue;
+            
+        t_objects *current_obj = dispatch_table;
+        while(current_obj)
+        {
+            if(current_obj->identifier && strcmp(tokens[x][0], current_obj->identifier) == 0)
+            {
+                current_obj->assign_object(tokens[x], scene);
+                break;
+            }
+            current_obj = current_obj->next;
+        }
+    }
+
+
+
+
+
+
+	for (int i = 0; i < counter; i++)
+        ft_free_split(tokens[i]);
+    free(tokens);
+    ft_lstclear(&head, del);
+    free(input_data);
+
+	printf("-----------------------------------------------\n");
+	printer(scene);
+
+	return 0;
+}
 	// int x = 0;
 	// int z = 0;
 	// while(x < counter)
@@ -115,56 +168,8 @@ int main(int ac, char **av)
 	// 	x++;
 	// }
 	// tokens[x] = NULL;
-	t_objects *input_data = malloc(sizeof(t_objects));
-	input_data->assign_object = NULL;
-	input_data->identifier = NULL;
-	input_data->nb = 0;
-	input_data->next = NULL;
-	printf("==============counter = %d\n", counter);
-	t_scene *scene = malloc(sizeof(t_scene));
-	int a = 0;
-	int b = 0;
-	initialize_scenes(scene);
-	
-	init_objects(&input_data, tokens, counter);
-
-	for(int x = 0; x < counter; x++)
-	{
-		if(!tokens[x] || !tokens[x][0]) 
-			continue;
-		t_objects *current_obj = input_data;
-		while(current_obj)
-		{
-			if(current_obj->identifier && strcmp(tokens[x][0], current_obj->identifier) == 0)
-			{
-				// printf("Calling assign_object for: %s\n", current_obj->identifier);
-				current_obj->assign_object(tokens[x], scene);
-				break;
-			}
-			current_obj = current_obj->next;
-		}
-	}
 
 
-	for (int i = 0; i < counter; i++)
-        ft_free_split(tokens[i]);
-    free(tokens);
-    ft_lstclear(&head, del);
-    free(input_data);
-	// free(scene->ambient_light);
-	// free(scene->camera);
-	// free(scene->light);
-	// free(scene->plane);
-	// free(scene->sphere);
-	// free(scene->cylinder);
-	// free(scene);
-	// ft_lstclear(&head, del);
-
-	printf("-----------------------------------------------\n");
-	printer(scene);
-
-	return 0;
-}
 
 	// while(a < counter)
 	// {

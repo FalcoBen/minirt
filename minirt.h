@@ -95,7 +95,7 @@ typedef struct s_scene
 	t_plane *plane; // llinked list
 	t_sphere *sphere; // llinked list
 	t_cylinder *cylinder;  // llinked list
-	struct s_scene *next;
+	// struct s_scene *next;
 }	t_scene;
 /*-----------linked list----------------------*/
 

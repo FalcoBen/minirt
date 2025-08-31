@@ -69,6 +69,15 @@ void	ft_free_split(char **str)
 	free(str);
 }
 
+void	make_sure_of_objects(t_scene *scene)
+{
+	if (!scene->camera) 
+		exit_error("Missing", "camera");
+	if (!scene->light || !scene->ambient_light) 
+		exit_error("Missing", "light source");
+	if (!scene->plane || !scene->sphere || !scene->cylinder) 
+		exit_error("Missing", "objects");
+	}
 int main(int ac, char **av)
 {
 	// atexit(s);
@@ -99,6 +108,8 @@ int main(int ac, char **av)
         line = get_next_line(fd);
     }       
 	close(fd);
+	if(counter == 0)
+		exit_error("empty", "file");
 	char ***tokens = malloc(sizeof(char **) * (counter + 1));
 	t_container *curr = head;
 	int i = 0;
@@ -108,6 +119,13 @@ int main(int ac, char **av)
 		i++;
 		curr = curr->next;
 	}
+	for(int i = 0; i < counter; i++)
+	{
+		if(strcmp(tokens[i][0], "A") == 0 || strcmp(tokens[i][0], "C") == 0 || strcmp(tokens[i][0], "L") == 0 || strcmp(tokens[i][0], "pl") == 0 || strcmp(tokens[i][0], "sp") == 0 ||  strcmp(tokens[i][0], "cy") == 0)
+			continue;
+		else
+			exit_error("object should not render", tokens[i][0]);
+	}
 	t_objects *input_data = malloc(sizeof(t_objects));
 	input_data->assign_object = NULL;
 	input_data->identifier = NULL;
@@ -115,7 +133,6 @@ int main(int ac, char **av)
 	input_data->next = NULL;
 
 	// printf("==============counter = %d\n", counter);
-
 	t_objects *dispatch_table = NULL;
     init_object_dispatch_table(&dispatch_table);
     
@@ -135,11 +152,19 @@ int main(int ac, char **av)
                 current_obj->assign_object(tokens[x], scene);
                 break;
             }
+			// else
+			// {
+			// 	for(int i = 0; i < counter; i++)
+			// 	{
+			// 		if(strcmp(tokens[i][0], current_obj->identifier) != 0)
+			// 			exit_error("object should not render", tokens[x][0]);
+			// 	}
+			// }
             current_obj = current_obj->next;
         }
     }
 
-
+	make_sure_of_objects(scene);
 
 
 

@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "MLX42/MLX42.h"
+#include "../MLX42/include/MLX42/MLX42.h"
 #include "colors.h"
 
 #define WIDTH 900

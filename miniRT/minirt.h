@@ -1,13 +1,19 @@
 #ifndef MINI_RT_H
 #define MINI_RT_H
 
-#include "MLX42/include/MLX42/MLX42.h"
-#include "get_next_line/get_next_line.h"
+#include "../MLX42/include/MLX42/MLX42.h"
+#include "../get_next_line/get_next_line.h"
 // #include "libft/libft.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <libc.h>
 #include <stdbool.h>
+#include "colors.h"
+
+#define WIDTH 800
+#define HEIGHT 800
+
+
 typedef struct s_scene t_scene;
 typedef struct s_objects
 {
@@ -136,5 +142,10 @@ void	printer(t_scene *scene);
 void process_scene_tokens(char ***tokens, int counter, t_scene *scene);
 void init_object_dispatch_table(t_objects **dispatch_table);
 void add_object(t_objects **head, char *identifier, void (*assign_object)(char **, t_scene *));
+
+
+/*----------------------------mlx--------------------------*/
+void	start_using_mlx(t_scene *scene);
+
 
 #endif    

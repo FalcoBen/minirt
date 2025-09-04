@@ -1,12 +1,12 @@
 CC      = cc
-CFLAGS  =  -I MLX42/include -fsanitize=address -g3
+CFLAGS  =  -I ../MLX42/include -fsanitize=address -g3
 NAME    = game
 RM      = rm -f
 SRCF    = chess_board.c #coordonne.c 
 OBJS    = $(SRCF:.c=.o) 
 
-LIBMLX  = MLX42/build/libmlx42.a
-LIBS = -L$(HOME)/goinfre/homebrew/lib -lglfw -ldl -lm
+LIBMLX  = ../MLX42/build/libmlx42.a
+LIBS = -L$(HOME)/goinfre/homebrew/lib -lglfw -ld -lm
 
 
 

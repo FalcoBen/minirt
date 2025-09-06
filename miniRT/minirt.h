@@ -6,7 +6,11 @@
 // #include "libft/libft.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include <libc.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <string.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include "colors.h"
 

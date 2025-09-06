@@ -93,7 +93,6 @@ char	*get_suffix(char *str)
 	return (suffix);
 }
 #include <fcntl.h>
-#include <libc.h>
 
 
 char	*get_next_line(int fd)

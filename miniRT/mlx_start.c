@@ -13,13 +13,13 @@ void	start_using_mlx(t_scene *scene)
     //                  (scene->ambient_light->color_ambient_light->g << 16) |
     //                  (scene->ambient_light->color_ambient_light->b << 8) | 0xFF;
     for (int y = 0; y < HEIGHT; y++)
-	{
+    {
         for (int x = 0; x < WIDTH; x++)
-            mlx_put_pixel(img, x, y, COLOR_WHITE);
-	}
+        mlx_put_pixel(img, x, y, COLOR_WHITE);
+    }
 
     if (!mlx_image_to_window(mlx, img, 0, 0))
-		perror("mlx_image_to_window");
+		  perror("mlx_image_to_window");
     mlx_loop(mlx);
 
     mlx_delete_image(mlx, img);

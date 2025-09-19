@@ -26,13 +26,13 @@ void printer(t_scene *scene)
         t_camera *camera = scene->camera;   
         printf("C : CAMERA\n");
         printf("--------COORDONNATE--------\n");
-        t_coordonnate *tmp = camera->coor_camera;
+        t_vec3 *tmp = camera->coor_camera;
         printf("X = %f\n", tmp->x);
         printf("Y = %f\n", tmp->y);
         printf("Z = %f\n", tmp->z);
         
         printf("**********VECTORS**********\n");
-        t_coordonnate *tmp_vec = camera->vector_camera;
+        t_vec3 *tmp_vec = camera->vector_camera;
         printf("X = %f\n", tmp_vec->x);
         printf("Y = %f\n", tmp_vec->y);
         printf("Z = %f\n", tmp_vec->z);
@@ -47,7 +47,7 @@ void printer(t_scene *scene)
         {
             printf("L : LIGHT \n");
             printf("--------COORDONNATE--------\n");
-            t_coordonnate *tmp = light->coor_light;
+            t_vec3 *tmp = light->coor_light;
             printf("X = %f\n", tmp->x);
             printf("Y = %f\n", tmp->y);
             printf("Z = %f\n", tmp->z);
@@ -70,13 +70,13 @@ void printer(t_scene *scene)
         {
             printf("pl : PLANE \n");
             printf("--------COORDONNATE--------\n");
-            t_coordonnate *tmp = plane->coor_plane;
+            t_vec3 *tmp = plane->coor_plane;
             printf("X = %f\n", tmp->x);
             printf("Y = %f\n", tmp->y);
             printf("Z = %f\n", tmp->z);
             
             printf("**********VECTORS**********\n");
-            t_coordonnate *tmp_vec = plane->vector_plane;
+            t_vec3 *tmp_vec = plane->vector_plane;
             printf("X = %f\n", tmp_vec->x);
             printf("Y = %f\n", tmp_vec->y);
             printf("Z = %f\n", tmp_vec->z);
@@ -97,7 +97,7 @@ void printer(t_scene *scene)
         {
             printf("sp : SPHERE\n");
             printf("--------COORDONNATE--------\n");
-            t_coordonnate *tmp = sphere->coor_sphere;
+            t_vec3 *tmp = sphere->coor_sphere;
             printf("X = %f\n", tmp->x);
             printf("Y = %f\n", tmp->y);
             printf("Z = %f\n", tmp->z);
@@ -120,13 +120,13 @@ void printer(t_scene *scene)
         {
             printf("cy : CYLINDER \n");
             printf("--------COORDONNATE--------\n");
-            t_coordonnate *tmp = cylinder->coor_cylinder;
+            t_vec3 *tmp = cylinder->coor_cylinder;
             printf("X = %f\n", tmp->x);
             printf("Y = %f\n", tmp->y);
             printf("Z = %f\n", tmp->z);
             
             printf("**********VECTORS**********\n");
-            t_coordonnate *tmp_vec = cylinder->vector_cylinder;
+            t_vec3 *tmp_vec = cylinder->vector_cylinder;
             printf("x = %f\n", tmp_vec->x);
             printf("y = %f\n", tmp_vec->y);
             printf("z = %f\n", tmp_vec->z);

@@ -42,15 +42,41 @@ void	make_sure_of_objects(t_scene *scene)
 		exit_error("Missing", "camera");
 	if (!scene->light || !scene->ambient_light) 
 		exit_error("Missing", "light source");
-	if (!scene->plane || !scene->sphere || !scene->cylinder) 
+	if (!scene->plane && !scene->sphere && !scene->cylinder) 
 		exit_error("Missing", "objects");
 }
-
+void test_vector_math(void)
+{
+	printf("=== VECTOR MATH TEST ===\n");
+    
+    t_vec3 a = {1, 2, 3};
+    t_vec3 b = {4, 5, 6};
+    
+    t_vec3 add = vec_add(a, b);
+    printf("Add: (%f, %f, %f)\n", add.x, add.y, add.z);
+    
+    t_vec3 sub = vec_sub(a, b);
+    printf("Sub: (%f, %f, %f)\n", sub.x, sub.y, sub.z);
+    
+    double dot = vec_dot(a, b);
+    printf("Dot: %f\n", dot);
+    
+    t_vec3 cross = vec_cross(a, b);
+    printf("Cross: (%f, %f, %f)\n", cross.x, cross.y, cross.z);
+    
+    double len = vec_length(a);
+    printf("Length a: %f\n", len);
+    
+    t_vec3 norm = vec_normalize(a);
+    printf("Normalized a: (%f, %f, %f)\n", norm.x, norm.y, norm.z);
+    printf("Length normalized: %f\n", vec_length(norm));
+    printf("=========================\n");
+}
 int main(int ac, char **av)
 {
 	// atexit(s);
 	if(ac != 2)
-		return 1;
+	return 1;
 	char *file_name = av[1];
 	if(!check_extension(file_name))
 	{
@@ -69,7 +95,7 @@ int main(int ac, char **av)
 	int counter = 0;
 	while (line != NULL)
     {
-        list = ft_lstnew(line);
+		list = ft_lstnew(line);
         ft_lstadd_back(&head, list);
         counter++;
         free(line);
@@ -78,8 +104,8 @@ int main(int ac, char **av)
 	close(fd);
 	if(counter == 0)
 		exit_error("empty", "file");
-	char ***tokens = malloc(sizeof(char **) * (counter + 1));
-	t_container *curr = head;
+		char ***tokens = malloc(sizeof(char **) * (counter + 1));
+		t_container *curr = head;
 	int i = 0;
 	while(curr)
 	{
@@ -87,19 +113,19 @@ int main(int ac, char **av)
 		i++;
 		curr = curr->next;
 	}
-	for(int i = 0; i < counter; i++)
-	{
-		if(strcmp(tokens[i][0], "A") == 0 || strcmp(tokens[i][0], "C") == 0 || strcmp(tokens[i][0], "L") == 0 || strcmp(tokens[i][0], "pl") == 0 || strcmp(tokens[i][0], "sp") == 0 ||  strcmp(tokens[i][0], "cy") == 0)
-			continue;
-		else
-			exit_error("object should not render", tokens[i][0]);
-	}
-	t_objects *input_data = malloc(sizeof(t_objects));
-	input_data->assign_object = NULL;
-	input_data->identifier = NULL;
+	// for(int i = 0; i < counter; i++)
+	// {
+		// 	if(strcmp(tokens[i][0], "A") == 0 || strcmp(tokens[i][0], "C") == 0 || strcmp(tokens[i][0], "L") == 0 || strcmp(tokens[i][0], "pl") == 0 || strcmp(tokens[i][0], "sp") == 0 ||  strcmp(tokens[i][0], "cy") == 0)
+		// 		continue;
+		// 	else
+		// 		exit_error("object should not render", tokens[i][0]);
+		// }
+		t_objects *input_data = malloc(sizeof(t_objects));
+		input_data->assign_object = NULL;
+		input_data->identifier = NULL;
 	input_data->nb = 0;
 	input_data->next = NULL;
-
+	
 	t_objects *dispatch_table = NULL;
     init_object_dispatch_table(&dispatch_table);
     
@@ -108,13 +134,13 @@ int main(int ac, char **av)
     
     for(int x = 0; x < counter; x++)
     {
-        if(!tokens[x] || !tokens[x][0]) 
-            continue;
-            
+		if(!tokens[x] || !tokens[x][0]) 
+		continue;
+		
         t_objects *current_obj = dispatch_table;
         while(current_obj)
         {
-            if(current_obj->identifier && strcmp(tokens[x][0], current_obj->identifier) == 0)
+			if(current_obj->identifier && strcmp(tokens[x][0], current_obj->identifier) == 0)
             {
                 current_obj->assign_object(tokens[x], scene);
                 break;
@@ -122,13 +148,14 @@ int main(int ac, char **av)
             current_obj = current_obj->next;
         }
     }
-
+	
 	make_sure_of_objects(scene);
-
-
+	
+	
+	test_vector_math();
 	start_using_mlx(scene);
-
-
+	
+	
 	for (int i = 0; i < counter; i++)
         ft_free_split(tokens[i]);
     free(tokens);

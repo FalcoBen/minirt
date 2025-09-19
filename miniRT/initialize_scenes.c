@@ -7,7 +7,7 @@ void	initialize_colors(t_color *colors)
 	colors->b = 0;
 }
 
-void	initialize_coordinate(t_coordonnate *coors)
+void	initialize_coordinate(t_vec3 *coors)
 {
 	coors->x = 0;
 	coors->y = 0;

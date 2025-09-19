@@ -113,13 +113,13 @@ void	ft_camera(char **data, t_scene *scene)
 	t_camera *new_camera = malloc(sizeof(t_camera));
 	t_camera *current;
 	new_camera = malloc(sizeof(t_camera));
-	new_camera->coor_camera = malloc(sizeof(t_coordonnate));
+	new_camera->coor_camera = malloc(sizeof(t_vec3));
 	new_camera->next = NULL;
 	char **coors = ft_split(data[1], ',');
 	new_camera->coor_camera->x = ft_atoi_double(coors[0]);
 	new_camera->coor_camera->y = ft_atoi_double(coors[1]);
 	new_camera->coor_camera->z = ft_atoi_double(coors[2]);
-	new_camera->vector_camera = malloc(sizeof(t_coordonnate));
+	new_camera->vector_camera = malloc(sizeof(t_vec3));
 	char **vects = ft_split(data[2], ',');
 	new_camera->vector_camera->x = ft_atoi_double(vects[0]);
 	new_camera->vector_camera->y = ft_atoi_double(vects[1]);
@@ -173,7 +173,7 @@ void	ft_light(char **data, t_scene *scene)
 
 	new_light = malloc(sizeof(t_light));
 	new_light->color_light = malloc(sizeof(t_color));
-	new_light->coor_light = malloc(sizeof(t_coordonnate));
+	new_light->coor_light = malloc(sizeof(t_vec3));
 	new_light->next = NULL;
 	
 	char **coors = ft_split(data[1], ',');
@@ -213,8 +213,8 @@ void	ft_plane(char **data, t_scene *scene)
 		exit_error("invalid arguments", "in pl");
 	new_plane = malloc(sizeof(t_plane));
 	new_plane->color_plane = malloc(sizeof(t_color));
-	new_plane->coor_plane = malloc(sizeof(t_coordonnate));
-	new_plane->vector_plane = malloc(sizeof(t_coordonnate));
+	new_plane->coor_plane = malloc(sizeof(t_vec3));
+	new_plane->vector_plane = malloc(sizeof(t_vec3));
 	new_plane->next = NULL;
 
 	char **coors = ft_split(data[1], ',');
@@ -262,7 +262,7 @@ void	ft_sphere(char **data, t_scene *scene)
 
 	new_sphere = malloc(sizeof(t_sphere));
 	new_sphere->color_sphere = malloc(sizeof(t_color));
-	new_sphere->coor_sphere = malloc(sizeof(t_coordonnate));
+	new_sphere->coor_sphere = malloc(sizeof(t_vec3));
 	new_sphere->next = NULL;
 
 	char **coors = ft_split(data[1], ',');
@@ -301,8 +301,8 @@ void	ft_cylinder(char **data, t_scene *scene)
 		exit_error("invalid arguments", "in CY");
 	new_cylinder = malloc(sizeof(t_cylinder));
 	new_cylinder->color_cylinder = malloc(sizeof(t_color));
-	new_cylinder->coor_cylinder = malloc(sizeof(t_coordonnate));
-	new_cylinder->vector_cylinder = malloc(sizeof(t_coordonnate));
+	new_cylinder->coor_cylinder = malloc(sizeof(t_vec3));
+	new_cylinder->vector_cylinder = malloc(sizeof(t_vec3));
 	new_cylinder->next = NULL;
 	char **coors = ft_split(data[1], ',');
 	new_cylinder->coor_cylinder->x = ft_atoi_double(coors[0]);

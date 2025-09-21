@@ -64,6 +64,9 @@
     "get_next_line.h": "c",
     "algorithm": "c",
     "sstream": "c",
-    "iterator": "c"
+    "iterator": "c",
+    "colors.h": "c",
+    "math.h": "c",
+    "camera.h": "c"
   }
 }

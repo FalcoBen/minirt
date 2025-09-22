@@ -49,7 +49,6 @@ void start_using_mlx(t_scene *scene)
     t_camera_obj *cam;
     t_ray ray;
  
-    // 1. Initialize MLX
     mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
     if (!mlx)
         exit_error("MLX initialization failed", NULL);
@@ -57,14 +56,13 @@ void start_using_mlx(t_scene *scene)
     if (!img)
         exit_error("MLX image creation failed", NULL);
 
-    // 2. Initialize Camera - THIS IS CRUCIAL!
     cam = init_camera(scene);
     if (!cam)
         exit_error("Camera initialization failed", NULL);
     print_camera_debug(cam);
     if (scene->plane)
         print_plane_debug(scene->plane);
-    // 3. Main Rendering Loop - For each pixel
+    // rendering loop
     y = 0;
     while (y < HEIGHT)
     {

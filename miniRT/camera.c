@@ -31,20 +31,14 @@ t_camera_obj *init_camera(t_scene *scene)
     if (!cam)
         return (NULL);
 
-    // 1. Camera position and orientation
-    cam->origin = (t_vec3){scene->camera->coor_camera->x,
-                          scene->camera->coor_camera->y,
-                          scene->camera->coor_camera->z};
+    cam->origin = (t_vec3){scene->camera->coor_camera->x, scene->camera->coor_camera->y, scene->camera->coor_camera->z};
     
-    t_vec3 forward = (t_vec3){scene->camera->vector_camera->x,
-                             scene->camera->vector_camera->y,
-                             scene->camera->vector_camera->z};
+    t_vec3 forward = (t_vec3){scene->camera->vector_camera->x, scene->camera->vector_camera->y, scene->camera->vector_camera->z};
     
-    // 2. Normalize the forward vector
-    forward = vec_normalize(forward);
+    forward = vec_normalize(forward); // camera direction
     
-    // 3. Calculate camera coordinate system
     world_up = (t_vec3){0, 1, 0};
+    // 3. Calculate camera coordinate system
     cam->right = vec_normalize(vec_cross(forward, world_up));
     cam->up = vec_normalize(vec_cross(cam->right, forward));
     cam->forward = forward;

@@ -1,7 +1,7 @@
 #include "camera.h"
 #include <math.h>
 
-static void setup_camera_coordinate_system(t_camera_obj *cam, t_vec3 forward)
+static void setup_camera_coordinate_system(t_virtual_camera *cam, t_vec3 forward)
 {
     t_vec3 world_up;
     t_vec3 forward_norm;
@@ -20,14 +20,14 @@ static void setup_camera_coordinate_system(t_camera_obj *cam, t_vec3 forward)
     cam->forward = forward_norm;
 }
 
-t_camera_obj *init_camera(t_scene *scene)
+t_virtual_camera *init_camera(t_scene *scene)
 {
-    t_camera_obj *cam;
+    t_virtual_camera *cam;
     double aspect_ratio;
     double fov_radians;
     t_vec3 world_up;
 
-    cam = malloc(sizeof(t_camera_obj));
+    cam = malloc(sizeof(t_virtual_camera));
     if (!cam)
         return (NULL);
 
@@ -38,12 +38,12 @@ t_camera_obj *init_camera(t_scene *scene)
     forward = vec_normalize(forward); // camera direction
     
     world_up = (t_vec3){0, 1, 0};
-    // 3. Calculate camera coordinate system
+    //  calculate camera coordinate system
     cam->right = vec_normalize(vec_cross(forward, world_up));
     cam->up = vec_normalize(vec_cross(cam->right, forward));
     cam->forward = forward;
 
-    // 4. Calculate viewport dimensions
+    //  calculate viewport dimensions
     aspect_ratio = (double)WIDTH / (double)HEIGHT;
     fov_radians = scene->camera->angle_view * (M_PI / 180.0);
     cam->viewport_height = 2.0 * tan(fov_radians / 2.0);
@@ -62,7 +62,7 @@ t_camera_obj *init_camera(t_scene *scene)
     return (cam);
 }
 
-t_ray get_ray(t_camera_obj *cam, double u, double v)
+t_ray get_ray(t_virtual_camera *cam, double u, double v)
 {
     t_ray ray;
     t_vec3 direction;

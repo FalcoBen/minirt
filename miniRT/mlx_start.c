@@ -46,7 +46,7 @@ void start_using_mlx(t_scene *scene)
     mlx_image_t *img;
     int x;
     int y;
-    t_camera_obj *cam;
+    t_virtual_camera *cam;
     t_ray ray;
  
     mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);

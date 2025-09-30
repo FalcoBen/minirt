@@ -3,7 +3,7 @@
 #include <math.h>
 
 // Add this debug function
-void print_camera_debug(t_camera_obj *cam)
+void print_camera_debug(t_virtual_camera *cam)
 {
     printf("=== CAMERA DEBUG ===\n");
     printf("Origin: (%f, %f, %f)\n", cam->origin.x, cam->origin.y, cam->origin.z);

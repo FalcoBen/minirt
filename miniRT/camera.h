@@ -2,10 +2,21 @@
 # define CAMERA_H
 
 # include "minirt.h"
+#define M_PI 3.14159265358979323846
+
 typedef struct s_vec3 t_vec3;
 typedef struct s_scene t_scene;
+
+
+typedef struct s_hit_record
+{
+    double t;
+    t_vec3 p;      // Hit point
+    t_vec3 normal; // Surface normal
+    t_color color; // Object color
+} t_hit_record;
+
 // typedef t_vec3 t_vec3;
-#define M_PI 3.14159265358979323846
 typedef struct s_ray
 {
     t_vec3	origin;

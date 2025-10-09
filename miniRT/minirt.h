@@ -19,6 +19,7 @@
 #define HEIGHT 800
 
 
+
 typedef struct s_scene t_scene;
 typedef struct s_objects
 {

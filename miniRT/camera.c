@@ -49,12 +49,12 @@ t_virtual_camera *init_camera(t_scene *scene)
     cam->viewport_height = 2.0 * tan(fov_radians / 2.0);
     cam->viewport_width = aspect_ratio * cam->viewport_height;
 
-    // 5. Calculate viewport vectors
+    // calculate viewport vectors
     cam->horizontal = vec_scale(cam->right, cam->viewport_width);
     cam->vertical = vec_scale(cam->up, cam->viewport_height);
 
-    // 6. Calculate lower left corner
-    // Viewport is 1 unit in front of camera along forward direction
+    // calculate lower left corner
+    // viewport is 1 unit in front of camera along forward direction
     t_vec3 viewport_center = vec_add(cam->origin, cam->forward);
     cam->lower_left = vec_sub(viewport_center, vec_scale(cam->horizontal, 0.5));
     cam->lower_left = vec_sub(cam->lower_left, vec_scale(cam->vertical, 0.5));

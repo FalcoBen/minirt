@@ -56,6 +56,7 @@ double intersect_sphere(t_ray *ray, t_sphere *sphere, t_hit_record *rec)
     
     if (rec)
     {
+        // puts("=============================================================\n");
         rec->t = t;
         rec->p = vec_add(ray->origin, vec_scale(ray->direction, t));
         rec->normal = vec_normalize(vec_sub(rec->p, *sphere->coor_sphere)); // Normal = (P - center) / radius
@@ -135,7 +136,6 @@ void start_using_mlx(t_scene *scene)
                     curr_plane = curr_plane->next;
                 }
             }
-            
             // check all spheres
             t_sphere *curr_sphere = scene->sphere;
             while (curr_sphere)

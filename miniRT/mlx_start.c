@@ -80,6 +80,15 @@ char *get_color(t_color *curr_color)
     return color;
 }
 
+void    close_window(mlx_key_data_t keydata, void* param)
+{
+    if(keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+    {
+        printf("window closed !!!!!\n");
+        exit(0);
+    }
+}
+
 void start_using_mlx(t_scene *scene)
 {
     mlx_t *mlx;
@@ -205,13 +214,12 @@ void start_using_mlx(t_scene *scene)
                 final_color.b = (int)(color.z * 255);
             }
 
-            // Render pixel
             mlx_put_pixel(img, x, y, color_to_int(final_color));
             x++;
         }
         y++;
     }
-
+    mlx_key_hook(mlx, &close_window, NULL);
     // Cleanup and display
     free(cam);
     if (mlx_image_to_window(mlx, img, 0, 0) < 0)

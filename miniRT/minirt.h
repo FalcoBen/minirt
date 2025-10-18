@@ -15,11 +15,12 @@
 #include "colors.h"
 // # include "camera.h"
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 2000
+#define HEIGHT 1400
 
 
 
+typedef struct s_tuple t_tuple;
 typedef struct s_scene t_scene;
 typedef struct s_objects
 {
@@ -54,6 +55,7 @@ typedef struct s_vec3
     double x;
     double y;
     double z;
+    double w;
 } t_vec3;
 
 typedef struct s_camera
@@ -109,14 +111,89 @@ typedef struct s_scene
     t_cylinder *cylinder;  // llinked list
     // struct s_scene *next;
 } t_scene;
-/*-----------linked list----------------------*/
 
+typedef struct s_all_data
+{
+    t_container *container;
+
+} t_all_data;
+
+#define ld double
+/*====================jbahmida===========================*/
+
+typedef struct s_color_ja
+{
+    ld r;
+    ld g;
+    ld b;
+} t_color_ja;
+
+typedef struct s_material
+{
+    t_color_ja *color_ja;
+    ld ambient;
+    ld diffuse;
+    ld specular;
+    ld shininess;
+} t_material;
+
+typedef struct s_sphere_ja
+{
+    
+    int id;
+    t_tuple *origin;
+    ld radius;
+    // t_matrix transform;
+    // t_matrix inv;
+    t_material *material;
+} t_sphere_ja;
+
+typedef union s_obj
+{
+	t_sphere_ja *sphere_ja;
+	// t_cylinder_ja *cylinder_ja;
+	// t_plane_ja *plan_ja;
+}t_obj;
+
+
+typedef enum  type
+{
+    PLANE,
+    SPHERE,
+    CYLINDER,
+} t_type;
+
+typedef struct s_object_ja
+{
+	t_type type;
+	t_obj *obj;
+}t_object_ja;
+
+
+typedef struct s_world
+{
+	int obj_num;
+    t_light *light;
+	t_object_ja **objects;
+}t_world;
+
+typedef struct s_tuple
+{
+    ld x;
+    ld y;
+    ld z;
+    ld w;
+} t_tuple;
+
+
+
+/*-----------linked list----------------------*/
 void ft_lstadd_back(t_container **lst, t_container *new);
 void ft_lstadd_front(t_container **lst, t_container *new);
 t_container *ft_lstnew(void *content);
 t_container *ft_lstlast(t_container *lst);
-void ft_lstclear(t_container **lst, void (*del)(void *));
-void ft_lstdelone(t_container *lst, void (*del)(void *));
+void ft_lstclear(void **lst, void (*del)(void *), char c);
+void ft_lstdelone(void *lst, void (*del)(void *), char c);
 /*------------------------------------------------------*/
 char **ft_split(char const *s, char c);
 char **ft_split_white(char *str);
@@ -126,7 +203,10 @@ double ft_atoi_double(char *str);
 int ft_atoi_color(char *str, char *scene);
 bool non_num_chara(char *str, int i);
 void skip_spaces(char *str, int *i);
-void exit_error(char *str, char *scene);
+void del(void *content);
+void	exit_error(char *str, char *scene, void *data, bool flag);
+void	ft_free_split(char **str);
+
 
 
 void ft_ambient_light(char **data, t_scene *scene);
@@ -161,7 +241,11 @@ t_vec3 vec_cross(t_vec3 a, t_vec3 b);
 t_vec3 vec_normalize(t_vec3 v);
 double vec_dot(t_vec3 a, t_vec3 b);
 double vec_length(t_vec3 v);
-t_vec3 vec_mult(t_vec3 a, t_vec3 b);  // New declaration
+t_vec3 vec_mult(t_vec3 a, t_vec3 b);  
 
+/*-------------------------------------------------------*/
+
+t_world s_world(t_scene *scene);
+void    print_world(t_world *world);
 
 #endif

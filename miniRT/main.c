@@ -1,5 +1,9 @@
 #include "minirt.h"
 
+void s()
+{
+	system("leaks miniRT");
+}
 void del(void *content)
 {
     free(content);
@@ -12,10 +16,6 @@ void	ft_free_split(char **str)
 	free(str);
 }
 
-void s()
-{
-	system("leaks miniRT");
-}
 
 bool check_extension(char *str)
 {
@@ -36,47 +36,90 @@ void initialize_scenes(t_scene *scene)
     scene->cylinder = NULL;       
 }
 
+// void	free_color(t_color *color)
+// {
+// 	free(color->r);
+// 	free(color->g);
+// 	free(color->b);
+// }
+
+// void	free_coor(t_vec3 *coor)
+// {
+// 	free(coor);
+// 	free(coor->x);
+// 	free(coor->y);
+// 	free(coor->z);
+// }
+
+void	free_scene(t_scene *scene)
+{
+	if(scene->ambient_light)
+	{
+		t_ambient_light *amb = scene->ambient_light;
+		free(amb->color_ambient_light);
+		free(amb);
+	}
+	if(scene->sphere)
+	{
+		t_sphere *sp = scene->sphere;
+		while(sp)
+		{
+			free(sp->color_sphere);
+			free(sp->coor_sphere);
+			free(sp);
+			sp = sp->next;
+		}
+	}
+	if(scene->camera)
+	{
+		t_camera *cm = scene->camera;
+		free(cm->coor_camera);
+		free(cm->vector_camera);
+		free(cm);
+	}
+	if(scene->plane)
+	{
+		t_plane *pl = scene->plane;
+		while(pl)
+		{
+			free(pl->color_plane);
+			free(pl->coor_plane);
+			free(pl->vector_plane);
+			free(pl);
+			pl = pl->next;
+		}
+	}
+	if(scene->cylinder)
+	{
+		t_cylinder *cy = scene->cylinder;
+		while(cy)
+		{
+			free(cy->color_cylinder);
+			free(cy->coor_cylinder);
+			free(cy->vector_cylinder);
+			free(cy);
+			cy = cy->next;
+		}
+	}
+	free(scene);
+}
+
+
 void	make_sure_of_objects(t_scene *scene)
 {
-	if (!scene->camera) 
-		exit_error("Missing", "camera");
-	if (!scene->light || !scene->ambient_light) 
-		exit_error("Missing", "light source");
-	if (!scene->plane && !scene->sphere && !scene->cylinder) 
-		exit_error("Missing", "objects");
+	// if (!scene->camera) 
+	// 	exit_error("Missing", "camera");
+	// if (!scene->light || !scene->ambient_light) 
+	// 	exit_error("Missing", "light source");
+	// if (!scene->plane && !scene->sphere && !scene->cylinder) 
+	// 	exit_error("Missing", "objects");
 }
-void test_vector_math(void)
-{
-	printf("=== VECTOR MATH TEST ===\n");
-    
-    t_vec3 a = {1, 2, 3};
-    t_vec3 b = {4, 5, 6};
-    
-    t_vec3 add = vec_add(a, b);
-    printf("Add: (%f, %f, %f)\n", add.x, add.y, add.z);
-    
-    t_vec3 sub = vec_sub(a, b);
-    printf("Sub: (%f, %f, %f)\n", sub.x, sub.y, sub.z);
-    
-    double dot = vec_dot(a, b);
-    printf("Dot: %f\n", dot);
-    
-    t_vec3 cross = vec_cross(a, b);
-    printf("Cross: (%f, %f, %f)\n", cross.x, cross.y, cross.z);
-    
-    double len = vec_length(a);
-    printf("Length a: %f\n", len);
-    
-    t_vec3 norm = vec_normalize(a);
-    printf("Normalized a: (%f, %f, %f)\n", norm.x, norm.y, norm.z);
-    printf("Length normalized: %f\n", vec_length(norm));
-    printf("=========================\n");
-}
+
 int main(int ac, char **av)
 {
 	// atexit(s);
 	if(ac != 2)
-	return 1;
+		return 1;
 	char *file_name = av[1];
 	if(!check_extension(file_name))
 	{
@@ -103,9 +146,9 @@ int main(int ac, char **av)
     }       
 	close(fd);
 	if(counter == 0)
-		exit_error("empty", "file");
-		char ***tokens = malloc(sizeof(char **) * (counter + 1));
-		t_container *curr = head;
+		exit_error("empty", "file", &head, false);
+	char ***tokens = malloc(sizeof(char **) * (counter + 1));
+	t_container *curr = head;
 	int i = 0;
 	while(curr)
 	{
@@ -113,16 +156,18 @@ int main(int ac, char **av)
 		i++;
 		curr = curr->next;
 	}
+	exit_error("cleanup", "container", &head, true);
+	
 	// for(int i = 0; i < counter; i++)
 	// {
-		// 	if(strcmp(tokens[i][0], "A") == 0 || strcmp(tokens[i][0], "C") == 0 || strcmp(tokens[i][0], "L") == 0 || strcmp(tokens[i][0], "pl") == 0 || strcmp(tokens[i][0], "sp") == 0 ||  strcmp(tokens[i][0], "cy") == 0)
-		// 		continue;
-		// 	else
-		// 		exit_error("object should not render", tokens[i][0]);
-		// }
-		t_objects *input_data = malloc(sizeof(t_objects));
-		input_data->assign_object = NULL;
-		input_data->identifier = NULL;
+	// 	if(strcmp(tokens[i][0], "A") == 0 || strcmp(tokens[i][0], "C") == 0 || strcmp(tokens[i][0], "L") == 0 || strcmp(tokens[i][0], "pl") == 0 || strcmp(tokens[i][0], "sp") == 0 ||  strcmp(tokens[i][0], "cy") == 0)
+	// 		continue;
+	// 	else
+	// 		//exit_error("object should not render", tokens[i][0]);
+	// }
+	t_objects *input_data = malloc(sizeof(t_objects));
+	input_data->assign_object = NULL;
+	input_data->identifier = NULL;
 	input_data->nb = 0;
 	input_data->next = NULL;
 	
@@ -135,7 +180,7 @@ int main(int ac, char **av)
     for(int x = 0; x < counter; x++)
     {
 		if(!tokens[x] || !tokens[x][0]) 
-		continue;
+			continue;
 		
         t_objects *current_obj = dispatch_table;
         while(current_obj)
@@ -148,23 +193,29 @@ int main(int ac, char **av)
             current_obj = current_obj->next;
         }
     }
-	
-	make_sure_of_objects(scene);
-	
-	
-	test_vector_math();
-	start_using_mlx(scene);
+	free(input_data);
+	// make_sure_of_objects(scene);
+	// // printer(scene);
+
+	// // printf("[[[[[[[[[[[[[[[[[[[[[%f]]]]]]]]]]]]]]]]]]]]]]]]\n", scene->sphere->coor_sphere->x);
+	// // // test_vector_math();
+	t_world z =	s_world(scene);
+	// for(int i = 0; z.objects[i] != NULL; i++)
+	// {
+	// 	printf("______________________________%d_____________________\n", z.objects[i]->obj->sphere_ja->id);
+
+	// }
+	print_world(&z);
+	// start_using_mlx(scene);
 	
 	
 	for (int i = 0; i < counter; i++)
         ft_free_split(tokens[i]);
     free(tokens);
-    ft_lstclear(&head, del);
-    free(input_data);
 
-
-	// printf("-----------------------------------------------\n");
-	// printer(scene);
+	free_scene(scene);
+	// // printf("-----------------------------------------------\n");
+	// // printer(scene);
 
 	return 0;
 }
@@ -190,3 +241,6 @@ int main(int ac, char **av)
 	// 	// input_data = input_data->next;
 	// 	a++;
 	// }
+
+
+	

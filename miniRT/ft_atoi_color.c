@@ -48,7 +48,7 @@ int	ft_atoi_color(char *str, char *scene)
 	if((int)nb < 0 || (int)nb > 255)
 	{
 		printf("[[%d]]\n", (int)nb);
-		exit_error("invalid range color", scene);
+		//exit_error("invalid range color", scene);
 	}
 	return ((int)nb);
 }

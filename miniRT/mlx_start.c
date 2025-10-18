@@ -99,14 +99,14 @@ void start_using_mlx(t_scene *scene)
 
     mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
     if (!mlx)
-        exit_error("MLX initialization failed", NULL);
+        //exit_error("MLX initialization failed", NULL);
     img = mlx_new_image(mlx, WIDTH, HEIGHT);
     if (!img)
-        exit_error("MLX image creation failed", NULL);
+        //exit_error("MLX image creation failed", NULL);
 
     cam = init_camera(scene);
     if (!cam)
-        exit_error("Camera initialization failed", NULL);
+        //exit_error("Camera initialization failed", NULL);
     print_camera_debug(cam);
     if (scene->plane)
         print_plane_debug(scene->plane);
@@ -223,7 +223,7 @@ void start_using_mlx(t_scene *scene)
     // Cleanup and display
     free(cam);
     if (mlx_image_to_window(mlx, img, 0, 0) < 0)
-        exit_error("Failed to display image", NULL);
+        //exit_error("Failed to display image", NULL);
     mlx_loop(mlx);
     mlx_delete_image(mlx, img);
     mlx_terminate(mlx);

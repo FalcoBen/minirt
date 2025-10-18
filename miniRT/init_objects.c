@@ -30,6 +30,8 @@ void add_object(t_objects **head, char *identifier, void (*assign_object)(char *
             current = current->next;
         current->next = new_node;
     }
+	free(new_node->identifier);
+	ft_lstclear((void **)head, del, 'o');
 }
 
 void init_object_dispatch_table(t_objects **dispatch_table)
@@ -63,19 +65,19 @@ void	ft_ambient_light(char **data, t_scene *scene)
 	i = 0;
 	while (data[i])
 		i++;
-	if (i != 3)
-		exit_error("invalid arguments", "in A");
+	// if (i != 3)
+		//exit_error("invalid arguments", "in A");
 
 	new_ambient = malloc(sizeof(t_ambient_light));
 	new_ambient->color_ambient_light = malloc(sizeof(t_color));
 	new_ambient->next = NULL;
 
 	new_ambient->bright_ambient_light = ft_atoi_double(data[1]);
-	if (new_ambient->bright_ambient_light < 0 || new_ambient->bright_ambient_light > 1)
-		exit_error("invalid range ambient light", "A");
+	// if (new_ambient->bright_ambient_light < 0 || new_ambient->bright_ambient_light > 1)
+		//exit_error("invalid range ambient light", "A");
 	colors = ft_split(data[2], ',');
-	if (!check_colors_args(colors))
-		exit_error("some color is missing", "in A");
+	// if (!check_colors_args(colors))
+		//exit_error("some color is missing", "in A");
 	new_ambient->color_ambient_light->r = ft_atoi_color(colors[0], "ambient light r");
 	new_ambient->color_ambient_light->g = ft_atoi_color(colors[1], "ambient light g");
 	new_ambient->color_ambient_light->b = ft_atoi_color(colors[2], "ambient light b");
@@ -96,8 +98,9 @@ void	ft_ambient_light(char **data, t_scene *scene)
 		counter++;
 		tmp = tmp->next;
 	}
-	if(counter > 1)
-		exit_error("duplicate object", "ambient_light");
+	// if(counter > 1)
+		//exit_error("duplicate object", "ambient_light");
+	ft_free_split(colors);
 	
 }
 
@@ -107,8 +110,8 @@ void	ft_camera(char **data, t_scene *scene)
 	int i;
 	for(i = 0; data[i]; i++)
 		i++;
-	if(i != 4)
-		exit_error("invalid arguments", "in C");
+	// if(i != 4)
+	// 	exit_error("invalid arguments", "in C");
 
 	t_camera *new_camera = malloc(sizeof(t_camera));
 	t_camera *current;
@@ -127,17 +130,17 @@ void	ft_camera(char **data, t_scene *scene)
 	double range_x = new_camera->vector_camera->x;
 	double range_y = new_camera->vector_camera->y;
 	double range_z = new_camera->vector_camera->z;
-	if(range_x < -1 || range_x > 1)
-		exit_error("invalid range vectors", "C in x");
+	// if(range_x < -1 || range_x > 1)
+		//exit_error("invalid range vectors", "C in x");
 
-	if(range_y < -1 || range_y > 1)
-		exit_error("invalid range vectors", "C in y");
+	// if(range_y < -1 || range_y > 1)
+		//exit_error("invalid range vectors", "C in y");
 		
-	if(range_z < -1 || range_z > 1)
-		exit_error("invalid range vectors", "C in z");
+	// if(range_z < -1 || range_z > 1)
+		//exit_error("invalid range vectors", "C in z");
 	new_camera->angle_view = ft_atoi_double(data[3]);
-	if(new_camera->angle_view < 0 || new_camera->angle_view > 180)
-		exit_error("invalid range angle view", "C");
+	// if(new_camera->angle_view < 0 || new_camera->angle_view > 180)
+		//exit_error("invalid range angle view", "C");
 
 	if(scene->camera == NULL)
 		scene->camera = new_camera;
@@ -157,8 +160,9 @@ void	ft_camera(char **data, t_scene *scene)
 		tmp = tmp->next;
 	}
 	
-	if(counter > 1)
-		exit_error("duplicate object", "camera");
+	// if(counter > 1)
+	//exit_error("duplicate object", "camera");
+	ft_free_split(coors);
 }
 void	ft_light(char **data, t_scene *scene)
 {
@@ -168,8 +172,8 @@ void	ft_light(char **data, t_scene *scene)
 	int i;
 	for(i = 0; data[i]; i++)
 		i++;
-	if(i != 4)
-		exit_error("invalid arguments", "in L");
+	// if(i != 4)
+		//exit_error("invalid arguments", "in L");
 
 	new_light = malloc(sizeof(t_light));
 	new_light->color_light = malloc(sizeof(t_color));
@@ -182,11 +186,11 @@ void	ft_light(char **data, t_scene *scene)
 	new_light->coor_light->z = ft_atoi_double(coors[2]);
 
 	new_light->bright_light = ft_atoi_double(data[2]);
-	if(new_light->bright_light < 0 || new_light->bright_light > 1)
-		exit_error("invalid range bright light", "L");
+	// if(new_light->bright_light < 0 || new_light->bright_light > 1)
+		//exit_error("invalid range bright light", "L");
 	char **colors = ft_split(data[3], ',');
-	if(!check_colors_args(colors))
-		exit_error("some color is missing", "in LIGHT");
+	// if(!check_colors_args(colors))
+		//exit_error("some color is missing", "in LIGHT");
 	new_light->color_light->r = ft_atoi_color(colors[0], "light");
 	new_light->color_light->g = ft_atoi_color(colors[1], "light");
 	new_light->color_light->b = ft_atoi_color(colors[2], "light");
@@ -200,6 +204,8 @@ void	ft_light(char **data, t_scene *scene)
 			current = current->next;
 		current->next = new_light;
 	}
+	ft_free_split(colors);
+	ft_free_split(coors);
 }
 void	ft_plane(char **data, t_scene *scene)
 {
@@ -209,8 +215,8 @@ void	ft_plane(char **data, t_scene *scene)
 	int i;
 	for(i = 0; data[i]; i++)
 		i++;
-	if(i != 4)
-		exit_error("invalid arguments", "in pl");
+	// if(i != 4)
+		//exit_error("invalid arguments", "in pl");
 	new_plane = malloc(sizeof(t_plane));
 	new_plane->color_plane = malloc(sizeof(t_color));
 	new_plane->coor_plane = malloc(sizeof(t_vec3));
@@ -230,12 +236,12 @@ void	ft_plane(char **data, t_scene *scene)
 	double range_x = new_plane->vector_plane->x;
 	double range_y = new_plane->vector_plane->y;
 	double range_z = new_plane->vector_plane->z;
-	if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
-			exit_error("invalid range vectors", "PL");
+	// if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
+			//exit_error("invalid range vectors", "PL");
 
 	char **colors = ft_split(data[3], ',');
-	if(!check_colors_args(colors))
-		exit_error("some color is missing", "in PL");
+	// if(!check_colors_args(colors))
+		//exit_error("some color is missing", "in PL");
 	new_plane->color_plane->r = ft_atoi_color(colors[0], "plane");
 	new_plane->color_plane->g = ft_atoi_color(colors[1], "plane");
 	new_plane->color_plane->b = ft_atoi_color(colors[2], "plane");
@@ -249,6 +255,8 @@ void	ft_plane(char **data, t_scene *scene)
 			current = current->next;
 		current->next = new_plane;
 	}
+	ft_free_split(colors);
+	ft_free_split(coors);
 }
 void	ft_sphere(char **data, t_scene *scene)
 {
@@ -257,8 +265,8 @@ void	ft_sphere(char **data, t_scene *scene)
 	int i;
 	for(i = 0; data[i]; i++)
 		i++;
-	if(i != 4)
-		exit_error("invalid arguments", "in SP");
+	// if(i != 4)
+		//exit_error("invalid arguments more or less", "in SP");
 
 	new_sphere = malloc(sizeof(t_sphere));
 	new_sphere->color_sphere = malloc(sizeof(t_color));
@@ -269,13 +277,14 @@ void	ft_sphere(char **data, t_scene *scene)
 	new_sphere->coor_sphere->x = ft_atoi_double(coors[0]);
 	new_sphere->coor_sphere->y = ft_atoi_double(coors[1]);
 	new_sphere->coor_sphere->z = ft_atoi_double(coors[2]);
-
+	new_sphere->coor_sphere->w = ft_atoi_double("0.1");
+	
 	new_sphere->diameter_sphere = ft_atoi_double(data[2]);
-	if(new_sphere->diameter_sphere <= 0)
-		exit_error("invalid diametre", "in sphere");
+	// if(new_sphere->diameter_sphere <= 0)
+		//exit_error("invalid diametre", "in sphere");
 	char **colors = ft_split(data[3], ',');
-	if(!check_colors_args(colors))
-		exit_error("some color is missing", "in SP");
+	// if(!check_colors_args(colors))
+		//exit_error("some color is missing", "in SP");
 	new_sphere->color_sphere->r = ft_atoi_color(colors[0], "sphere");
 	new_sphere->color_sphere->g = ft_atoi_color(colors[1], "sphere");
 	new_sphere->color_sphere->b = ft_atoi_color(colors[2], "sphere");
@@ -288,17 +297,19 @@ void	ft_sphere(char **data, t_scene *scene)
 			current = current->next;
 		current->next = new_sphere;
 	}
+	ft_free_split(colors);
+	ft_free_split(coors);
 }
 void	ft_cylinder(char **data, t_scene *scene)
 {
 	t_cylinder *new_cylinder;
 	t_cylinder *current;
-
+	
 	int i;
 	for(i = 0; data[i]; i++)
-		i++;
+	i++;
 	if(i != 6)
-		exit_error("invalid arguments", "in CY");
+	//exit_error("invalid arguments", "in CY");
 	new_cylinder = malloc(sizeof(t_cylinder));
 	new_cylinder->color_cylinder = malloc(sizeof(t_color));
 	new_cylinder->coor_cylinder = malloc(sizeof(t_vec3));
@@ -308,38 +319,40 @@ void	ft_cylinder(char **data, t_scene *scene)
 	new_cylinder->coor_cylinder->x = ft_atoi_double(coors[0]);
 	new_cylinder->coor_cylinder->y = ft_atoi_double(coors[1]);
 	new_cylinder->coor_cylinder->z = ft_atoi_double(coors[2]);
-
+	
 	char **vects = ft_split(data[2], ',');
 	new_cylinder->vector_cylinder->x = ft_atoi_double(vects[0]);
 	new_cylinder->vector_cylinder->y = ft_atoi_double(vects[1]);
 	new_cylinder->vector_cylinder->z = ft_atoi_double(vects[2]);
-
+	
 	double range_x = new_cylinder->vector_cylinder->x;
 	double range_y = new_cylinder->vector_cylinder->y;
 	double range_z = new_cylinder->vector_cylinder->z;
-	if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
-			exit_error("invalid range vectors", "CY");
-
+	// if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
+	//exit_error("invalid range vectors", "CY");
+	
 	new_cylinder->diameter_cylinder = ft_atoi_double(data[3]);
 	
 	new_cylinder->height_cylinder = ft_atoi_double(data[4]);
-	if (new_cylinder->height_cylinder <= 0 || new_cylinder->diameter_cylinder <= 0)
-		exit_error("invalid range in height or diameter", "CY");
-
+	// if (new_cylinder->height_cylinder <= 0 || new_cylinder->diameter_cylinder <= 0)
+	//exit_error("invalid range in height or diameter", "CY");
+	
 	char **colors = ft_split(data[5], ',');
-	if(!check_colors_args(colors))
-		exit_error("some color is missing", "in CY");
+	// if(!check_colors_args(colors))
+	//exit_error("some color is missing", "in CY");
 	new_cylinder->color_cylinder->r = ft_atoi_color(colors[0], "cylinder");
 	new_cylinder->color_cylinder->g = ft_atoi_color(colors[1], "cylinder");
 	new_cylinder->color_cylinder->b = ft_atoi_color(colors[2], "cylinder");
 	if(scene->cylinder == NULL)
-		scene->cylinder = new_cylinder;
+	scene->cylinder = new_cylinder;
 	else
 	{
 		current = scene->cylinder;
 		while(current->next)
-			current = current->next;
+		current = current->next;
 		current->next = new_cylinder;
 	}
+	ft_free_split(colors);
+	ft_free_split(coors);
 }
 

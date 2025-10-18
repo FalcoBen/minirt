@@ -33,14 +33,24 @@ bool	non_num_chara(char *str, int i)
 	// skip_spaces(str, &j);
 	return (false);
 }
-void	exit_error(char *str, char *scene)
+
+void exit_error(char *str, char *scene, void *data, bool flag)
 {
-	if(!scene)
-		scene = "double";
-	printf("Error\n%s in %s\n", str, scene);
-	// cleanup
-	exit(1);
+    if (!scene)
+	scene = "double";
+    printf("Error\n%s in %s\n", str, scene);
+	
+    if (flag)
+    {
+		t_container **container;
+        container = (t_container **)data;
+        if (container && *container)
+            ft_lstclear((void **)container, del, 'c');
+		return ;
+    }
+    // exit(1);
 }
+
 double	ft_atoi_double(char *str)
 {
 	int						i;
@@ -65,7 +75,7 @@ double	ft_atoi_double(char *str)
 	}
 	if (non_num_chara(str, i))
 	{
-		exit_error("invalid character", NULL);
+		//exit_error("invalid character", NULL);
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{

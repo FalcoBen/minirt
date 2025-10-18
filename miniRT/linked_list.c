@@ -21,25 +21,46 @@ void	ft_lstadd_front(t_container **lst, t_container *new)
 	new->next = *lst;
 	*lst = new;
 }
-void	ft_lstclear(t_container **lst, void (*del)(void *))
+void	ft_lstclear(void **lst, void (*del)(void *), char c)
 {
-	t_container	*tmp;
+	void	*tmp;
+	void	*current;
 
-	if (!lst || !del)
+	if (!lst || !*lst || !del)
 		return ;
-	while ((*lst))
+
+	current = *lst;
+	if(c == 'c')
 	{
-		tmp = (*lst)->next;
-		ft_lstdelone((*lst), del);
-		*lst = tmp;
+
+		while (current)
+		{
+			tmp = ((t_container *)current)->next;
+			ft_lstdelone((t_container *)current, del, 'c');
+			current = tmp;
+		}
+	}
+	if(c == 'o')
+	{
+
+		while (current)
+		{
+			tmp = ((t_objects *)current)->next;
+			ft_lstdelone((t_objects *)current, del, 'o');
+			current = tmp;
+		}
 	}
 	*lst = NULL;
 }
-void	ft_lstdelone(t_container *lst, void (*del)(void *))
+
+void	ft_lstdelone(void *lst, void (*del)(void *), char c)
 {
 	if (!lst || !del)
 		return ;
-	del(lst->line);
+	if(c == 'c')
+	{
+		del(((t_container *)lst)->line);
+	}
 	free(lst);
 }
 

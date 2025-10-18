@@ -54,7 +54,7 @@ void obj_creator(t_obj *obj, t_scene *scene, t_type type)
         dest->origin->x = src->coor_sphere->x;
         dest->origin->y = src->coor_sphere->y;
         dest->origin->z = src->coor_sphere->z;
-        dest->origin->w = src->coor_sphere->w;
+        // dest->origin->w = src->coor_sphere->w;
         dest->material->diffuse =  ambient_light->bright_ambient_light;
         dest->radius = src->diameter_sphere / 2;
         dest->material->color_ja->r = switch_ld(src->color_sphere->r);

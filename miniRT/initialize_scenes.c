@@ -12,6 +12,7 @@ void	initialize_coordinate(t_vec3 *coors)
 	coors->x = 0;
 	coors->y = 0;
 	coors->z = 0;
+	// coors->w = 1.0;
 }
 
 void	initialize_ambient_light(t_scene *scene)

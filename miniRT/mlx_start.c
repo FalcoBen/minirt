@@ -1,7 +1,42 @@
 #include "minirt.h"
 #include "camera.h"
 #include <math.h>
+void debug_rendering(t_scene *scene, t_virtual_camera *cam, mlx_image_t *img, int x, int y, t_ray ray, double closest_t, t_hit_record hit_rec, t_color final_color, int hit)
+{
+    printf("=== Debug at Pixel (%d, %d) ===\n", x, y);
 
+    // Camera and Ray Debug
+    printf("Camera Origin: (%f, %f, %f)\n", cam->origin.x, cam->origin.y, cam->origin.z);
+    printf("Forward: (%f, %f, %f)\n", cam->forward.x, cam->forward.y, cam->forward.z);
+    printf("Right: (%f, %f, %f)\n", cam->right.x, cam->right.y, cam->right.z);
+    printf("Up: (%f, %f, %f)\n", cam->up.x, cam->up.y, cam->up.z);
+    printf("Viewport Width: %f, Height: %f\n", cam->viewport_width, cam->viewport_height);
+    printf("Ray Origin: (%f, %f, %f), Direction: (%f, %f, %f)\n", ray.origin.x, ray.origin.y, ray.origin.z, ray.direction.x, ray.direction.y, ray.direction.z);
+
+    // Intersection Debug
+    printf("Closest t: %f, Hit: %d\n", closest_t, hit);
+    if (hit)
+    {
+        printf("Hit Point: (%f, %f, %f)\n", hit_rec.p.x, hit_rec.p.y, hit_rec.p.z);
+        printf("Normal: (%f, %f, %f)\n", hit_rec.normal.x, hit_rec.normal.y, hit_rec.normal.z);
+        printf("Color from Hit: (%d, %d, %d)\n", hit_rec.color.r, hit_rec.color.g, hit_rec.color.b);
+    }
+
+    // Scene Object Debug
+    printf("Sphere at: (%f, %f, %f), Radius: %f\n", scene->sphere->coor_sphere->x, scene->sphere->coor_sphere->y, scene->sphere->coor_sphere->z, scene->sphere->diameter_sphere / 2.0);
+    t_plane *p = scene->plane;
+    int plane_count = 0;
+    while (p)
+    {
+        printf("Plane %d at: (%f, %f, %f), Normal: (%f, %f, %f)\n", plane_count, p->coor_plane->x, p->coor_plane->y, p->coor_plane->z, p->vector_plane->x, p->vector_plane->y, p->vector_plane->z);
+        p = p->next;
+        plane_count++;
+    }
+
+    // Final Color Debug
+    printf("Final Color: (%d, %d, %d)\n", final_color.r, final_color.g, final_color.b);
+    printf("---------------------------\n");
+}
 static uint32_t color_to_int(t_color color)
 {
     return ((color.r << 24) | (color.g << 16) | (color.b << 8) | 0xFF);
@@ -14,9 +49,10 @@ double intersect_plane(t_ray *ray, t_plane *plane, t_hit_record *rec)
     t_vec3 oc = vec_sub(plane_point, ray->origin);
     double denom = vec_dot(ray->direction, plane_normal);
 
+    // printf("Denom: %f\n", denom);
     if (fabs(denom) < 1e-6)
         return INFINITY;
-
+    
     double t = vec_dot(oc, plane_normal) / denom;
     if (t < 0)
     {
@@ -98,20 +134,20 @@ void start_using_mlx(t_scene *scene)
     t_ray ray;
 
     mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-    if (!mlx)
-        //exit_error("MLX initialization failed", NULL);
+    // if (!mlx)
+    //     exit_error("MLX initialization failed", NULL);
     img = mlx_new_image(mlx, WIDTH, HEIGHT);
-    if (!img)
-        //exit_error("MLX image creation failed", NULL);
+    // if (!img)
+    //     exit_error("MLX image creation failed", NULL);
 
     cam = init_camera(scene);
-    if (!cam)
-        //exit_error("Camera initialization failed", NULL);
+    // if (!cam)
+    //     exit_error("Camera initialization failed", NULL);
     print_camera_debug(cam);
     if (scene->plane)
         print_plane_debug(scene->plane);
 
-    // rendering loop
+    // Rendering loop
     y = 0;
     while (y < HEIGHT)
     {
@@ -122,30 +158,28 @@ void start_using_mlx(t_scene *scene)
             double v = 1.0 - (double)y / (HEIGHT - 1); // Flip Y (0 at top)
 
             ray = get_ray(cam, u, v);
-            print_ray_debug(&ray, x, y); // DEBUG
+            print_ray_debug(&ray, x, y); // Existing debug
 
             double closest_t = INFINITY;
             t_hit_record hit_rec;
-            int hit = 0; // flag for any hit
+            int hit = 0; // Flag for any hit
 
-            // check all planes
+            // Check all planes
             t_plane *curr_plane = scene->plane;
-            if(scene->plane)
+            while (curr_plane)
             {
-                while (curr_plane)
+                double t = intersect_plane(&ray, curr_plane, NULL);
+                if (t < closest_t)
                 {
-                    double t = intersect_plane(&ray, curr_plane, NULL);
-                    if (t < closest_t)
-                    {
-                        closest_t = t;
-                        intersect_plane(&ray, curr_plane, &hit_rec);
-                        // printf("Plane hit at pixel [[%d, %d]], t = [[%f]] with color = %s \n", x, y, t, get_color(curr_plane->color_plane));
-                        hit = 1;
-                    }
-                    curr_plane = curr_plane->next;
+                    closest_t = t;
+                    intersect_plane(&ray, curr_plane, &hit_rec);
+                    printf("Plane hit at pixel [%d, %d], t = %f\n", x, y, t);
+                    hit = 1;
                 }
+                curr_plane = curr_plane->next;
             }
-            // check all spheres
+
+            // Check all spheres
             t_sphere *curr_sphere = scene->sphere;
             while (curr_sphere)
             {
@@ -154,14 +188,14 @@ void start_using_mlx(t_scene *scene)
                 {
                     closest_t = t;
                     intersect_sphere(&ray, curr_sphere, &hit_rec);
+                    printf("Sphere hit at pixel [%d, %d], t = %f\n", x, y, t);
                     hit = 1;
-                    // printf("Sphere hit at pixel (%d, %d), t = %f  with color = %s\n", x, y, t, get_color(curr_sphere->color_sphere));
                 }
                 curr_sphere = curr_sphere->next;
             }
 
             // If hit, compute color with lighting
-            t_color final_color = {0, 0, 0}; // Black by default
+            t_color final_color = {0,0,0}; // Black by default
             if (hit)
             {
                 t_vec3 hit_point = hit_rec.p;
@@ -175,7 +209,7 @@ void start_using_mlx(t_scene *scene)
                                    amb->color_ambient_light->b / 255.0};
                 t_vec3 color = vec_mult(obj_color, vec_scale(amb_color, amb->bright_ambient_light));
 
-                // Diffuse lighting (loop over lights)
+                // Diffuse lighting
                 t_light *current_light = scene->light;
                 while (current_light)
                 {
@@ -187,10 +221,7 @@ void start_using_mlx(t_scene *scene)
                     t_vec3 light_dir = vec_normalize(to_light);
 
                     double diff_factor = fmax(vec_dot(normal, light_dir), 0.0);
-
-                    // Optional attenuation (uncomment for distance fade)
-                    // double atten = 1.0 / (dist * dist + 1e-6);
-                    double atten = 1.0; // No attenuation for now
+                    double atten = 1.0;
 
                     t_vec3 light_color = {current_light->color_light->r / 255.0, 
                                          current_light->color_light->g / 255.0, 
@@ -214,17 +245,22 @@ void start_using_mlx(t_scene *scene)
                 final_color.b = (int)(color.z * 255);
             }
 
+            // Call debug function
+            // debug_rendering(scene, cam, img, x, y, ray, closest_t, hit_rec, final_color, hit);
+
             mlx_put_pixel(img, x, y, color_to_int(final_color));
             x++;
         }
         y++;
     }
-    mlx_key_hook(mlx, &close_window, NULL);
-    // Cleanup and display
-    free(cam);
+
     if (mlx_image_to_window(mlx, img, 0, 0) < 0)
-        //exit_error("Failed to display image", NULL);
+        perror("mlx_image to window:");
+
+    mlx_key_hook(mlx, &close_window, mlx);
     mlx_loop(mlx);
+
+    free(cam);
     mlx_delete_image(mlx, img);
     mlx_terminate(mlx);
 }

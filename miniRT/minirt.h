@@ -15,8 +15,8 @@
 #include "colors.h"
 // # include "camera.h"
 
-#define WIDTH 2000
-#define HEIGHT 1400
+#define WIDTH 1000
+#define HEIGHT 1000
 
 
 
@@ -55,7 +55,7 @@ typedef struct s_vec3
     double x;
     double y;
     double z;
-    double w;
+    // double w;
 } t_vec3;
 
 typedef struct s_camera
@@ -206,6 +206,12 @@ void skip_spaces(char *str, int *i);
 void del(void *content);
 void	exit_error(char *str, char *scene, void *data, bool flag);
 void	ft_free_split(char **str);
+
+
+/*----------------------------free------------------------------------*/
+void	free_scene(t_scene *scene);
+
+
 
 
 

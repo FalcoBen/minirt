@@ -20,6 +20,64 @@ static void setup_camera_coordinate_system(t_virtual_camera *cam, t_vec3 forward
     cam->forward = forward_norm;
 }
 
+// t_virtual_camera *init_camera(t_scene *scene)
+// {
+//     t_virtual_camera *cam;
+//     double aspect_ratio;
+//     double fov_radians;
+//     t_vec3 world_up;
+
+//     cam = malloc(sizeof(t_virtual_camera));
+//     if (!cam)
+//         return (NULL);
+//     printf("--------------%f------------------\n", scene->camera->coor_camera->x);
+//     cam->origin.x = scene->camera->coor_camera->x;
+//     cam->origin.y = scene->camera->coor_camera->y;
+//     cam->origin.z = scene->camera->coor_camera->z;
+//     // cam->origin.w = 0.1;
+    
+//     t_vec3 forward;
+    
+//     forward.x = scene->camera->vector_camera->x;
+//     forward.y = scene->camera->vector_camera->y;
+//     forward.z = scene->camera->vector_camera->z;
+    
+    
+    
+//     forward = vec_normalize(forward); // camera direction
+    
+//     world_up.x = 0;
+//     world_up.y = 1;
+//     world_up.z = 0;
+//     //  calculate camera coordinate system
+//     cam->right = vec_normalize(vec_cross(forward, world_up));
+//     cam->up = vec_normalize(vec_cross(cam->right, forward));
+//     cam->forward = forward;
+
+//     //  calculate viewport dimensions
+//     aspect_ratio = (double)WIDTH / (double)HEIGHT;
+//     fov_radians = scene->camera->angle_view * (M_PI / 180.0);
+//     // cam->viewport_height = 2.0 * tan(fov_radians / 2.0);
+//     // cam->viewport_width = aspect_ratio * cam->viewport_height;
+//     // calculate viewport vectors
+//     // cam->horizontal = vec_scale(cam->right, cam->viewport_width);
+//     // cam->vertical = vec_scale(cam->up, cam->viewport_height);
+//     /*------------------------------------------------*/
+//     cam->viewport_width = 2.0 * tan(fov_radians / 2.0);
+//     cam->viewport_height = cam->viewport_width / aspect_ratio;
+//     cam->horizontal = vec_scale(cam->right, cam->viewport_width);
+//     cam->vertical = vec_scale(cam->up, cam->viewport_height);
+//     /*------------------------------------------------*/
+
+//     // calculate lower left corner
+//     // viewport is 1 unit in front of camera along forward direction
+//     t_vec3 viewport_center = vec_add(cam->origin, cam->forward);
+//     cam->lower_left = vec_sub(viewport_center, vec_scale(cam->horizontal, 0.5));
+//     cam->lower_left = vec_sub(cam->lower_left, vec_scale(cam->vertical, 0.5));
+
+//     return (cam);
+// }
+
 t_virtual_camera *init_camera(t_scene *scene)
 {
     t_virtual_camera *cam;

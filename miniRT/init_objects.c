@@ -30,13 +30,13 @@ void add_object(t_objects **head, char *identifier, void (*assign_object)(char *
             current = current->next;
         current->next = new_node;
     }
-	free(new_node->identifier);
-	ft_lstclear((void **)head, del, 'o');
+	// free(new_node->identifier);
+	// ft_lstclear((void **)head, del, 'o');
 }
 
 void init_object_dispatch_table(t_objects **dispatch_table)
 {
-    add_object(dispatch_table, "A", ft_ambient_light);
+	add_object(dispatch_table, "A", ft_ambient_light);
     add_object(dispatch_table, "C", ft_camera);
     add_object(dispatch_table, "L", ft_light);
     add_object(dispatch_table, "pl", ft_plane);
@@ -115,7 +115,6 @@ void	ft_camera(char **data, t_scene *scene)
 
 	t_camera *new_camera = malloc(sizeof(t_camera));
 	t_camera *current;
-	new_camera = malloc(sizeof(t_camera));
 	new_camera->coor_camera = malloc(sizeof(t_vec3));
 	new_camera->next = NULL;
 	char **coors = ft_split(data[1], ',');
@@ -141,7 +140,7 @@ void	ft_camera(char **data, t_scene *scene)
 	new_camera->angle_view = ft_atoi_double(data[3]);
 	// if(new_camera->angle_view < 0 || new_camera->angle_view > 180)
 		//exit_error("invalid range angle view", "C");
-
+	puts("-----------------------------CALLED-------------------------------------------------\n");
 	if(scene->camera == NULL)
 		scene->camera = new_camera;
 	else
@@ -161,8 +160,9 @@ void	ft_camera(char **data, t_scene *scene)
 	}
 	
 	// if(counter > 1)
-	//exit_error("duplicate object", "camera");
+		//exit_error("duplicate object", "camera");
 	ft_free_split(coors);
+	ft_free_split(vects);
 }
 void	ft_light(char **data, t_scene *scene)
 {
@@ -277,7 +277,7 @@ void	ft_sphere(char **data, t_scene *scene)
 	new_sphere->coor_sphere->x = ft_atoi_double(coors[0]);
 	new_sphere->coor_sphere->y = ft_atoi_double(coors[1]);
 	new_sphere->coor_sphere->z = ft_atoi_double(coors[2]);
-	new_sphere->coor_sphere->w = ft_atoi_double("0.1");
+	// new_sphere->coor_sphere->w = ft_atoi_double("0.1");
 	
 	new_sphere->diameter_sphere = ft_atoi_double(data[2]);
 	// if(new_sphere->diameter_sphere <= 0)
@@ -308,8 +308,8 @@ void	ft_cylinder(char **data, t_scene *scene)
 	int i;
 	for(i = 0; data[i]; i++)
 	i++;
-	if(i != 6)
-	//exit_error("invalid arguments", "in CY");
+	// if(i != 6)
+		//exit_error("invalid arguments", "in CY");
 	new_cylinder = malloc(sizeof(t_cylinder));
 	new_cylinder->color_cylinder = malloc(sizeof(t_color));
 	new_cylinder->coor_cylinder = malloc(sizeof(t_vec3));

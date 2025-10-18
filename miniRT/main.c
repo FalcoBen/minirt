@@ -1,22 +1,5 @@
 #include "minirt.h"
 
-void s()
-{
-	system("leaks miniRT");
-}
-void del(void *content)
-{
-    free(content);
-}
-
-void	ft_free_split(char **str)
-{
-	for(int i = 0; str[i]; i++)
-		free(str[i]);
-	free(str);
-}
-
-
 bool check_extension(char *str)
 {
 	char *extension = ".rt";
@@ -51,58 +34,7 @@ void initialize_scenes(t_scene *scene)
 // 	free(coor->z);
 // }
 
-void	free_scene(t_scene *scene)
-{
-	if(scene->ambient_light)
-	{
-		t_ambient_light *amb = scene->ambient_light;
-		free(amb->color_ambient_light);
-		free(amb);
-	}
-	if(scene->sphere)
-	{
-		t_sphere *sp = scene->sphere;
-		while(sp)
-		{
-			free(sp->color_sphere);
-			free(sp->coor_sphere);
-			free(sp);
-			sp = sp->next;
-		}
-	}
-	if(scene->camera)
-	{
-		t_camera *cm = scene->camera;
-		free(cm->coor_camera);
-		free(cm->vector_camera);
-		free(cm);
-	}
-	if(scene->plane)
-	{
-		t_plane *pl = scene->plane;
-		while(pl)
-		{
-			free(pl->color_plane);
-			free(pl->coor_plane);
-			free(pl->vector_plane);
-			free(pl);
-			pl = pl->next;
-		}
-	}
-	if(scene->cylinder)
-	{
-		t_cylinder *cy = scene->cylinder;
-		while(cy)
-		{
-			free(cy->color_cylinder);
-			free(cy->coor_cylinder);
-			free(cy->vector_cylinder);
-			free(cy);
-			cy = cy->next;
-		}
-	}
-	free(scene);
-}
+
 
 
 void	make_sure_of_objects(t_scene *scene)
@@ -156,7 +88,7 @@ int main(int ac, char **av)
 		i++;
 		curr = curr->next;
 	}
-	exit_error("cleanup", "container", &head, true);
+	// exit_error("cleanup", "container", &head, true);
 	
 	// for(int i = 0; i < counter; i++)
 	// {
@@ -165,6 +97,7 @@ int main(int ac, char **av)
 	// 	else
 	// 		//exit_error("object should not render", tokens[i][0]);
 	// }
+
 	t_objects *input_data = malloc(sizeof(t_objects));
 	input_data->assign_object = NULL;
 	input_data->identifier = NULL;
@@ -193,27 +126,29 @@ int main(int ac, char **av)
             current_obj = current_obj->next;
         }
     }
-	free(input_data);
+	// free(input_data);
+
 	// make_sure_of_objects(scene);
+	
 	// // printer(scene);
 
 	// // printf("[[[[[[[[[[[[[[[[[[[[[%f]]]]]]]]]]]]]]]]]]]]]]]]\n", scene->sphere->coor_sphere->x);
 	// // // test_vector_math();
-	t_world z =	s_world(scene);
+	// t_world z =	s_world(scene);
 	// for(int i = 0; z.objects[i] != NULL; i++)
 	// {
 	// 	printf("______________________________%d_____________________\n", z.objects[i]->obj->sphere_ja->id);
 
 	// }
-	print_world(&z);
-	// start_using_mlx(scene);
+	// print_world(&z);
+	start_using_mlx(scene);
 	
 	
 	for (int i = 0; i < counter; i++)
         ft_free_split(tokens[i]);
     free(tokens);
 
-	free_scene(scene);
+	// free_scene(scene);
 	// // printf("-----------------------------------------------\n");
 	// // printer(scene);
 

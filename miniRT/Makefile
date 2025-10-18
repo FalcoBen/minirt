@@ -4,7 +4,7 @@ RM = rm -f
 NAME = miniRT
 SRCF = main.c ../get_next_line/get_next_line.c ../get_next_line/get_next_line_utils.c linked_list.c ft_split.c split_white_apces.c \
 			init_objects.c ft_atoi_double.c ft_atoi_color.c printer.c initialize_scenes.c mlx_start.c \
-			camera.c vec3_math.c debug_prints.c world.c
+			camera.c vec3_math.c debug_prints.c world.c free_alloc.c
 OBJS = $(SRCF:.c=.o)
 LIBFT = libft/libft.a
 

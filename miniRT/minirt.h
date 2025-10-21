@@ -15,8 +15,8 @@
 #include "colors.h"
 // # include "camera.h"
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 1600
+#define HEIGHT 1600
 
 
 
@@ -42,6 +42,15 @@ typedef struct s_color
     int g;
     int b;
 } t_color;
+
+typedef struct s_texture
+{
+    int type;
+    t_color color_solid;
+    t_color color_checkerd;
+    mlx_texture_t *image;
+    double scale;
+} t_texture;
 
 typedef struct s_ambient_light
 {
@@ -79,6 +88,10 @@ typedef struct s_plane
     t_vec3 *coor_plane;
     t_color *color_plane;
     t_vec3 *vector_plane;
+    t_texture *bump_texture;
+
+    char *img_path;
+    bool flag_bump;
     struct s_plane *next;
 } t_plane;
 
@@ -87,6 +100,9 @@ typedef struct s_sphere
     t_vec3 *coor_sphere;
     double diameter_sphere;
     t_color *color_sphere;
+    t_texture *bump_texture;
+    char *img_path;
+    bool flag_bump;
     struct s_sphere *next;
 } t_sphere;
 
@@ -117,6 +133,15 @@ typedef struct s_all_data
     t_container *container;
 
 } t_all_data;
+
+/*------------------------------------------------------------------*/
+
+
+
+
+
+
+
 
 #define ld double
 /*====================jbahmida===========================*/
@@ -254,4 +279,10 @@ t_vec3 vec_mult(t_vec3 a, t_vec3 b);
 t_world s_world(t_scene *scene);
 void    print_world(t_world *world);
 
+
+
+/*------------------------Textures------------------------*/
+double sample_height(t_texture *tex, double u, double v);
+t_vec3 sample_color(t_texture *tex, double u, double v);
+double  switch_ld(int color);
 #endif

@@ -14,6 +14,9 @@ typedef struct s_hit_record
     t_vec3 p;      // Hit point
     t_vec3 normal; // Surface normal
     t_color color; // Object color
+    double u;
+    double v;
+    void *hit_object;
 } t_hit_record;
 
 // typedef t_vec3 t_vec3;

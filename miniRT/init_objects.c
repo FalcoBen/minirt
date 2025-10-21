@@ -213,11 +213,60 @@ void	ft_plane(char **data, t_scene *scene)
 	t_plane *current;
 
 	int i;
-	for(i = 0; data[i]; i++)
+	// for(i = 0; data[i]; i++)
+	// 	i++;
+	while(data[i])
 		i++;
+	i--;
+	new_plane = malloc(sizeof(t_plane));
+	if(i == 4 || i == 5)
+	{
+		new_plane->flag_bump = false;
+		int type_bump = ft_atoi_double(data[4]);
+		if(type_bump == 1)
+		{
+			new_plane->flag_bump = true;
+			t_texture *test_bump_checker = malloc(sizeof(t_texture));
+			test_bump_checker->type = 1;
+			// test_bump_checker->color_solid = (t_color){0,0,0};
+			// test_bump_checker->color_checkerd = (t_color){255,255,255};
+			test_bump_checker->scale = 0.01;
+			new_plane->bump_texture = test_bump_checker;		
+		}
+		else if(type_bump == 2)
+		{
+			if(i == 5)
+			{
+				new_plane->flag_bump = true;
+				new_plane->img_path = ft_strdup(data[5]);
+				printf("------------%s--------\n", new_plane->img_path);
+				t_texture *test_bump = malloc(sizeof(t_texture));
+				test_bump->type = 2;
+				test_bump->color_solid = (t_color){0,0,0};
+				test_bump->color_checkerd = (t_color){0,0,0};
+				test_bump->scale = 0.1;  // bump strength
+				test_bump->image = mlx_load_png(new_plane->img_path);
+				if (!test_bump->image)
+				{
+					printf("Failed to load bump map PNG\n");
+					perror("png");
+					free(test_bump);
+					exit(33);
+				}
+				else
+				{
+					new_plane->bump_texture = test_bump;
+				}
+			}
+			else
+			{
+				exit(12);
+				// exit_error();
+			}
+		}
+	}
 	// if(i != 4)
 		//exit_error("invalid arguments", "in pl");
-	new_plane = malloc(sizeof(t_plane));
 	new_plane->color_plane = malloc(sizeof(t_color));
 	new_plane->coor_plane = malloc(sizeof(t_vec3));
 	new_plane->vector_plane = malloc(sizeof(t_vec3));
@@ -252,26 +301,81 @@ void	ft_plane(char **data, t_scene *scene)
 	{
 		current = scene->plane;
 		while(current->next)
-			current = current->next;
+		current = current->next;
 		current->next = new_plane;
 	}
 	ft_free_split(colors);
 	ft_free_split(coors);
 }
+
+// void	ignore_color(t_color *color_sphere)
+// {
+// 	color_sphere = (t_color*){0,0,0};
+// }
 void	ft_sphere(char **data, t_scene *scene)
 {
 	t_sphere *new_sphere;
 	t_sphere *current;
-	int i;
-	for(i = 0; data[i]; i++)
-		i++;
-	// if(i != 4)
-		//exit_error("invalid arguments more or less", "in SP");
 
 	new_sphere = malloc(sizeof(t_sphere));
 	new_sphere->color_sphere = malloc(sizeof(t_color));
 	new_sphere->coor_sphere = malloc(sizeof(t_vec3));
 	new_sphere->next = NULL;
+	
+	int i = 0;
+	while(data[i] != NULL)
+	{
+		i++;
+	}
+	i--;
+	// if(i != 4)
+	// 	exit_error("invalid arguments more or less", "in SP");
+	if(i == 4 || i == 5)
+	{
+		new_sphere->flag_bump = false;
+		int type_bump = ft_atoi_double(data[4]);
+		if(type_bump == 1)
+		{
+			new_sphere->flag_bump = true;
+			t_texture *test_bump_checker = malloc(sizeof(t_texture));
+			test_bump_checker->type = 1;
+			// test_bump_checker->color_solid = (t_color){0,0,0};
+			// test_bump_checker->color_checkerd = (t_color){255,255,255};
+			test_bump_checker->scale = 0.01;
+			new_sphere->bump_texture = test_bump_checker;		
+		}
+		else if(type_bump == 2)
+		{
+			if(i == 5)
+			{
+				new_sphere->flag_bump = true;
+				new_sphere->img_path = ft_strdup(data[5]);
+				printf("------------%s--------\n", new_sphere->img_path);
+				t_texture *test_bump = malloc(sizeof(t_texture));
+				test_bump->type = 2;
+				test_bump->color_solid = (t_color){0,0,0};
+				test_bump->color_checkerd = (t_color){0,0,0};
+				test_bump->scale = 0.1;  // bump strength
+				test_bump->image = mlx_load_png(new_sphere->img_path);
+				if (!test_bump->image)
+				{
+					printf("Failed to load bump map PNG\n");
+					perror("png");
+					free(test_bump);
+					exit(33);
+				}
+				else
+				{
+					new_sphere->bump_texture = test_bump;
+				}
+			}
+			else
+			{
+				exit(12);
+				// exit_error();
+			}
+		}
+	}
 
 	char **coors = ft_split(data[1], ',');
 	new_sphere->coor_sphere->x = ft_atoi_double(coors[0]);
@@ -288,6 +392,7 @@ void	ft_sphere(char **data, t_scene *scene)
 	new_sphere->color_sphere->r = ft_atoi_color(colors[0], "sphere");
 	new_sphere->color_sphere->g = ft_atoi_color(colors[1], "sphere");
 	new_sphere->color_sphere->b = ft_atoi_color(colors[2], "sphere");
+	
 	if(scene->sphere == NULL)
 		scene->sphere = new_sphere;
 	else

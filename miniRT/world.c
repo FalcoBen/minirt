@@ -216,3 +216,7 @@ void    print_world(t_world *world)
         i++;
     }
 }
+
+
+
+

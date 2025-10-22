@@ -1,0 +1,10 @@
+A 0.2 255,255,255 
+C 0,4,8 0,-0.3,-1 70 
+L 0,6,0 0.8 255,255,255
+pl  0,0,0   0,1,0     200,200,200 2 textures/space.png 
+pl -5,0,0  -1,0,0     200,200,200   2 textures/space.png 
+pl  5,0,0   1,0,0     200,200,200    2 textures/space.png  
+pl  0,5,0   0,-1,0    200,200,200 2 textures/space.png 
+pl  0,0,-5  0,0,1     200,200,200 2 textures/space.png 
+sp -2.8,2,-5 3 255,0,0 2 textures/starts.png 
+sp 2.8,2,-5 3 255,0,0 2 textures/moon.png 

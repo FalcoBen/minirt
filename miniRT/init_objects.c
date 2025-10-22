@@ -212,10 +212,10 @@ void	ft_plane(char **data, t_scene *scene)
 	t_plane *new_plane;
 	t_plane *current;
 
-	int i;
+	int i = 0;
 	// for(i = 0; data[i]; i++)
 	// 	i++;
-	while(data[i])
+	while(data[i] != NULL)
 		i++;
 	i--;
 	new_plane = malloc(sizeof(t_plane));
@@ -328,6 +328,7 @@ void	ft_sphere(char **data, t_scene *scene)
 		i++;
 	}
 	i--;
+	puts("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n");
 	// if(i != 4)
 	// 	exit_error("invalid arguments more or less", "in SP");
 	if(i == 4 || i == 5)

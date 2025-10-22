@@ -56,25 +56,23 @@ double intersect_plane(t_ray *ray, t_plane *plane, t_hit_record *rec)
         rec->p = vec_add(ray->origin, vec_scale(ray->direction, t));
         rec->normal = plane_normal;
         rec->color = *plane->color_plane;
-
+        
         // Compute UV coordinates for plane
-        double scale = 10.0; // Tiling scale (adjust for texture frequency)
+        double scale = 9; // Tiling scale (adjust for texture frequency)
         t_vec3 to_hit = vec_sub(rec->p, plane_point); // Vector from plane origin to hit point
         t_vec3 arbitrary = (fabs(plane_normal.x) > 0.9) ? (t_vec3){0,1,0} : (t_vec3){1,0,0}; // Avoid parallel to normal
         t_vec3 tangent_u = vec_normalize(vec_cross(plane_normal, arbitrary));
         t_vec3 tangent_v = vec_cross(plane_normal, tangent_u);
-
+        
         rec->u = fmod(vec_dot(to_hit, tangent_u) / scale, 1.0);
-        if (rec->u < 0)
-        {
-            rec->u += 1.0; // Ensure [0,1]
-        } 
+        if (rec->u < 0) 
+        rec->u += 1.0; // Ensure [0,1]
         rec->v = fmod(vec_dot(to_hit, tangent_v) / scale, 1.0);
         if (rec->v < 0)
-        {
-            rec->v += 1.0; // Ensure [0,1]
-        } 
-        rec->hit_object = plane; // Store plane as hit object
+        rec->v += 1.0;
+        rec->hit_object = plane;
+        
+        // printf("Plane UV at (%f, %f, %f): u=%f, v=%f\n", rec->p.x, rec->p.y, rec->p.z, rec->u, rec->v);
     }
     
     return t;
@@ -231,16 +229,46 @@ void start_using_mlx(t_scene *scene)
                 t_texture *bump_tex = NULL;
                 if (hit_rec.hit_object)
                 {
-                    t_sphere *hit_sphere = (t_sphere *)hit_rec.hit_object;
-                    if (hit_sphere && hit_sphere->flag_bump && hit_sphere->bump_texture) 
+                    if (scene->sphere)
                     {
-                        obj_color = sample_color(hit_sphere->bump_texture, hit_rec.u, hit_rec.v);
+                        t_sphere *curr_sphere = scene->sphere;
+                        while (curr_sphere)
+                        {
+                            if (curr_sphere == (t_sphere *)hit_rec.hit_object)
+                            {
+                                bump_tex = curr_sphere->bump_texture;
+                                if (curr_sphere->flag_bump && curr_sphere->bump_texture) 
+                                {
+                                    obj_color = sample_color(curr_sphere->bump_texture, hit_rec.u, hit_rec.v);
+                                    // obj_color = (t_vec3){height, height, height};
+                                }
+                                break;
+                            }
+                            curr_sphere = curr_sphere->next;
+                        }
                     }
-                    bump_tex = hit_sphere->bump_texture;
+                    if (scene->plane)
+                    {
+                        t_plane *curr_plane = scene->plane;
+                        while (curr_plane)
+                        {
+                            if (curr_plane == (t_plane *)hit_rec.hit_object)
+                            {
+                                bump_tex = curr_plane->bump_texture;
+                                if (curr_plane->flag_bump && curr_plane->bump_texture) 
+                                {
+                                    obj_color = sample_color(curr_plane->bump_texture, hit_rec.u, hit_rec.v);
+                                    // obj_color = (t_vec3){height, height, height};
+                                }
+                                break;
+                            }
+                            curr_plane = curr_plane->next;
+                        }
+                    }
                     if (bump_tex)
                     {   
-                        // printf("Sphere hit at pixel [%d, %d], u=%f, v=%f\n", x, y, hit_rec.u, hit_rec.v);
-                        double offset = 0.001;
+                        // printf("Applying bump texture to %s at u=%f, v=%f\n", (scene->plane && ((t_plane *)hit_rec.hit_object) == (t_plane *)curr_plane) ? "plane" : "sphere", hit_rec.u, hit_rec.v);
+                        double offset = 0.01;
                         double h = sample_height(bump_tex, hit_rec.u, hit_rec.v);
                         double hu = sample_height(bump_tex, hit_rec.u + offset, hit_rec.v);
                         double hv = sample_height(bump_tex, hit_rec.u, hit_rec.v + offset);
@@ -248,15 +276,14 @@ void start_using_mlx(t_scene *scene)
                         double dHdu = (hu - h) / offset;
                         double dHdv = (hv - h) / offset;
                         
-                        // Compute tangent space
                         t_vec3 arbitrary = (fabs(normal.x) > 0.9) ? (t_vec3){0,1,0} : (t_vec3){1,0,0};
                         t_vec3 tangent_u = vec_normalize(vec_cross(normal, arbitrary));
                         t_vec3 tangent_v = vec_cross(normal, tangent_u);
                         
-                        // Perturb normal
                         normal = vec_normalize(vec_add(normal, vec_add(vec_scale(tangent_u, dHdu * bump_tex->scale),
                                                                     vec_scale(tangent_v, dHdv * bump_tex->scale))));
-                                                                }
+                        // printf("Perturbed normal: (%f, %f, %f)\n", normal.x, normal.y, normal.z);
+                    }
                 }
                 /*--------------------------------------------------------------------------*/
                 

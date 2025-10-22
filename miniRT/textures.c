@@ -61,5 +61,5 @@ t_vec3 sample_color(t_texture *tex, double u, double v)
             (double)pixel[2] / 255.0
         };
     }
-    return (t_vec3){0.0, 0.0, 0.0}; // Black default
+    return (t_vec3){0.0, 0.0, 0.0};
 }

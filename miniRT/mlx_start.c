@@ -169,9 +169,9 @@ void start_using_mlx(t_scene *scene)
     cam = init_camera(scene);
     // if (!cam)
     //     exit_error("Camera initialization failed", NULL);
-    print_camera_debug(cam);
-    if (scene->plane)
-        print_plane_debug(scene->plane);
+    // print_camera_debug(cam);
+    // if (scene->plane)
+    //     print_plane_debug(scene->plane);
 
     // Rendering loop
     y = 0;
@@ -184,7 +184,7 @@ void start_using_mlx(t_scene *scene)
             double v = 1.0 - (double)y / (HEIGHT - 1); // Flip Y (0 at top)
 
             ray = get_ray(cam, u, v);
-            print_ray_debug(&ray, x, y);
+            // print_ray_debug(&ray, x, y);
 
             double closest_t = INFINITY;
             t_hit_record hit_rec;
@@ -234,13 +234,12 @@ void start_using_mlx(t_scene *scene)
                         t_sphere *curr_sphere = scene->sphere;
                         while (curr_sphere)
                         {
-                            if (curr_sphere == (t_sphere *)hit_rec.hit_object)
+                            if (curr_sphere == (t_sphere *)hit_rec.hit_object && curr_sphere->flag_bump)
                             {
                                 bump_tex = curr_sphere->bump_texture;
                                 if (curr_sphere->flag_bump && curr_sphere->bump_texture) 
                                 {
                                     obj_color = sample_color(curr_sphere->bump_texture, hit_rec.u, hit_rec.v);
-                                    // obj_color = (t_vec3){height, height, height};
                                 }
                                 break;
                             }
@@ -252,13 +251,12 @@ void start_using_mlx(t_scene *scene)
                         t_plane *curr_plane = scene->plane;
                         while (curr_plane)
                         {
-                            if (curr_plane == (t_plane *)hit_rec.hit_object)
+                            if (curr_plane == (t_plane *)hit_rec.hit_object && curr_plane->flag_bump)
                             {
                                 bump_tex = curr_plane->bump_texture;
                                 if (curr_plane->flag_bump && curr_plane->bump_texture) 
                                 {
                                     obj_color = sample_color(curr_plane->bump_texture, hit_rec.u, hit_rec.v);
-                                    // obj_color = (t_vec3){height, height, height};
                                 }
                                 break;
                             }
@@ -328,15 +326,7 @@ void start_using_mlx(t_scene *scene)
                 final_color.g = (int)(color.y * 255);
                 final_color.b = (int)(color.z * 255);
             }
-            // Call debug function
-            // debug_rendering(scene, cam, img, x, y, ray, closest_t, hit_rec, final_color, hit);
-            // if(bumped)
-            // {
-            //     mlx_put_pixel(img, x, y, mlx_rgba(255, 0, 0, 128));
-            //     // bumped = false;
-            // }
-            // else
-                mlx_put_pixel(img, x, y, color_to_int(final_color));
+            mlx_put_pixel(img, x, y, color_to_int(final_color));
             x++;
         }
         y++;

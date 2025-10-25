@@ -7,35 +7,6 @@ static uint32_t color_to_int(t_color color)
     return ((color.r << 24) | (color.g << 16) | (color.b << 8) | 0xFF);
 }
 
-// double intersect_plane(t_ray *ray, t_plane *plane, t_hit_record *rec)
-// {
-//     t_vec3 plane_point = *plane->coor_plane;
-//     t_vec3 plane_normal = vec_normalize(*plane->vector_plane);
-//     t_vec3 oc = vec_sub(plane_point, ray->origin);
-//     double denom = vec_dot(ray->direction, plane_normal);
-
-//     // printf("Denom: %f\n", denom);
-//     if (fabs(denom) < 1e-6)
-//         return INFINITY;
-    
-//     double t = vec_dot(oc, plane_normal) / denom;
-//     if (t < 0)
-//     {
-//         // printf("---------returned\n");
-//         return INFINITY;
-//     }
-
-//     if (rec)
-//     {
-//         rec->t = t;
-//         rec->p = vec_add(ray->origin, vec_scale(ray->direction, t));
-//         rec->normal = plane_normal;
-//         rec->color = *plane->color_plane;
-//     }
-    
-//     return t;
-// }
-
 double intersect_plane(t_ray *ray, t_plane *plane, t_hit_record *rec)
 {
     t_vec3 plane_point = *plane->coor_plane;
@@ -212,7 +183,7 @@ void start_using_mlx(t_scene *scene)
                 {
                     closest_t = t;
                     intersect_sphere(&ray, curr_sphere, &hit_rec);
-                    // printf("Sphere hit at pixel [%d, %d], t = %f\n", x, y, t);
+                    printf("Sphere hit at pixel [%d, %d], t = %f\n", x, y, t);
                     hit = 1;
                 }
                 curr_sphere = curr_sphere->next;
@@ -338,6 +309,7 @@ void start_using_mlx(t_scene *scene)
     mlx_loop(mlx);
 
     free(cam);
+    // mlx_delete_texture()
     mlx_delete_image(mlx, img);
     // mlx_terminate(mlx);
 }

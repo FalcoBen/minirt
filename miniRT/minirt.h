@@ -15,11 +15,11 @@
 #include "colors.h"
 // # include "camera.h"
 
-#define WIDTH 1600
-#define HEIGHT 1600
+#define WIDTH 800
+#define HEIGHT 800
 
 
-
+typedef struct s_cleanup t_cleanup;
 typedef struct s_tuple t_tuple;
 typedef struct s_scene t_scene;
 typedef struct s_objects
@@ -125,6 +125,7 @@ typedef struct s_scene
     t_plane *plane; // llinked list
     t_sphere *sphere; // llinked list
     t_cylinder *cylinder;  // llinked list
+    t_cleanup *cleaner;
     // struct s_scene *next;
 } t_scene;
 
@@ -137,7 +138,15 @@ typedef struct s_all_data
 /*------------------------------------------------------------------*/
 
 
-
+typedef struct s_cleanup
+{
+    t_container *container;
+    t_scene *scene;
+    t_objects **dispatched_table;
+    t_objects *input_data;
+    char ***tokens;
+    int token_count;
+}t_cleanup;
 
 
 
@@ -229,15 +238,16 @@ int ft_atoi_color(char *str, char *scene);
 bool non_num_chara(char *str, int i);
 void skip_spaces(char *str, int *i);
 void del(void *content);
-void	exit_error(char *str, char *scene, void *data, bool flag);
+// void	exit_error(char *str, char *scene, void *data, char c);
+void exit_error(char *str, char *scene_name, t_cleanup *cleanup);
 void	ft_free_split(char **str);
-
-
+bool check_after_split(char **str);
+int	count_comma(char *str);
 /*----------------------------free------------------------------------*/
 void	free_scene(t_scene *scene);
 
 
-
+void s();
 
 
 void ft_ambient_light(char **data, t_scene *scene);

@@ -1,5 +1,6 @@
 CC = cc
 CFLAGS =  -fsanitize=address -g3 
+# CFLAGS =   -g3 
 RM = rm -f
 NAME = miniRT
 SRCF = main.c ../get_next_line/get_next_line.c ../get_next_line/get_next_line_utils.c linked_list.c ft_split.c split_white_apces.c \

@@ -1,6 +1,6 @@
 #include "rays.h"
 
-void //exit_error(const char *msg)
+void exit_error(const char *msg)
 {
     fprintf(stderr, "Error: %s\n", msg);
     exit(1);

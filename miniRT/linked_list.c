@@ -23,6 +23,10 @@ void	ft_lstadd_front(t_container **lst, t_container *new)
 }
 void	ft_lstclear(void **lst, void (*del)(void *), char c)
 {
+	// printf("ft_lstclear: lst = %p\n", (void *)lst);
+	// if (lst)
+	// 	printf("ft_lstclear: *lst = %p\n", *(void **)lst);
+
 	void	*tmp;
 	void	*current;
 
@@ -36,13 +40,14 @@ void	ft_lstclear(void **lst, void (*del)(void *), char c)
 		while (current)
 		{
 			tmp = ((t_container *)current)->next;
+			// printf("current = %p\n", (void *)current);
 			ft_lstdelone((t_container *)current, del, 'c');
 			current = tmp;
 		}
 	}
 	if(c == 'o')
 	{
-
+		
 		while (current)
 		{
 			tmp = ((t_objects *)current)->next;
@@ -60,6 +65,11 @@ void	ft_lstdelone(void *lst, void (*del)(void *), char c)
 	if(c == 'c')
 	{
 		del(((t_container *)lst)->line);
+	}
+	else if(c == 'o')
+	{
+		del(((t_objects *)lst)->identifier);
+		// void *ptr = ((t_objects *)lst).
 	}
 	free(lst);
 }
@@ -90,3 +100,4 @@ t_container	*ft_lstlast(t_container *lst)
 	}
 	return (lst);
 }
+

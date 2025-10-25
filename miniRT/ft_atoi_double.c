@@ -33,23 +33,11 @@ bool	non_num_chara(char *str, int i)
 	// skip_spaces(str, &j);
 	return (false);
 }
+// void s()
+// {
+// 	system("leaks miniRT scene.rt");
+// }
 
-void exit_error(char *str, char *scene, void *data, bool flag)
-{
-    if (!scene)
-	scene = "double";
-    printf("Error\n%s in %s\n", str, scene);
-	
-    if (flag)
-    {
-		t_container **container;
-        container = (t_container **)data;
-        if (container && *container)
-            ft_lstclear((void **)container, del, 'c');
-		return ;
-    }
-    // exit(1);
-}
 
 double	ft_atoi_double(char *str)
 {

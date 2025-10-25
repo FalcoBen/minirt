@@ -70,6 +70,7 @@
     "camera.h": "c",
     "stdio.h": "c",
     "stdbool.h": "c",
-    "fcntl.h": "c"
+    "fcntl.h": "c",
+    "limits.h": "c"
   }
 }

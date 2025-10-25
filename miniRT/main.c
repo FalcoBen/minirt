@@ -19,22 +19,6 @@ void initialize_scenes(t_scene *scene)
     scene->cylinder = NULL;       
 }
 
-// void	free_color(t_color *color)
-// {
-// 	free(color->r);
-// 	free(color->g);
-// 	free(color->b);
-// }
-
-// void	free_coor(t_vec3 *coor)
-// {
-// 	free(coor);
-// 	free(coor->x);
-// 	free(coor->y);
-// 	free(coor->z);
-// }
-
-
 
 
 void	make_sure_of_objects(t_scene *scene)
@@ -46,6 +30,15 @@ void	make_sure_of_objects(t_scene *scene)
 	// if (!scene->plane && !scene->sphere && !scene->cylinder) 
 	// 	exit_error("Missing", "objects");
 }
+// void	free_identifier(t_objects *dispatch_table)
+// {
+// 	while (dispatch_table)
+// 	{
+// 		free(dispatch_table->identifier);
+// 		dispatch_table = dispatch_table->next;
+// 	}
+	
+// }
 
 int main(int ac, char **av)
 {
@@ -64,10 +57,10 @@ int main(int ac, char **av)
 		printf("failed to open file\n");
 		return 2;
 	}
-	t_container *list = NULL;
-	t_container *head = NULL;
 	char *line = get_next_line(fd);
 	int counter = 0;
+	t_container *list = NULL;
+	t_container *head = NULL;
 	while (line != NULL)
     {
 		list = ft_lstnew(line);
@@ -77,9 +70,22 @@ int main(int ac, char **av)
         line = get_next_line(fd);
     }       
 	close(fd);
+	t_cleanup *cleaner = malloc(sizeof(t_cleanup));
+	cleaner->container = NULL;
+	cleaner->dispatched_table = NULL;
+	cleaner->scene = NULL;
+	cleaner->token_count = 0;
+	cleaner->tokens = NULL;
+	
+	cleaner->container = head; //////////////////////////
 	if(counter == 0)
-		exit_error("empty", "file", &head, false);
+	{
+		// exit_error("empty", "file", &head, 'e');
+		exit_error("empty", "file", cleaner);
+		return 1;
+	}
 	char ***tokens = malloc(sizeof(char **) * (counter + 1));
+	cleaner->tokens = tokens; ////////////////
 	t_container *curr = head;
 	int i = 0;
 	while(curr)
@@ -88,34 +94,39 @@ int main(int ac, char **av)
 		i++;
 		curr = curr->next;
 	}
-	// exit_error("cleanup", "container", &head, true);
-	
+	cleaner->token_count = i; /////////////////
+	// exit_error("cleanup", "container", &head, 'c');
+	// exit_error("cleanup", "container", cleaner);
 	// for(int i = 0; i < counter; i++)
 	// {
-	// 	if(strcmp(tokens[i][0], "A") == 0 || strcmp(tokens[i][0], "C") == 0 || strcmp(tokens[i][0], "L") == 0 || strcmp(tokens[i][0], "pl") == 0 || strcmp(tokens[i][0], "sp") == 0 ||  strcmp(tokens[i][0], "cy") == 0)
-	// 		continue;
-	// 	else
-	// 		//exit_error("object should not render", tokens[i][0]);
-	// }
-
+		// 	if(strcmp(tokens[i][0], "A") == 0 || strcmp(tokens[i][0], "C") == 0 || strcmp(tokens[i][0], "L") == 0 || strcmp(tokens[i][0], "pl") == 0 || strcmp(tokens[i][0], "sp") == 0 ||  strcmp(tokens[i][0], "cy") == 0)
+		// 		continue;
+		// 	else
+		// 		//exit_error("object should not render", tokens[i][0]);
+		// }
+		
 	t_objects *input_data = malloc(sizeof(t_objects));
 	input_data->assign_object = NULL;
 	input_data->identifier = NULL;
 	input_data->nb = 0;
 	input_data->next = NULL;
-	
+	cleaner->input_data = input_data;
 	t_objects *dispatch_table = NULL;
-    init_object_dispatch_table(&dispatch_table);
-    
+	init_object_dispatch_table(&dispatch_table);
+	// free_identifier(dispatch_table);
+
 	t_scene *scene = malloc(sizeof(t_scene));
+	cleaner->dispatched_table = &dispatch_table;
+	scene->cleaner = cleaner;
+	cleaner->scene = scene;
     initialize_scenes(scene);
     
+	t_objects *current_obj = dispatch_table;
     for(int x = 0; x < counter; x++)
     {
 		if(!tokens[x] || !tokens[x][0]) 
 			continue;
 		
-        t_objects *current_obj = dispatch_table;
         while(current_obj)
         {
 			if(current_obj->identifier && strcmp(tokens[x][0], current_obj->identifier) == 0)
@@ -126,56 +137,31 @@ int main(int ac, char **av)
             current_obj = current_obj->next;
         }
     }
-	// free(input_data);
-
+	free(input_data);
 	// make_sure_of_objects(scene);
 	
-	// // printer(scene);
-
-	// // printf("[[[[[[[[[[[[[[[[[[[[[%f]]]]]]]]]]]]]]]]]]]]]]]]\n", scene->sphere->coor_sphere->x);
-	// // // test_vector_math();
+	// printer(scene);
+	/*---------------------------------------------jassim-------------------------------------------------*/
 	// t_world z =	s_world(scene);
-	// for(int i = 0; z.objects[i] != NULL; i++)
-	// {
-	// 	printf("______________________________%d_____________________\n", z.objects[i]->obj->sphere_ja->id);
-
-	// }
 	// print_world(&z);
+	printf("******************************\n");
+	ft_lstclear((void **)&dispatch_table, del, 'o');
+	// ft_lstclear((void **)&head, del, 'c');
 	start_using_mlx(scene);
 	
+	// printf("caller: dispatch_table = %p, &dispatch_table = %p\n", (void *)dispatch_table, (void *)&dispatch_table);
+	// if (dispatch_table)
+	// 	printf("caller: first->next = %p, first->identifier = %p\n", (void *)dispatch_table->next, (void *)dispatch_table->identifier);
+	
+	// ft_lstclear((void **)&current_obj, del, 'o');
 	
 	for (int i = 0; i < counter; i++)
         ft_free_split(tokens[i]);
     free(tokens);
-
-	// free_scene(scene);
+	// free(cleaner);
+	free_scene(scene);
 	// // printf("-----------------------------------------------\n");
 	// // printer(scene);
 
 	return 0;
 }
-	// int x = 0;
-	// int z = 0;
-	// while(x < counter)
-	// {
-	// 	z = 0;
-	// 	while(tokens[x][z])
-	// 	{
-	// 		printf("token[%i][%i] = %s\n", x, z, tokens[x][z]);
-	// 		z++;
-	// 	}
-	// 	x++;
-	// }
-	// tokens[x] = NULL;
-
-
-
-	// while(a < counter)
-	// {
-	// 	printf("[[[%s]]], [[%d]]\n", input_data[a].identifier, input_data[a].nb);
-	// 	// input_data = input_data->next;
-	// 	a++;
-	// }
-
-
-	

@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/28 12:58:23 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/10/28 02:13:54 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,12 @@ int	count_comma(char *str)
 {
 	int i = 0;
 	int comma = 0;
-	printf("@@@@@%s\n", str);
 	while(str[i])
 	{
 		if(str[i] == ',')
 			comma++;
 		i++;
 	}
-	printf("coma = %d\n", comma);
 	return comma;
 }
 
@@ -70,9 +68,11 @@ bool verify_color(char *str)
 	while(splitted[i])
 	{
 		int nb = ft_atoi(splitted[i]);
-		printf("nb =============== %d\n", nb);
 		if(nb > 255 || nb < 0)
+		{
+			ft_free_split(splitted);
 			return false;
+		}
 		i++;
 	}
 	ft_free_split(splitted);

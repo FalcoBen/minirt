@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/08/28 12:43:14 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/10/27 01:18:38 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ double	ft_atoi_double(char *str)
 	}
 	if (non_num_chara(str, i))
 	{
-		//exit_error("invalid character", NULL);
+		// exit_error("invalid character", NULL, s);
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{

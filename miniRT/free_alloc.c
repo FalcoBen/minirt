@@ -37,8 +37,6 @@ void exit_error(char *str, char *scene_name, t_cleanup *cleanup)
         ft_lstclear((void **)&cleanup->container, del, 'c');
         cleanup->container = NULL;
     }
-    if(cleanup->scene)
-		free(cleanup->scene);
     free(cleanup);
     
     exit(1);

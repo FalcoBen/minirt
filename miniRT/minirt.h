@@ -146,6 +146,7 @@ typedef struct s_cleanup
     t_objects *input_data;
     char ***tokens;
     int token_count;
+    bool flag_input;
 }t_cleanup;
 
 
@@ -245,7 +246,7 @@ bool check_after_split(char **str);
 int	count_comma(char *str);
 /*----------------------------free------------------------------------*/
 void	free_scene(t_scene *scene);
-
+void    set_scene(t_scene *scene, bool flag);
 
 void s();
 
@@ -295,4 +296,5 @@ void    print_world(t_world *world);
 double sample_height(t_texture *tex, double u, double v);
 t_vec3 sample_color(t_texture *tex, double u, double v);
 double  switch_ld(int color);
+
 #endif

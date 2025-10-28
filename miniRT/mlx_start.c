@@ -104,12 +104,29 @@ char *get_color(t_color *curr_color)
     return color;
 }
 
+void    set_scene(t_scene *scene, bool flag)
+{
+    static void *holder = NULL; 
+    if(!flag)
+    {
+        puts("--------------------------------------stored ---------------------------------\n");
+        holder = scene->cleaner;
+    }
+    else
+    {
+        ((t_cleanup *)holder)->flag_input = true;
+        exit_error("closing", "window", ((t_cleanup *)holder));
+    }
+}
+
 void    close_window(mlx_key_data_t keydata, void* param)
 {
     if(keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
     {
-        printf("window closed !!!!!\n");
-        exit(0);
+        // printf("window closed !!!!!\n");
+        // t_scene *scene;
+        set_scene(NULL, true);
+        // exit_error("window", "closed", cleaner);
     }
 }
 #include <stdint.h>

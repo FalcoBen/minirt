@@ -47,7 +47,6 @@ void	ft_lstclear(void **lst, void (*del)(void *), char c)
 	}
 	if(c == 'o')
 	{
-		
 		while (current)
 		{
 			tmp = ((t_objects *)current)->next;

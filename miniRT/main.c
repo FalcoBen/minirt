@@ -76,6 +76,7 @@ int main(int ac, char **av)
 	cleaner->scene = NULL;
 	cleaner->token_count = 0;
 	cleaner->tokens = NULL;
+	cleaner->flag_input = false;
 	
 	cleaner->container = head; //////////////////////////
 	if(counter == 0)
@@ -137,7 +138,6 @@ int main(int ac, char **av)
             current_obj = current_obj->next;
         }
     }
-	free(input_data);
 	// make_sure_of_objects(scene);
 	
 	// printer(scene);
@@ -147,6 +147,7 @@ int main(int ac, char **av)
 	printf("******************************\n");
 	ft_lstclear((void **)&dispatch_table, del, 'o');
 	// ft_lstclear((void **)&head, del, 'c');
+	set_scene(scene, false);
 	start_using_mlx(scene);
 	
 	// printf("caller: dispatch_table = %p, &dispatch_table = %p\n", (void *)dispatch_table, (void *)&dispatch_table);
@@ -154,12 +155,19 @@ int main(int ac, char **av)
 	// 	printf("caller: first->next = %p, first->identifier = %p\n", (void *)dispatch_table->next, (void *)dispatch_table->identifier);
 	
 	// ft_lstclear((void **)&current_obj, del, 'o');
-	
-	for (int i = 0; i < counter; i++)
-        ft_free_split(tokens[i]);
-    free(tokens);
-	// free(cleaner);
-	free_scene(scene);
+	if(cleaner->flag_input)
+	{
+		
+		for (int i = 0; i < counter; i++)
+		ft_free_split(tokens[i]);
+		free(tokens);
+		// free(cleaner);
+		free_scene(scene);
+		free(cleaner);
+		ft_lstclear((void **)&head, del, 'c');
+		free(input_data);
+	}
+
 	// // printf("-----------------------------------------------\n");
 	// // printer(scene);
 

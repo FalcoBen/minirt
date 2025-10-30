@@ -6,11 +6,11 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 22:47:16 by fbenalla          #+#    #+#             */
-/*   Updated: 2024/11/04 21:36:32 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/10/29 03:24:04 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minirt.h"
 
 int	ft_isdigit(int c)
 {

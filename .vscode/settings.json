@@ -72,5 +72,6 @@
     "stdbool.h": "c",
     "fcntl.h": "c",
     "limits.h": "c"
-  }
+  },
+  "cmake.ignoreCMakeListsMissing": true
 }

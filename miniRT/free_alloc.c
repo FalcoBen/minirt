@@ -1,4 +1,81 @@
 #include "minirt.h"
+bool is_coordinate(char *coor)
+{
+	int i = 0;
+	if(count_comma(coor) != 2)
+	{
+		printf("coor = %s\n", coor);
+		return false;
+	}
+	
+	return true;
+}
+bool	verify_data_plane(char **data)
+{
+	int i = 0;
+	if(!data[1] || !data[2] || !data[3])
+	{
+		return false;
+	}
+	if(!is_coordinate(data[1]))
+	{
+		printf("111111111111111111111111111111111111\n");
+		return false;
+	}
+	if(!is_coordinate(data[2]))
+	{
+		printf("2222222222222222222222222222222222222222222222221\n");
+		return false;
+	}
+	if(!verify_color(data[3]))
+	{
+
+		printf("333333333333333333333333333333333333333333333333333\n");
+		return false;
+	}
+	while(data[i])
+		i++;
+	if(i > 6)
+	{
+		printf("alot of arguments in plane\n");
+		return false;
+	}
+	return true;
+}
+bool	verify_data_sphere(char **data, t_cleanup *clean)
+{
+	int i = 0;
+	if(!data[1] || !data[2] || !data[3])
+	{
+		return false;
+	}
+
+	if(!is_coordinate(data[1]))
+	{
+		printf("111111111111111111111111111111111111\n");
+		return false;
+	}
+	double raduis = ft_atoi_double(data[2], clean);
+	if(clean->flag_exit)
+	{
+		printf("2222222222222222222222222222222222222222222222221\n");
+		return false;
+	}
+	if(!verify_color(data[3]))
+	{
+		printf("333333333333333333333333333333333333333333333333333\n");
+		return false;
+	}
+	while(data[i])
+		i++;
+	if(i > 6)
+	{
+		printf("alot of arguments in sphere\n");
+		return false;
+	}
+	return true;
+}
+
 
 void exit_error(char *str, char *scene_name, t_cleanup *cleanup)
 {
@@ -14,7 +91,7 @@ void exit_error(char *str, char *scene_name, t_cleanup *cleanup)
         free(cleanup->tokens);
         cleanup->tokens = NULL;
     }
-    
+		
     if (cleanup->dispatched_table && *cleanup->dispatched_table)
     {
         ft_lstclear((void **)cleanup->dispatched_table, del, 'o');
@@ -24,7 +101,7 @@ void exit_error(char *str, char *scene_name, t_cleanup *cleanup)
     if (cleanup->scene)
     {
 		free_scene(cleanup->scene);
-        cleanup->scene = NULL;
+		cleanup->scene = NULL;
     }
 	if(cleanup->input_data)
 	{

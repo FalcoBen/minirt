@@ -77,6 +77,7 @@ int main(int ac, char **av)
 	cleaner->token_count = 0;
 	cleaner->tokens = NULL;
 	cleaner->flag_input = false;
+	cleaner->flag_exit = false;
 	
 	cleaner->container = head; //////////////////////////
 	if(counter == 0)

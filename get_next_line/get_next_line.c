@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:18:55 by fbenalla          #+#    #+#             */
-/*   Updated: 2024/12/13 21:14:00 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/10/29 03:20:31 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ char	*get_preffix(char *str)
 	i = 0;
 	while (str[i] && str[i] != '\n')
 		i++;
-	if (str[i] == '\n')
-		i++;
+	// if (str[i] == '\n')
+	// 	i++;
 	preffix = malloc((i + 1) * sizeof(char));
 	if (!preffix)
 		return (NULL);
@@ -93,6 +93,7 @@ char	*get_suffix(char *str)
 	return (suffix);
 }
 #include <fcntl.h>
+#include <stdio.h>
 
 
 char	*get_next_line(int fd)

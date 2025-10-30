@@ -20,7 +20,7 @@ double intersect_plane(t_ray *ray, t_plane *plane, t_hit_record *rec)
     double t = vec_dot(oc, plane_normal) / denom;
     if (t < 0)
         return INFINITY;
-
+    
     if (rec)
     {
         rec->t = t;
@@ -200,7 +200,7 @@ void start_using_mlx(t_scene *scene)
                 {
                     closest_t = t;
                     intersect_sphere(&ray, curr_sphere, &hit_rec);
-                    printf("Sphere hit at pixel [%d, %d], t = %f\n", x, y, t);
+                    // printf("Sphere hit at pixel [%d, %d], t = %f\n", x, y, t);
                     hit = 1;
                 }
                 curr_sphere = curr_sphere->next;

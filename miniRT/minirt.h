@@ -147,6 +147,7 @@ typedef struct s_cleanup
     char ***tokens;
     int token_count;
     bool flag_input;
+    bool flag_exit;
 }t_cleanup;
 
 
@@ -234,8 +235,10 @@ char **ft_split(char const *s, char c);
 char **ft_split_white(char *str);
 /*-------------objects--------------*/
 void init_objects(t_objects **input_data, char ***tokens,int counter);
-double ft_atoi_double(char *str);
+double ft_atoi_double(char *str, t_cleanup *clean);
 int ft_atoi_color(char *str, char *scene);
+bool verify_color(char *str);
+bool	verify_number(char *str);
 bool non_num_chara(char *str, int i);
 void skip_spaces(char *str, int *i);
 void del(void *content);
@@ -244,6 +247,7 @@ void exit_error(char *str, char *scene_name, t_cleanup *cleanup);
 void	ft_free_split(char **str);
 bool check_after_split(char **str);
 int	count_comma(char *str);
+bool verify_color(char *str);
 /*----------------------------free------------------------------------*/
 void	free_scene(t_scene *scene);
 void    set_scene(t_scene *scene, bool flag);
@@ -297,4 +301,7 @@ double sample_height(t_texture *tex, double u, double v);
 t_vec3 sample_color(t_texture *tex, double u, double v);
 double  switch_ld(int color);
 
+int	ft_isdigit(int c);
+bool	verify_data_plane(char **data);
+bool	verify_data_sphere(char **data, t_cleanup *clean);
 #endif

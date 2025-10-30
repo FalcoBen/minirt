@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/10/28 02:13:54 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/10/30 00:42:43 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,20 @@ bool check_after_split(char **str)
 	return true;
 }
 
+bool	verify_number(char *str)
+{
+	int i = 0;
+	// printf("]]%s[[\n", str);
+	while(str[i])
+	{
+		// if(!(str[i] >= '0' && str[i] <= '9'))
+		if(!ft_isdigit(str[i]))
+			return false;
+		i++;
+	}
+	return true;
+}
+
 int	ft_atoi_color(char *str, char *scene)
 {
 	int						i;
@@ -108,6 +122,11 @@ int	ft_atoi_color(char *str, char *scene)
 	// }
 	if(!verify_color(str))
 		return -1;
+	if(!verify_number(str))
+	{
+		puts("here\n");
+		return -1;
+	}
 	i = 0;
 	nb = 0;
 	signe = 0;

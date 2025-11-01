@@ -78,6 +78,7 @@ int main(int ac, char **av)
 	cleaner->tokens = NULL;
 	cleaner->flag_input = false;
 	cleaner->flag_exit = false;
+	cleaner->input_data = NULL;
 	
 	cleaner->container = head; //////////////////////////
 	if(counter == 0)
@@ -97,15 +98,21 @@ int main(int ac, char **av)
 		curr = curr->next;
 	}
 	cleaner->token_count = i; /////////////////
-	// exit_error("cleanup", "container", &head, 'c');
-	// exit_error("cleanup", "container", cleaner);
-	// for(int i = 0; i < counter; i++)
-	// {
-		// 	if(strcmp(tokens[i][0], "A") == 0 || strcmp(tokens[i][0], "C") == 0 || strcmp(tokens[i][0], "L") == 0 || strcmp(tokens[i][0], "pl") == 0 || strcmp(tokens[i][0], "sp") == 0 ||  strcmp(tokens[i][0], "cy") == 0)
-		// 		continue;
-		// 	else
-		// 		//exit_error("object should not render", tokens[i][0]);
-		// }
+	
+	t_scene *scene = malloc(sizeof(t_scene));
+
+	int z = 0;
+	while(z < counter)
+	{
+			if(!tokens[z][0] || strcmp(tokens[z][0], "A") == 0 || strcmp(tokens[z][0], "C") == 0 || strcmp(tokens[z][0], "L") == 0 || strcmp(tokens[z][0], "pl") == 0 || strcmp(tokens[z][0], "sp") == 0 ||  strcmp(tokens[z][0], "cy")  == 0)
+			{
+				z++;
+				continue;
+			}	
+			else
+				exit_error("object should not render", tokens[z][0], cleaner);
+			z++;
+	}
 		
 	t_objects *input_data = malloc(sizeof(t_objects));
 	input_data->assign_object = NULL;
@@ -117,7 +124,7 @@ int main(int ac, char **av)
 	init_object_dispatch_table(&dispatch_table);
 	// free_identifier(dispatch_table);
 
-	t_scene *scene = malloc(sizeof(t_scene));
+	// t_scene *scene = malloc(sizeof(t_scene));
 	cleaner->dispatched_table = &dispatch_table;
 	scene->cleaner = cleaner;
 	cleaner->scene = scene;

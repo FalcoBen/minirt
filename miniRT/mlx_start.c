@@ -200,7 +200,7 @@ void start_using_mlx(t_scene *scene)
                 {
                     closest_t = t;
                     intersect_sphere(&ray, curr_sphere, &hit_rec);
-                    // printf("Sphere hit at pixel [%d, %d], t = %f\n", x, y, t);
+                    printf("Sphere hit at pixel [%d, %d], t = %f\n", x, y, t);
                     hit = 1;
                 }
                 curr_sphere = curr_sphere->next;

@@ -64,7 +64,7 @@ void	ft_ambient_light(char **data, t_scene *scene)
 	t_ambient_light	*new_ambient;
 	t_ambient_light	*current;
 	char			**colors;
-	
+
 	i = 0;
 	while (data[i])
 		i++;
@@ -237,6 +237,7 @@ void	ft_plane(char **data, t_scene *scene)
 	{
 		exit_error("data not in the correct format", "in plane", scene->cleaner);
 	}
+	scene->type = T_PLANE;
 	new_plane = malloc(sizeof(t_plane));
 	new_plane->flag_bump = false;
 	if (i == 4 || i == 5)
@@ -366,6 +367,7 @@ void	ft_sphere(char **data, t_scene *scene)
 		i++;
 	}
 	i--;
+	scene->type = T_SPHERE;
 	if (i == 4 || i == 5)
 	{
 		int type_bump = ft_atoi_color(data[4], "bump in sphere");
@@ -475,7 +477,7 @@ void	ft_cylinder(char **data, t_scene *scene)
 	while(data[i])
 		i++;
 	i--;
-	
+	scene->type = T_CYLINDER;
 	new_cylinder = malloc(sizeof(t_cylinder));
 	new_cylinder->color_cylinder = malloc(sizeof(t_color));
 	new_cylinder->coor_cylinder = malloc(sizeof(t_vec3));

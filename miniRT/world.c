@@ -22,6 +22,7 @@ int number_of_all_objects(t_scene *scene)
         counter++;
         cy = cy->next;
     }
+    scene->obj_num = counter;
     return counter;
 }
 double  switch_ld(int color)
@@ -37,7 +38,7 @@ void obj_creator(t_obj *obj, t_scene *scene, t_type type)
         return ;
 
 
-    if (type == SPHERE)
+    if (type == T_SPHERE)
     {
         t_sphere_ja *dest;
         dest = obj->sphere_ja;
@@ -64,7 +65,7 @@ void obj_creator(t_obj *obj, t_scene *scene, t_type type)
         id++;
     }
 
-    // if (type == PLANE)
+    // if (type == T_PLANE)
     // {
     //     t_plane_ja *dest;
     //     t_plane *src;
@@ -85,7 +86,7 @@ void obj_creator(t_obj *obj, t_scene *scene, t_type type)
     //     id++;
     // }
 
-    // if (type == CYLINDER)
+    // if (type == T_CYLINDER)
     // {
     //     t_cylinder_ja *dest;
     //     t_cylinder *src;
@@ -129,9 +130,9 @@ t_world s_world(t_scene *scene)
 
         world.objects[i]->obj->sphere_ja->material = malloc(sizeof(t_material));
 
-        world.objects[i]->type = SPHERE;
+        world.objects[i]->type = T_SPHERE;
 
-        obj_creator(world.objects[i]->obj, scene, SPHERE);
+        obj_creator(world.objects[i]->obj, scene, T_SPHERE);
 
         world.objects[i]->obj->sphere_ja->id = id;
         scene->sphere = scene->sphere->next;
@@ -199,7 +200,7 @@ void    print_world(t_world *world)
     puts("::::::::::::::::::::::::::::::::::::::::;;\n");
     while(i < world->obj_num)
     {
-        if(world->objects[i]->type == SPHERE)
+        if(world->objects[i]->type == T_SPHERE)
         {
             printf("id = [%d]\n", world->objects[i]->obj->sphere_ja->id);
             t_tuple *coor = world->objects[i]->obj->sphere_ja->origin;

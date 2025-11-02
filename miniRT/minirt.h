@@ -43,6 +43,14 @@ typedef struct s_color
     int b;
 } t_color;
 
+typedef enum  type
+{
+    T_PLANE,
+    T_SPHERE,
+    T_CYLINDER,
+} t_type;
+
+
 typedef struct s_texture
 {
     int type;
@@ -54,6 +62,7 @@ typedef struct s_texture
 
 typedef struct s_ambient_light
 {
+    t_type type;
     double bright_ambient_light;
     t_color *color_ambient_light;
     struct s_ambient_light *next;
@@ -69,6 +78,7 @@ typedef struct s_vec3
 
 typedef struct s_camera
 {
+    t_type type;
     t_vec3 *coor_camera;
     t_vec3 *vector_camera;
     double angle_view;
@@ -77,6 +87,7 @@ typedef struct s_camera
 
 typedef struct s_light
 {
+    t_type type;
     t_vec3 *coor_light;
     double bright_light;
     t_color *color_light;
@@ -85,6 +96,7 @@ typedef struct s_light
 
 typedef struct s_plane
 {
+    t_type type;
     t_vec3 *coor_plane;
     t_color *color_plane;
     t_vec3 *vector_plane;
@@ -97,6 +109,7 @@ typedef struct s_plane
 
 typedef struct s_sphere
 {
+    t_type type;
     t_vec3 *coor_sphere;
     double diameter_sphere;
     t_color *color_sphere;
@@ -108,6 +121,7 @@ typedef struct s_sphere
 
 typedef struct s_cylinder
 {
+    t_type type;
     t_vec3 *coor_cylinder;
     t_vec3 *vector_cylinder;
     double diameter_cylinder;
@@ -116,8 +130,33 @@ typedef struct s_cylinder
     struct s_cylinder *next;
 } t_cylinder;
 
+
+// malloc(sizeof(t_objects)*num_obj);
+// for(int i = 0; i < obj_num; i++)
+// {
+//     = malloc(sizeof(t_obj));
+//     if(type == t_sphere)
+//     {
+//         plan(&t_obj.plan, [point], [vector]);
+//     }
+// }
+// typedef struct {
+//     t_type type;
+//     t_obj *obj;
+// }k;
+
+// typedef struct {
+//     int obj_num;
+//     int lighy_num;
+//     k *objects;
+// }l;
+
+
 typedef struct s_scene
 {
+    int obj_num;
+    int light_num;
+    t_type type;
     t_objects *object;
     t_ambient_light *ambient_light; //single instance
     t_camera *camera; //single instance
@@ -192,12 +231,6 @@ typedef union s_obj
 }t_obj;
 
 
-typedef enum  type
-{
-    PLANE,
-    SPHERE,
-    CYLINDER,
-} t_type;
 
 typedef struct s_object_ja
 {

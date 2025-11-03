@@ -15,13 +15,22 @@
 #include "colors.h"
 // # include "camera.h"
 
-#define WIDTH 800
-#define HEIGHT 800
+#define WIDTH 1400
+#define HEIGHT 1400
 
 
 typedef struct s_cleanup t_cleanup;
 typedef struct s_tuple t_tuple;
 typedef struct s_scene t_scene;
+typedef struct s_ray t_ray;
+typedef struct s_hit_record t_hit_record;
+typedef struct s_material
+{
+    double shininess;        // 1-200: higher = sharper highlights
+    double specular_strength; // 0-1: how reflective the surface is
+    double metallic;         // 0-1: metallic vs dielectric
+} t_material;
+
 typedef struct s_objects
 {
     char *identifier;
@@ -203,14 +212,14 @@ typedef struct s_color_ja
     ld b;
 } t_color_ja;
 
-typedef struct s_material
-{
-    t_color_ja *color_ja;
-    ld ambient;
-    ld diffuse;
-    ld specular;
-    ld shininess;
-} t_material;
+// typedef struct s_material
+// {
+//     t_color_ja *color_ja;
+//     ld ambient;
+//     ld diffuse;
+//     ld specular;
+//     ld shininess;
+// } t_material;
 
 typedef struct s_sphere_ja
 {
@@ -337,4 +346,11 @@ double  switch_ld(int color);
 int	ft_isdigit(int c);
 bool	verify_data_plane(char **data);
 bool	verify_data_sphere(char **data, t_cleanup *clean);
+
+
+
+double intersect_plane(t_ray *ray, t_plane *plane, t_hit_record *rec);
+double intersect_sphere(t_ray *ray, t_sphere *sphere, t_hit_record *rec);
+double intersect_cylinder(t_ray *ray, t_cylinder *cylinder, t_hit_record *rec);
+
 #endif

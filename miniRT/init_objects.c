@@ -254,7 +254,7 @@ void	ft_plane(char **data, t_scene *scene)
 				test_bump_checker->type = 1;
 				// test_bump_checker->color_solid = (t_color){0,0,0};
 				// test_bump_checker->color_checkerd = (t_color){255,255,255};
-				test_bump_checker->scale = 0.01;
+				test_bump_checker->scale = 0.1;
 				test_bump_checker->image = NULL;
 				new_plane->img_path = NULL;
 				new_plane->bump_texture = test_bump_checker;		
@@ -269,7 +269,7 @@ void	ft_plane(char **data, t_scene *scene)
 					test_bump->type = 2;
 					test_bump->color_solid = (t_color){0,0,0};
 					test_bump->color_checkerd = (t_color){0,0,0};
-					test_bump->scale = 0.1;  // bump strength
+					test_bump->scale = 0.002;  // bump strength
 					test_bump->image = mlx_load_png(new_plane->img_path);
 					if (!test_bump->image)
 					{
@@ -380,9 +380,9 @@ void	ft_sphere(char **data, t_scene *scene)
 				new_sphere->flag_bump = true;
 				t_texture *test_bump_checker = malloc(sizeof(t_texture));
 				test_bump_checker->type = 1;
-				// test_bump_checker->color_solid = (t_color){0,0,0};
-				// test_bump_checker->color_checkerd = (t_color){255,255,255};
-				test_bump_checker->scale = 0.01;
+				test_bump_checker->color_solid = (t_color){0,0,0};
+				test_bump_checker->color_checkerd = (t_color){255,255,255};
+				test_bump_checker->scale = 0.1;
 				test_bump_checker->image = NULL;	
 				new_sphere->bump_texture = test_bump_checker;	
 			}

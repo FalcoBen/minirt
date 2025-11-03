@@ -136,6 +136,9 @@ typedef struct s_cylinder
     double diameter_cylinder;
     double height_cylinder;
     t_color *color_cylinder;
+    t_texture *bump_texture;
+    char *img_path;
+    bool flag_bump;
     struct s_cylinder *next;
 } t_cylinder;
 
@@ -346,7 +349,7 @@ double  switch_ld(int color);
 int	ft_isdigit(int c);
 bool	verify_data_plane(char **data);
 bool	verify_data_sphere(char **data, t_cleanup *clean);
-
+bool	verify_data_cylinder(char **data, t_cleanup *clean);
 
 
 double intersect_plane(t_ray *ray, t_plane *plane, t_hit_record *rec);

@@ -472,13 +472,75 @@ void	ft_cylinder(char **data, t_scene *scene)
 {
 	t_cylinder *new_cylinder;
 	t_cylinder *current;
-	
+	if(!verify_data_cylinder(data, scene->cleaner))
+	{
+		exit_error("data not in the correct format", "in cylinder", scene->cleaner);
+	}
 	int i = 0;
 	while(data[i])
 		i++;
 	i--;
-	scene->type = T_CYLINDER;
 	new_cylinder = malloc(sizeof(t_cylinder));
+	new_cylinder->flag_bump = false;
+	new_cylinder->bump_texture = NULL;
+	new_cylinder->img_path = NULL;
+	scene->type = T_CYLINDER;
+
+	if (i == 6 || i == 7) 
+	{
+		int type_bump = ft_atoi_color(data[6], "bump in cylinder");
+		if(type_bump == 1 || type_bump == 2)
+		{
+			if(type_bump == 1)
+			{
+				if(i == 7)
+					exit_error("nothing should be after this type of bump", "in cylinder", scene->cleaner);
+				new_cylinder->flag_bump = true;
+				t_texture *test_bump_checker = malloc(sizeof(t_texture));
+				test_bump_checker->type = 1;
+				// test_bump_checker->scale = 0.01;
+				test_bump_checker->image = NULL;	
+				new_cylinder->bump_texture = test_bump_checker;	
+			}
+			else if(type_bump == 2)
+			{
+				if(i == 7)
+				{
+					new_cylinder->flag_bump = true;
+					new_cylinder->img_path = ft_strdup(data[7]);
+					t_texture *test_bump = malloc(sizeof(t_texture));
+					test_bump->type = 2;
+					test_bump->color_solid = (t_color){0,0,0};
+					test_bump->color_checkerd = (t_color){0,0,0};
+					// test_bump->scale = 0.1;
+					test_bump->image = mlx_load_png(new_cylinder->img_path);
+					if (!test_bump->image)
+					{
+						free(new_cylinder->img_path);
+						free(test_bump);
+						free(new_cylinder);
+						perror("png");
+						exit_error("incorrect image path", "in cylinder", scene->cleaner);
+					}
+					else
+					{
+						new_cylinder->bump_texture = test_bump;
+					}
+				}
+				else
+				{
+					free(new_cylinder);
+					exit_error("need a png", "in cylinder", scene->cleaner);
+				}
+			}
+		}
+		else
+		{
+			free(new_cylinder);
+			exit_error("malformat in type of bump", "in cylinder", scene->cleaner);
+		}
+	}
+	
 	new_cylinder->color_cylinder = malloc(sizeof(t_color));
 	new_cylinder->coor_cylinder = malloc(sizeof(t_vec3));
 	new_cylinder->vector_cylinder = malloc(sizeof(t_vec3));
@@ -525,5 +587,5 @@ void	ft_cylinder(char **data, t_scene *scene)
 	}
 	ft_free_split(colors);
 	ft_free_split(coors);
+	ft_free_split(vects);
 }
-

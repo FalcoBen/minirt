@@ -487,7 +487,6 @@ void start_using_mlx(t_scene *scene)
                     t_cylinder *curr_cylinder = scene->cylinder;
                     while (curr_cylinder)
                     {
-                        puts("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
                         double t = intersect_cylinder(&ray, curr_cylinder, NULL);
                         if (t < closest_t)
                         {
@@ -536,6 +535,18 @@ void start_using_mlx(t_scene *scene)
                                     break;
                                 }
                                 test_plane = test_plane->next;
+                            }
+                            t_cylinder *test_cylinder = scene->cylinder;
+                            while (test_cylinder)
+                            {
+                                if (test_cylinder == (t_cylinder *)hit_rec.hit_object && test_cylinder->flag_bump)
+                                {
+                                    bump_tex = test_cylinder->bump_texture;
+                                    if (test_cylinder->bump_texture)
+                                        obj_color = sample_color(test_cylinder->bump_texture, hit_rec.u, hit_rec.v);
+                                    break;
+                                }
+                                test_cylinder = test_cylinder->next;
                             }
                             
                             if (bump_tex)

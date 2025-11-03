@@ -75,6 +75,45 @@ bool	verify_data_sphere(char **data, t_cleanup *clean)
 	}
 	return true;
 }
+bool	verify_data_cylinder(char **data, t_cleanup *clean)
+{
+	int i = 0;
+	if(!data[1] || !data[2] || !data[3] || !data[4] || !data[5])
+	{
+		return false;
+	}
+
+	if(!is_coordinate(data[1]))
+	{
+		printf("111111111111111111111111111111111111\n");
+		return false;
+	}
+	if(!is_coordinate(data[2]))
+	{
+		printf("111111111111111111111111111111111111\n");
+		return false;
+	}
+	double height = ft_atoi_double(data[3], clean);
+	double diameter = ft_atoi_double(data[4], clean);
+	if(clean->flag_exit)
+	{
+		printf("2222222222222222222222222222222222222222222222221\n");
+		return false;
+	}
+	if(!verify_color(data[5]))
+	{
+		printf("333333333333333333333333333333333333333333333333333\n");
+		return false;
+	}
+	while(data[i])
+		i++;
+	if(i > 7)
+	{
+		printf("alot of arguments in sphere\n");
+		return false;
+	}
+	return true;
+}
 
 
 void exit_error(char *str, char *scene_name, t_cleanup *cleanup)

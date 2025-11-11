@@ -269,7 +269,7 @@ void	ft_plane(char **data, t_scene *scene)
 					test_bump->type = 2;
 					test_bump->color_solid = (t_color){0,0,0};
 					test_bump->color_checkerd = (t_color){0,0,0};
-					test_bump->scale = 0.002;  // bump strength
+					test_bump->scale = 0.0001;  // bump strength
 					test_bump->image = mlx_load_png(new_plane->img_path);
 					if (!test_bump->image)
 					{
@@ -396,7 +396,7 @@ void	ft_sphere(char **data, t_scene *scene)
 					test_bump->type = 2;
 					test_bump->color_solid = (t_color){0,0,0};
 					test_bump->color_checkerd = (t_color){0,0,0};
-					test_bump->scale = 0.1;  // bump strength
+					test_bump->scale = 0.001;  // bump strength
 					test_bump->image = mlx_load_png(new_sphere->img_path);
 					if (!test_bump->image)
 					{
@@ -498,7 +498,7 @@ void	ft_cylinder(char **data, t_scene *scene)
 				new_cylinder->flag_bump = true;
 				t_texture *test_bump_checker = malloc(sizeof(t_texture));
 				test_bump_checker->type = 1;
-				// test_bump_checker->scale = 0.01;
+				test_bump_checker->scale = 15.0;
 				test_bump_checker->image = NULL;	
 				new_cylinder->bump_texture = test_bump_checker;	
 			}

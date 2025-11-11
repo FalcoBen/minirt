@@ -140,132 +140,151 @@ t_vec3 calculate_lighting(t_scene *scene, t_hit_record *hit_rec, t_vec3 view_dir
 /******************************************************************************* */
 // Add this function to mlx_start.c after intersect_sphere
 
-double intersect_cylinder(t_ray *ray, t_cylinder *cylinder, t_hit_record *rec)
+#include <math.h>
+#define EPSILON 1e-6
+double intersect_cylinder(t_ray *ray, t_cylinder *cyl, t_hit_record *rec)
 {
-    t_vec3 center = *cylinder->coor_cylinder;
-    t_vec3 axis = vec_normalize(*cylinder->vector_cylinder);
-    double radius = cylinder->diameter_cylinder / 2.0;
-    double height = cylinder->height_cylinder;
-    
-    // Vector from cylinder base to ray origin
-    t_vec3 oc = vec_sub(ray->origin, center);
-    
-    // Project ray direction and oc onto plane perpendicular to cylinder axis
-    t_vec3 ray_perp = vec_sub(ray->direction, vec_scale(axis, vec_dot(ray->direction, axis)));
-    t_vec3 oc_perp = vec_sub(oc, vec_scale(axis, vec_dot(oc, axis)));
-    
-    // Solve quadratic equation for infinite cylinder
-    double a = vec_dot(ray_perp, ray_perp);
-    double b = 2.0 * vec_dot(oc_perp, ray_perp);
-    double c = vec_dot(oc_perp, oc_perp) - radius * radius;
-    
-    double discriminant = b * b - 4 * a * c;
-    
-    if (discriminant < 0.0)
-        return INFINITY;
-    
-    double t1 = (-b - sqrt(discriminant)) / (2.0 * a);
-    double t2 = (-b + sqrt(discriminant)) / (2.0 * a);
-    
-    double closest_t = INFINITY;
-    int hit_body = 0;
-    
-    // Check both intersection points for body
+    t_vec3 C = *cyl->coor_cylinder;
+    t_vec3 A = vec_normalize(*cyl->vector_cylinder);
+    double r = cyl->diameter_cylinder * 0.5;
+    double h = cyl->height_cylinder;
+
+    t_vec3 RO = ray->origin;
+    t_vec3 RD = ray->direction;
+
+    t_vec3 OC = vec_sub(RO, C);
+
+    double a = vec_dot(RD, RD) - pow(vec_dot(RD, A), 2);
+    double b = 2.0 * (vec_dot(RD, OC) - vec_dot(RD, A) * vec_dot(OC, A));
+    double c = vec_dot(OC, OC) - pow(vec_dot(OC, A), 2) - r * r;
+
+    double disc = b * b - 4 * a * c;
+    if (disc < 0) return INFINITY;
+
+    double sqrt_disc = sqrt(disc);
+    double t1 = (-b - sqrt_disc) / (2 * a);
+    double t2 = (-b + sqrt_disc) / (2 * a);
+
+    double t = INFINITY;
+    t_vec3 hit_p = {0};
+    t_vec3 hit_n = {0};
+    bool is_body = false;
+
+    // Check body
+    double ts[2] = {t1, t2};
     for (int i = 0; i < 2; i++)
     {
-        double t = (i == 0) ? t1 : t2;
-        if (t < 0) continue;
-        
-        t_vec3 hit_point = vec_add(ray->origin, vec_scale(ray->direction, t));
-        t_vec3 to_hit = vec_sub(hit_point, center);
-        double proj = vec_dot(to_hit, axis);
-        
-        // Check if hit is within cylinder height
-        if (proj >= 0 && proj <= height && t < closest_t)
+        double t_cand = ts[i];
+        if (t_cand <= 0) continue;
+
+        t_vec3 p = vec_add(RO, vec_scale(RD, t_cand));
+        double proj = vec_dot(vec_sub(p, C), A);
+
+        if (proj >= 0 && proj <= h && t_cand < t)
         {
-            closest_t = t;
-            hit_body = 1;
-            
-            if (rec)
-            {
-                rec->t = t;
-                rec->p = hit_point;
-                
-                // Normal perpendicular to axis
-                t_vec3 proj_vec = vec_scale(axis, proj);
-                t_vec3 center_at_height = vec_add(center, proj_vec);
-                rec->normal = vec_normalize(vec_sub(hit_point, center_at_height));
-                rec->color = *cylinder->color_cylinder;
-                
-                // UV mapping for cylinder body
-                double theta = atan2(rec->normal.z, rec->normal.x);
-                rec->u = (theta + M_PI) / (2.0 * M_PI);
-                rec->v = proj / height;
-                rec->hit_object = cylinder;
-            }
+            t = t_cand;
+            hit_p = p;
+            t_vec3 center_h = vec_add(C, vec_scale(A, proj));
+            hit_n = vec_normalize(vec_sub(p, center_h));
+            is_body = true;
         }
     }
-    
-    // Check top cap
-    double denom_top = vec_dot(ray->direction, axis);
-    if (fabs(denom_top) > 1e-6)
+
+    // Check caps (only if not already hit closer)
+    double denom = vec_dot(RD, A);
+    if (fabs(denom) > 1e-6)
     {
-        t_vec3 cap_center = vec_add(center, vec_scale(axis, height));
-        t_vec3 to_cap = vec_sub(cap_center, ray->origin);
-        double t = vec_dot(to_cap, axis) / denom_top;
-        
-        if (t > 0)
+        // Top cap
+        t_vec3 top = vec_add(C, vec_scale(A, h));
+        double t_top = vec_dot(vec_sub(top, RO), A) / denom;
+        if (t_top > 0)
         {
-            t_vec3 hit_point = vec_add(ray->origin, vec_scale(ray->direction, t));
-            t_vec3 to_hit = vec_sub(hit_point, cap_center);
-            
-            if (vec_length(to_hit) <= radius && t < closest_t)
+            t_vec3 p = vec_add(RO, vec_scale(RD, t_top));
+            if (vec_length(vec_sub(p, top)) <= r && t_top < t)
             {
-                closest_t = t;
-                if (rec)
-                {
-                    rec->t = t;
-                    rec->p = hit_point;
-                    rec->normal = axis;
-                    rec->color = *cylinder->color_cylinder;
-                    rec->u = (to_hit.x / radius + 1.0) * 0.5;
-                    rec->v = (to_hit.z / radius + 1.0) * 0.5;
-                    rec->hit_object = cylinder;
-                }
+                t = t_top;
+                hit_p = p;
+                hit_n = A;
+                is_body = false;
+            }
+        }
+
+        // Bottom cap
+        double t_bot = vec_dot(vec_sub(C, RO), A) / denom;
+        if (t_bot > 0)
+        {
+            t_vec3 p = vec_add(RO, vec_scale(RD, t_bot));
+            if (vec_length(vec_sub(p, C)) <= r && t_bot < t)
+            {
+                t = t_bot;
+                hit_p = p;
+                hit_n = vec_scale(A, -1);
+                is_body = false;
             }
         }
     }
-    
-    // Check bottom cap
-    double denom_bottom = vec_dot(ray->direction, axis);
-    if (fabs(denom_bottom) > 1e-6)
+
+    if (t == INFINITY) return INFINITY;
+
+    if (rec)
     {
-        t_vec3 to_cap = vec_sub(center, ray->origin);
-        double t = vec_dot(to_cap, axis) / denom_bottom;
-        
-        if (t > 0)
+        rec->t = t;
+        rec->p = hit_p;
+        rec->normal = hit_n;
+        rec->hit_object = cyl;
+
+        // === CORRECT UV MAPPING ===
+        if (is_body)
         {
-            t_vec3 hit_point = vec_add(ray->origin, vec_scale(ray->direction, t));
-            t_vec3 to_hit = vec_sub(hit_point, center);
-            
-            if (vec_length(to_hit) <= radius && t < closest_t)
+            t_vec3 to_p = vec_sub(hit_p, C);
+            double proj_h = vec_dot(to_p, A);
+            rec->v = proj_h / h;
+
+            t_vec3 perp = vec_sub(to_p, vec_scale(A, proj_h));
+            if (vec_length(perp) > 1e-6)
             {
-                closest_t = t;
-                if (rec)
-                {
-                    rec->t = t;
-                    rec->p = hit_point;
-                    rec->normal = vec_scale(axis, -1.0);
-                    rec->color = *cylinder->color_cylinder;
-                    rec->u = (to_hit.x / radius + 1.0) * 0.5;
-                    rec->v = (to_hit.z / radius + 1.0) * 0.5;
-                    rec->hit_object = cylinder;
-                }
+                t_vec3 nperp = vec_normalize(perp);
+                t_vec3 ref = (fabs(A.x) > 0.9) ? (t_vec3){0,1,0} : (t_vec3){1,0,0};
+                t_vec3 tan = vec_normalize(vec_cross(A, ref));
+                t_vec3 bitan = vec_cross(A, tan);
+
+                double ux = vec_dot(nperp, tan);
+                double uz = vec_dot(nperp, bitan);
+                double angle = atan2(uz, ux);
+                rec->u = angle / (2.0 * M_PI) + 0.5;
+            }
+            else rec->u = 0.0;
+        }
+        else
+        {
+            // Cap UV
+            t_vec3 center_cap = vec_dot(hit_n, A) > 0 ? vec_add(C, vec_scale(A, h)) : C;
+            t_vec3 local = vec_sub(hit_p, center_cap);
+            t_vec3 radial = vec_sub(local, vec_scale(A, vec_dot(local, A)));
+
+            t_vec3 ref = (fabs(A.x) > 0.9) ? (t_vec3){0,1,0} : (t_vec3){1,0,0};
+            t_vec3 u_axis = vec_normalize(vec_cross(A, ref));
+            t_vec3 v_axis = vec_cross(A, u_axis);
+
+            double r_len = vec_length(radial);
+            if (r_len > 1e-6)
+            {
+                t_vec3 nrad = vec_normalize(radial);
+                rec->u = vec_dot(nrad, u_axis) * 0.5 + 0.5;
+                rec->v = vec_dot(nrad, v_axis) * 0.5 + 0.5;
+            }
+            else
+            {
+                rec->u = rec->v = 0.5;
             }
         }
+
+        // Wrap UV
+        rec->u = fmod(rec->u + 100.0, 1.0);
+        rec->v = fmod(rec->v + 100.0, 1.0);
     }
-    
-    return closest_t;
+
+    return t;
 }
 /******************************************************************************* */
 static uint32_t color_to_int(t_color color)
@@ -551,7 +570,8 @@ void start_using_mlx(t_scene *scene)
                             
                             if (bump_tex)
                             {
-                                double offset = 0.0001;
+                                // double offset = 0.01;
+                                double offset = 0.001 / fmax(bump_tex->scale, 1.0);  // Adaptive!
                                 double h = sample_height(bump_tex, hit_rec.u, hit_rec.v);
                                 double hu = sample_height(bump_tex, hit_rec.u + offset, hit_rec.v);
                                 double hv = sample_height(bump_tex, hit_rec.u, hit_rec.v + offset);

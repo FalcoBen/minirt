@@ -1,18 +1,8 @@
 #include "parsing.h"
 
-void add_object(t_objects_fb **head, char *identifier, void (*assign_object)(char **, t_scene *))
+void    objects_linking_constractor(char *identifier, void (*assign_object)(char **, t_scene *), t_objects_fb **head, t_objects_fb *current)
 {
-    t_objects_fb *current = *head;
-    while (current)
-    {
-		if (current->identifier && strcmp(current->identifier, identifier) == 0)
-		{
-			return;
-		}
-        current = current->next;
-    }
-    
-    t_objects_fb *new_node = malloc(sizeof(t_objects_fb));
+	t_objects_fb *new_node = malloc(sizeof(t_objects_fb));
     if (!new_node)
 		return;
 
@@ -32,8 +22,21 @@ void add_object(t_objects_fb **head, char *identifier, void (*assign_object)(cha
 			current = current->next;
         current->next = new_node;
     }
-	// free(new_node->identifier);
-	// ft_lstclear((void **)head, del, 'o');
+
+}
+void add_object(t_objects_fb **head, char *identifier, void (*assign_object)(char **, t_scene *))
+{
+    t_objects_fb *current = *head;
+    while (current)
+    {
+		if (current->identifier && strcmp(current->identifier, identifier) == 0)
+		{
+			return;
+		}
+        current = current->next;
+    }
+    objects_linking_constractor(identifier, assign_object, head, current);
+
 }
 
 void init_object_dispatch_table(t_objects_fb **dispatch_table)

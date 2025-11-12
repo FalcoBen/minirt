@@ -1,0 +1,270 @@
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+
+
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+
+}
+
+
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:/usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
+}
+
+
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+
+
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:*
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:*
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:*
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:*
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:*
+}
+
+
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+}
+
+
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30
+
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30
+
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30
+
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30
+
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30
+
+}
+
+
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+}
+
+
+
+
+{
+   ignore_system_libs
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr8
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
+}
+{
+   ignore_system_libs_addr
+   Memcheck:Addr4
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value8
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
+}
+{
+   ignore_system_libs_val
+   Memcheck:Value4
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
+}
+

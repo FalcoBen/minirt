@@ -1,87 +1,116 @@
-#include "minirt.h"
+// -----------------------------------------------------------------------------
+// Codam Coding College, Amsterdam @ 2022-2023 by W2Wizard.
+// See README in the root project for more information.
+// -----------------------------------------------------------------------------
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+#include "MiniRt.h"
+
+// 5120 x 2880 
+// #define WIDTH 1080
+// #define HEIGHT 1080
+
+static mlx_image_t* image;
+static mlx_image_t* i;
+
+// -----------------------------------------------------------------------------
+
+int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 {
-	size_t	lens;
-	size_t	n;
-
-	lens = strlen(src);
-	n = dstsize - 1;
-	if (dstsize == 0)
-	{
-		return (lens);
-	}
-	while (*src && n > 0)
-	{
-		*dst++ = *src++;
-		n--;
-	}
-	*dst = '\0';
-	return (lens);
+    return (r << 24 | g << 16 | b << 8 | a);
 }
 
-bool ispace(char c)
+void ft_randomize(void* param)
 {
-	if(c == ' ' || (c >= 9 && c <= 13))
-		return true;
-	return false;
-}
-
-int count_word(char *str)
-{
-	int i = 0;
-	int flag = 0;
-	int counter = 0;
-	while(str[i])
+	(void)param;
+	for (uint32_t i = 0; i < image->width; ++i)
 	{
-		if(ispace(str[i]))
-			flag = 0;
-		else if (flag == 0)
+		for (uint32_t y = 0; y < image->height; ++y)
 		{
-			flag = 1;
-			counter++;
+			uint32_t color = ft_pixel(
+				rand() % 0xFF+1, // R
+				rand() % 0xFF+2, // G
+				rand() % 0xFF+3, // B
+				rand() % 0xFF  // A
+			);
+			mlx_put_pixel(image, i, y, color);
 		}
-		i++;
 	}
-	return counter;
 }
 
-int	lenght_word(char *str)
+void ft_hook(void* param)
 {
-	int i = 0;
-	while(str[i] && str[i] != ' ' && str[i] != '\t')
-		i++;
-	return i;
+	mlx_t* mlx = param;
+
+	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(mlx);
+	if (mlx_is_key_down(mlx, MLX_KEY_UP))
+		image->instances[0].y -= 5;
+	if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
+		image->instances[0].y += 5;
+	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
+		image->instances[0].x -= 5;
+	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
+		image->instances[0].x += 5;
 }
 
-char **ft_split_white(char *str)
+// -----------------------------------------------------------------------------
+
+int main(void)
 {
-	int counts = count_word(str);
-	char **arr = malloc(sizeof(char *) * (counts + 1));
-	if(!arr)
-		return NULL;
-	int i = 0;
-	while(i < counts)
+	mlx_t* mlx;
+
+	if (!(mlx = mlx_init(WIDTH, HEIGHT, "MLX42", true)))
 	{
-		while(*str == ' ' || (*str >= 9 && *str <= 13))
-			str++;
-		arr[i] = malloc(sizeof(char ) * lenght_word(str) + 1);
-		if(!arr[i])
-			return NULL;
-		ft_strlcpy(arr[i], str, lenght_word(str) + 1);
-		str = str + lenght_word(str);
-		i++;
+		puts(mlx_strerror(mlx_errno));
+		return(EXIT_FAILURE);
 	}
-	arr[i] = NULL;
-	return arr;
+
+
+	if (!(image = mlx_new_image(mlx, 600, 600)))
+	{
+		mlx_close_window(mlx);
+		puts(mlx_strerror(mlx_errno));
+		return(EXIT_FAILURE);
+	}
+
+	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
+	{
+		mlx_close_window(mlx);
+		puts(mlx_strerror(mlx_errno));
+		return(EXIT_FAILURE);
+	}
+	
+	// if (mlx_image_to_window(mlx, image, 440, 440) == -1)
+	// {
+	// 	mlx_close_window(mlx);
+	// 	puts(mlx_strerror(mlx_errno));
+	// 	return(EXIT_FAILURE);
+	// }
+	
+	// if (mlx_image_to_window(mlx, image, 880, 880) == -1)
+	// {
+	// 	mlx_close_window(mlx);
+	// 	puts(mlx_strerror(mlx_errno));
+	// 	return(EXIT_FAILURE);
+	// }
+	// if (mlx_image_to_window(mlx, image, 880, 0) == -1)
+	// {
+	// 	mlx_close_window(mlx);
+	// 	puts(mlx_strerror(mlx_errno));
+	// 	return(EXIT_FAILURE);
+	// }
+	// if (mlx_image_to_window(mlx, image, 0, 880) == -1)
+	// {
+	// 	mlx_close_window(mlx);
+	// 	puts(mlx_strerror(mlx_errno));
+	// 	return(EXIT_FAILURE);
+	// }
+	
+	
+	mlx_loop_hook(mlx, ft_randomize, mlx);
+	mlx_loop_hook(mlx, ft_hook, mlx);
+
+	mlx_loop(mlx);
+	mlx_terminate(mlx);
+	return (EXIT_SUCCESS);
 }
-
-int main()
-{
-	char *str = "  			fa	hd ben allal    fef is hoat";
-	char **splited = ft_split_white(str);
-	for(int i = 0; splited[i]; i++)
-		printf("[%s]\n", splited[i]);
-}
-
-

@@ -23,12 +23,12 @@ void    set_scene(t_scene *scene, bool flag)
         exit_error("closing", "window", ((t_cleanup *)holder));
     }
 }
-void parsing(int fd)
+
+void	parsing_scene(int fd, int *counter, t_cleanup *cleaner, t_container *head)
 {
 	char *line = get_next_line(fd);
-	int counter = 0;
 	t_container *list = NULL;
-	t_container *head = NULL;
+	// t_container *head = NULL;
 	while (line != NULL)
     {
 		list = ft_lstnew(line);
@@ -38,7 +38,6 @@ void parsing(int fd)
         line = get_next_line(fd);
     }       
 	close(fd);
-	t_cleanup *cleaner = malloc(sizeof(t_cleanup));
 	cleaner->container = NULL;
 	cleaner->dispatched_table = NULL;
 	cleaner->scene = NULL;
@@ -47,14 +46,36 @@ void parsing(int fd)
 	cleaner->flag_input = false;
 	cleaner->flag_exit = false;
 	cleaner->input_data = NULL;
-	
 	cleaner->container = head;
-	// if(counter == 0)
-	// {
-	// 	// exit_error("empty", "file", &head, 'e');
-	// 	exit_error("empty", "file", cleaner);
-	// 	return 1;
-	// }
+}
+
+void parsing(int fd)
+{
+	int counter = 0;
+	// char *line = get_next_line(fd);
+	// t_container *list = NULL;
+	t_container *head = NULL;
+	// while (line != NULL)
+    // {
+	// 	list = ft_lstnew(line);
+    //     ft_lstadd_back(&head, list);
+    //     counter++;
+    //     free(line);
+    //     line = get_next_line(fd);
+    // }       
+	// close(fd);
+	// cleaner->container = NULL;
+	// cleaner->dispatched_table = NULL;
+	// cleaner->scene = NULL;
+	// cleaner->token_count = 0;
+	// cleaner->tokens = NULL;
+	// cleaner->flag_input = false;
+	// cleaner->flag_exit = false;
+	// cleaner->input_data = NULL;
+	// cleaner->container = head;
+	t_cleanup *cleaner = malloc(sizeof(t_cleanup));
+	parsing_scene(fd, &counter, cleaner, head);
+
 	char ***tokens = malloc(sizeof(char **) * (counter + 1));
 	cleaner->tokens = tokens;
 	t_container *curr = head;
@@ -67,7 +88,6 @@ void parsing(int fd)
 	}
 	cleaner->token_count = i;
 	
-	t_scene *scene = malloc(sizeof(t_scene));
 
 	int z = 0;
 	while(z < counter)
@@ -92,6 +112,7 @@ void parsing(int fd)
 	t_objects_fb *dispatch_table = NULL;
 	init_object_dispatch_table(&dispatch_table);
 	cleaner->dispatched_table = &dispatch_table;
+	t_scene *scene = malloc(sizeof(t_scene));
 	scene->cleaner = cleaner;
 	cleaner->scene = scene;
     initialize_scenes(scene);

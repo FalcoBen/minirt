@@ -33,7 +33,7 @@ extern int g_fd;
 
 
 #define BPP sizeof(int32_t)
-#define WIDTH 500
+#define WIDTH 1000
 #define HEIGHT 500
 
 #define DW 500

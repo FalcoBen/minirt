@@ -60,37 +60,32 @@ bool	check_colors_args(char **colors)
 	return true;
 }
 
-
-void	ft_ambient_light_fb(char **data, t_scene *scene)
+void	check_valid_args(char **data, t_scene *scene, char object)
 {
-	int				i;
-	t_ambient_light_fb	*new_ambient;
-	t_ambient_light_fb	*current;
-	char			**colors;
-
+	int i = 0;
 	i = 0;
 	while (data[i])
 		i++;
-	if (i != 3)
-		exit_error("invalid arguments", "in A", scene->cleaner);
+	if(object == 'A')
+	{
+		if (i != 3)
+			exit_error("invalid arguments", "in A", scene->cleaner);
+	}
+	if(object == 'C')
+	{
+		if(i != 4)
+			exit_error("invalid arguments", "in C", scene->cleaner);
+	}
+	if(object == 'L')
+	{
+		if(i != 4)
+			exit_error("invalid arguments", "in L", scene->cleaner);
+	}
+}
+void	ambient_light_linked_list(t_ambient_light_fb *new_ambient, t_scene *scene)
+{
+	t_ambient_light_fb	*current;
 
-	new_ambient = malloc(sizeof(t_ambient_light_fb));
-	new_ambient->color_ambient_light = malloc(sizeof(t_color_fb));
-	new_ambient->next = NULL;
-
-	new_ambient->bright_ambient_light_fb = ft_atoi_double(data[1], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in", "A", scene->cleaner);
-
-	if (new_ambient->bright_ambient_light_fb < 0 || new_ambient->bright_ambient_light_fb > 1)
-		exit_error("invalid range ambient light", "A", scene->cleaner);
-	if(count_comma(data[2]) != 2)
-		exit_error("more or less in color", "in ambient_light", scene->cleaner);
-	colors = ft_split(data[2], ',');
-	new_ambient->color_ambient_light->r = ft_atoi_color(colors[0], "ambient light r");
-	new_ambient->color_ambient_light->g = ft_atoi_color(colors[1], "ambient light g");
-	new_ambient->color_ambient_light->b = ft_atoi_color(colors[2], "ambient light b");
-	
 	if (scene->ambient_light == NULL)
 		scene->ambient_light = new_ambient;
 	else
@@ -109,29 +104,146 @@ void	ft_ambient_light_fb(char **data, t_scene *scene)
 	}
 	if(counter > 1)
 		exit_error("duplicate object", "ambient_light", scene->cleaner);
+}
+void	camera_linked_list(t_camera_fb *new_camera, t_scene *scene)
+{
+	t_camera_fb	*current;
+
+	if(scene->camera == NULL)
+		scene->camera = new_camera;
+	else
+	{
+		current = scene->camera;
+		while(current->next)
+			current = current->next;
+		current->next = new_camera;
+	}
+
+	t_camera_fb *tmp = scene->camera;
+	int counter = 0;
+	while (tmp)
+	{
+		counter++;
+		tmp = tmp->next;
+	}
+	if(counter > 1)
+		exit_error("duplicate object", "camera", scene->cleaner);
+}
+void	light_linked_list(t_light_fb *new_light, t_scene *scene)
+{
+
+	t_light_fb *current;
+	if(scene->light == NULL)
+		scene->light = new_light;
+	else
+	{
+		current = scene->light;
+		while(current->next)
+			current = current->next;
+		current->next = new_light;
+	}
+}
+void	plane_linked_list(t_plane_fb *new_plane, t_scene *scene)
+{
+	t_plane_fb *current;
+
+	if(scene->plane == NULL)
+		scene->plane = new_plane;
+	else
+	{
+		current = scene->plane;
+		while(current->next)
+			current = current->next;
+		current->next = new_plane;
+	}
+}
+void	sphere_linked_list(t_sphere_fb *new_sphere, t_scene *scene)
+{
+	t_sphere_fb *current;
+
+	if(scene->sphere == NULL)
+	{
+		puts("in if spher\n");	
+		scene->sphere = new_sphere;
+	}
+	else
+	{
+		current = scene->sphere;
+		while(current->next)
+			current = current->next;
+		current->next = new_sphere;
+	}
+}
+void	cylinder_linked_list(t_cylinder_fb *new_cylinder, t_scene *scene)
+{
+	t_cylinder_fb *current;
+	if(scene->cylinder == NULL)
+		scene->cylinder = new_cylinder;
+	else
+	{
+		current = scene->cylinder;
+		while(current->next)
+			current = current->next;
+		current->next = new_cylinder;
+	}
+}
+void	cone_linked_list(t_cone_fb *new_cone, t_scene *scene)
+{
+	t_cone_fb *current;
+	if(scene->cone == NULL)
+	{
+		scene->cone = new_cone;
+	}
+	else
+	{
+		current = scene->cone;
+		while(current->next)
+			current = current->next;
+		current->next = new_cone;
+	}
+}
+ 
+void	ft_ambient_light_fb(char **data, t_scene *scene)
+{	
+	t_ambient_light_fb	*new_ambient;
+	char			**colors;
+	
+	check_valid_args(data, scene, 'A');
+	new_ambient = malloc(sizeof(t_ambient_light_fb));
+	new_ambient->color_ambient_light = malloc(sizeof(t_color_fb));
+	new_ambient->next = NULL;
+
+	new_ambient->bright_ambient_light_fb = ft_atoi_double(data[1], scene->cleaner);
+	if(scene->cleaner->flag_exit)
+		exit_error("invalid thing in", "A", scene->cleaner);
+	if (new_ambient->bright_ambient_light_fb < 0 || new_ambient->bright_ambient_light_fb > 1)
+		exit_error("invalid range ambient light", "A", scene->cleaner);
+	if(count_comma(data[2]) != 2)
+		exit_error("more or less in color", "in ambient_light", scene->cleaner);
+	colors = ft_split(data[2], ',');
+	new_ambient->color_ambient_light->r = ft_atoi_color(colors[0], "ambient light r");
+	new_ambient->color_ambient_light->g = ft_atoi_color(colors[1], "ambient light g");
+	new_ambient->color_ambient_light->b = ft_atoi_color(colors[2], "ambient light b");
+	ambient_light_linked_list(new_ambient, scene);
 	ft_free_split(colors);
 	
 }
 
 
-void	ft_camera_fb(char **data, t_scene *scene)
+void	coor_camera(t_camera_fb *new_camera, char **data, t_scene *scene)
 {
-	int i = 0;
-	while(data[i])
-		i++;
-	if(i != 4)
-		exit_error("invalid arguments", "in C", scene->cleaner);
-
-	t_camera_fb *new_camera = malloc(sizeof(t_camera_fb));
-	t_camera_fb *current;
 	new_camera->coor_camera = malloc(sizeof(t_vec3));
-	new_camera->next = NULL;
 	char **coors = ft_split(data[1], ',');
 	new_camera->coor_camera->x = ft_atoi_double(coors[0], scene->cleaner);
 	new_camera->coor_camera->y = ft_atoi_double(coors[1], scene->cleaner);
 	new_camera->coor_camera->z = ft_atoi_double(coors[2], scene->cleaner);
 	if(scene->cleaner->flag_exit)
 		exit_error("invalid thing in coors", "C", scene->cleaner);
+	ft_free_split(coors);
+	
+}
+void	vector_camera(t_camera_fb *new_camera, char **data, t_scene *scene)
+{
 	new_camera->vector_camera = malloc(sizeof(t_vec3));
 	char **vects = ft_split(data[2], ',');
 	new_camera->vector_camera->x = ft_atoi_double(vects[0], scene->cleaner);
@@ -150,48 +262,36 @@ void	ft_camera_fb(char **data, t_scene *scene)
 		
 	if(range_z < -1 || range_z > 1)
 		exit_error("invalid range vectors", "C in z", scene->cleaner);
+	ft_free_split(vects);
+	
+}
+void	ft_camera_fb(char **data, t_scene *scene)
+{
+	check_valid_args(data, scene, 'C');
+
+	t_camera_fb *new_camera = malloc(sizeof(t_camera_fb));
+	t_camera_fb *current;
+	new_camera->next = NULL;
+	coor_camera(new_camera, data, scene);
+	vector_camera(new_camera, data, scene);
 	new_camera->angle_view = ft_atoi_double(data[3], scene->cleaner);
 	if(scene->cleaner->flag_exit)
 		exit_error("invalid thing in angle", "C", scene->cleaner);
 	if(new_camera->angle_view < 0 || new_camera->angle_view > 180)
 		exit_error("invalid range angle view", "C", scene->cleaner);
-	if(scene->camera == NULL)
-		scene->camera = new_camera;
-	else
-	{
-		current = scene->camera;
-		while(current->next)
-			current = current->next;
-		current->next = new_camera;
-	}
-
-	t_camera_fb *tmp = scene->camera;
-	int counter = 0;
-	while (tmp)
-	{
-		counter++;
-		tmp = tmp->next;
-	}
-	
-	if(counter > 1)
-		exit_error("duplicate object", "camera", scene->cleaner);
-	ft_free_split(coors);
-	ft_free_split(vects);
+	camera_linked_list(new_camera, scene);
 }
+
+
 void	ft_light(char **data, t_scene *scene)
 {
 	t_light_fb *new_light;
-	t_light_fb *current;
 
-	int i = 0;
-	while (data[i])
-		i++;
-	if(i != 4)
-		exit_error("invalid arguments", "in L", scene->cleaner);
-		
-		new_light = malloc(sizeof(t_light_fb));
-		new_light->color_light = malloc(sizeof(t_color_fb));
-		new_light->coor_light = malloc(sizeof(t_vec3));
+	check_valid_args(data, scene, 'L');
+	
+	new_light = malloc(sizeof(t_light_fb));
+	new_light->color_light = malloc(sizeof(t_color_fb));
+	new_light->coor_light = malloc(sizeof(t_vec3));
 	new_light->next = NULL;
 	
 	char **coors = ft_split(data[1], ',');
@@ -215,22 +315,13 @@ void	ft_light(char **data, t_scene *scene)
 	if(new_light->color_light->r == -1 || new_light->color_light->g == -1 ||new_light->color_light->b == -1)
 		exit_error("somthing wrong with colors", "in light", scene->cleaner);
 	
-	if(scene->light == NULL)
-	scene->light = new_light;
-	else
-	{
-		current = scene->light;
-		while(current->next)
-		current = current->next;
-		current->next = new_light;
-	}
+	light_linked_list(new_light, scene);
 	ft_free_split(colors);
 	ft_free_split(coors);
 }
 void	ft_plane_fb(char **data, t_scene *scene)
 {
 	t_plane_fb *new_plane;
-	t_plane_fb *current;
 	
 	int i = 0;
 	while(data[i] != NULL)
@@ -255,8 +346,6 @@ void	ft_plane_fb(char **data, t_scene *scene)
 				new_plane->flag_bump = true;
 				t_texture *test_bump_checker = malloc(sizeof(t_texture));
 				test_bump_checker->type = 1;
-				// test_bump_checker->color_solid = (t_color_fb){0,0,0};
-				// test_bump_checker->color_checkerd = (t_color_fb){255,255,255};
 				test_bump_checker->scale = 0.1;
 				test_bump_checker->image = NULL;
 				new_plane->img_path = NULL;
@@ -334,15 +423,7 @@ void	ft_plane_fb(char **data, t_scene *scene)
 	if(new_plane->color_plane->r == -1 || new_plane->color_plane->g == -1 ||new_plane->color_plane->b == -1)
 		exit_error("somthing wrong with colors", "in plane", scene->cleaner);
 	
-	if(scene->plane == NULL)
-		scene->plane = new_plane;
-	else
-	{
-		current = scene->plane;
-		while(current->next)
-			current = current->next;
-		current->next = new_plane;
-	}
+	plane_linked_list(new_plane, scene);
 
 	ft_free_split(colors);
 	ft_free_split(coors);
@@ -458,19 +539,7 @@ void	ft_sphere_fb(char **data, t_scene *scene)
 	new_sphere->color_sphere->b = ft_atoi_color(colors[2], "sphere");
 	if(new_sphere->color_sphere->r == -1 || new_sphere->color_sphere->g == -1 ||new_sphere->color_sphere->b == -1)
 		exit_error("somthing wrong with colors", "in sphere", scene->cleaner);
-		
-	if(scene->sphere == NULL)
-	{
-		puts("in if spher\n");	
-		scene->sphere = new_sphere;
-	}
-	else
-	{
-		current = scene->sphere;
-		while(current->next)
-			current = current->next;
-		current->next = new_sphere;
-	}
+	sphere_linked_list(new_sphere, scene);
 	ft_free_split(colors);
 	ft_free_split(coors);
 }
@@ -478,7 +547,6 @@ void	ft_cylinder_fb(char **data, t_scene *scene)
 {
 	printf("in cylinder ----------------------------------------------\n");
 	t_cylinder_fb *new_cylinder;
-	t_cylinder_fb *current;
 	if(!verify_data_cylinder(data, scene->cleaner))
 	{
 		exit_error("data not in the correct format", "in cylinder", scene->cleaner);
@@ -590,15 +658,7 @@ void	ft_cylinder_fb(char **data, t_scene *scene)
 	new_cylinder->color_cylinder->r = ft_atoi_color(colors[0], "cylinder");
 	new_cylinder->color_cylinder->g = ft_atoi_color(colors[1], "cylinder");
 	new_cylinder->color_cylinder->b = ft_atoi_color(colors[2], "cylinder");
-	if(scene->cylinder == NULL)
-		scene->cylinder = new_cylinder;
-	else
-	{
-		current = scene->cylinder;
-		while(current->next)
-			current = current->next;
-		current->next = new_cylinder;
-	}
+	cylinder_linked_list(new_cylinder, scene);
 	ft_free_split(colors);
 	ft_free_split(coors);
 	ft_free_split(vects);
@@ -728,17 +788,9 @@ void	ft_cone_fb(char **data, t_scene *scene)
 	new_cone->color_cone->r = ft_atoi_color(colors[0], "cone");
 	new_cone->color_cone->g = ft_atoi_color(colors[1], "cone");
 	new_cone->color_cone->b = ft_atoi_color(colors[2], "cone");
-	if(scene->cone == NULL)
-	{
-		scene->cone = new_cone;
-	}
-	else
-	{
-		current = scene->cone;
-		while(current->next)
-			current = current->next;
-		current->next = new_cone;
-	}
+	
+	cone_linked_list(new_cone, scene);
+
 	ft_free_split(colors);
 	ft_free_split(coors);
 	ft_free_split(vects);

@@ -282,18 +282,10 @@ void	ft_camera_fb(char **data, t_scene *scene)
 	camera_linked_list(new_camera, scene);
 }
 
-
-void	ft_light(char **data, t_scene *scene)
+void	coor_light(t_light_fb *new_light, char **data, t_scene *scene)
 {
-	t_light_fb *new_light;
-
-	check_valid_args(data, scene, 'L');
-	
-	new_light = malloc(sizeof(t_light_fb));
-	new_light->color_light = malloc(sizeof(t_color_fb));
 	new_light->coor_light = malloc(sizeof(t_vec3));
-	new_light->next = NULL;
-	
+
 	char **coors = ft_split(data[1], ',');
 	new_light->coor_light->x = ft_atoi_double(coors[0], scene->cleaner);
 	new_light->coor_light->y = ft_atoi_double(coors[1], scene->cleaner);
@@ -307,8 +299,20 @@ void	ft_light(char **data, t_scene *scene)
 		exit_error("invalid range bright light", "L", scene->cleaner);
 	if(count_comma(data[3]) != 2)
 		exit_error("more or less in color", "in light", scene->cleaner);
+	ft_free_split(coors);
+	
+}
+void	ft_light(char **data, t_scene *scene)
+{
+	t_light_fb *new_light;
+
+	check_valid_args(data, scene, 'L');
+	
+	new_light = malloc(sizeof(t_light_fb));
+	new_light->next = NULL;
+	coor_light(new_light, data, scene);
+	new_light->color_light = malloc(sizeof(t_color_fb));
 	char **colors = ft_split(data[3], ',');
-	// printf("----|%s|\n", colors[2]);
 	new_light->color_light->r = ft_atoi_color(colors[0], "light");
 	new_light->color_light->g = ft_atoi_color(colors[1], "light");
 	new_light->color_light->b = ft_atoi_color(colors[2], "light");
@@ -317,83 +321,74 @@ void	ft_light(char **data, t_scene *scene)
 	
 	light_linked_list(new_light, scene);
 	ft_free_split(colors);
-	ft_free_split(coors);
 }
-void	ft_plane_fb(char **data, t_scene *scene)
-{
-	t_plane_fb *new_plane;
-	
-	int i = 0;
-	while(data[i] != NULL)
-		i++;
-	i--;
-	if(!verify_data_plane(data))
-	{
-		exit_error("data not in the correct format", "in plane", scene->cleaner);
-	}
-	scene->type = T_PLAN;
-	new_plane = malloc(sizeof(t_plane_fb));
-	new_plane->flag_bump = false;
-	if (i == 4 || i == 5)
-	{
-		int type_bump = ft_atoi_color(data[4], "bump plane");
-		if(type_bump == 1 || type_bump == 2)
-		{
-			if(type_bump == 1)
-			{
-				if(i == 5)
-					exit_error("nothing should be after this type of bump", "in plane", scene->cleaner);
-				new_plane->flag_bump = true;
-				t_texture *test_bump_checker = malloc(sizeof(t_texture));
-				test_bump_checker->type = 1;
-				test_bump_checker->scale = 0.1;
-				test_bump_checker->image = NULL;
-				new_plane->img_path = NULL;
-				new_plane->bump_texture = test_bump_checker;		
-			}
-			else if(type_bump == 2)
-			{
-				if(i == 5)
-				{
-					new_plane->flag_bump = true;
-					new_plane->img_path = ft_strdup(data[5]);
-					t_texture *test_bump = malloc(sizeof(t_texture));
-					test_bump->type = 2;
-					test_bump->color_solid = (t_color_fb){0,0,0};
-					test_bump->color_checkerd = (t_color_fb){0,0,0};
-					test_bump->scale = 0.002;  // bump strength
-					test_bump->image = mlx_load_png(new_plane->img_path);
-					if (!test_bump->image)
-					{
-						free(new_plane->img_path);
-						free(test_bump);
-						free(new_plane);
-						perror("png");
-						exit_error("incorrect image path", "in plane", scene->cleaner);
-					}
-					else
-					{
-						new_plane->bump_texture = test_bump;
-					}
-				}
-				else
-				{
-					free(new_plane);
-					exit_error("need a png", "in plane", scene->cleaner);
-				}
-			}
-		}
-		else
-		{
-			free(new_plane);
-			exit_error("malformat in type of bump ", "in plane", scene->cleaner);	
-		}
-	}
 
-	new_plane->color_plane = malloc(sizeof(t_color_fb));
+/*-------------------------------------*/
+t_texture	*create_checker_bump(void)
+{
+    t_texture *test_bump_checker = malloc(sizeof(t_texture));
+    test_bump_checker->type = 1;
+    test_bump_checker->scale = 0.1;
+    test_bump_checker->image = NULL;
+    return (test_bump_checker);
+}
+
+t_texture	*create_image_bump(char *img_path, t_scene *scene)
+{
+    t_texture *test_bump = malloc(sizeof(t_texture));
+    test_bump->type = 2;
+    test_bump->color_solid = (t_color_fb){0, 0, 0};
+    test_bump->color_checkerd = (t_color_fb){0, 0, 0};
+    test_bump->scale = 0.002;
+    test_bump->image = mlx_load_png(img_path);
+    if (!test_bump->image)
+    {
+        free(img_path);
+        free(test_bump);
+        perror("png");
+        exit_error("incorrect image path", "in plane", scene->cleaner);
+    }
+    return (test_bump);
+}
+
+void	bump_mapping_plane_type_1(t_plane_fb *new_plane, int i, t_scene *scene)
+{
+    if (i == 5)
+        exit_error("nothing should be after this type of bump", "in plane", scene->cleaner);
+    new_plane->img_path = NULL;
+    new_plane->bump_texture = create_checker_bump();
+}
+
+void	bump_mapping_plane_type_2(t_plane_fb *new_plane, char **data, int i, t_scene *scene)
+{
+    if (i != 5)
+    {
+        free(new_plane);
+        exit_error("need a png", "in plane", scene->cleaner);
+    }
+    new_plane->img_path = ft_strdup(data[5]);
+    new_plane->bump_texture = create_image_bump(new_plane->img_path, scene);
+}
+
+void	bump_mapping_plane_constractor(t_plane_fb *new_plane, char **data, t_scene *scene, int i)
+{
+    int type_bump = ft_atoi_color(data[4], "bump plane");
+    if (type_bump != 1 && type_bump != 2)
+    {
+        free(new_plane);
+        exit_error("malformat in type of bump ", "in plane", scene->cleaner);
+    }
+    new_plane->flag_bump = true;
+    if (type_bump == 1)
+        bump_mapping_plane_type_1(new_plane, i, scene);
+    else
+        bump_mapping_plane_type_2(new_plane, data, i, scene);
+}
+/*--------------------------------------*/
+
+void	coor_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
+{
 	new_plane->coor_plane = malloc(sizeof(t_vec3));
-	new_plane->vector_plane = malloc(sizeof(t_vec3));
-	new_plane->next = NULL;
 
 	char **coors = ft_split(data[1], ',');
 	new_plane->coor_plane->x = ft_atoi_double(coors[0], scene->cleaner);
@@ -401,6 +396,12 @@ void	ft_plane_fb(char **data, t_scene *scene)
 	new_plane->coor_plane->z = ft_atoi_double(coors[2], scene->cleaner);
 	if(scene->cleaner->flag_exit)
 		exit_error("invalid thing in coor", "pl", scene->cleaner);
+	ft_free_split(coors);
+	
+}
+void	vects_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
+{
+	new_plane->vector_plane = malloc(sizeof(t_vec3));
 
 	char **vects = ft_split(data[2], ',');	
 	new_plane->vector_plane->x = ft_atoi_double(vects[0], scene->cleaner);
@@ -416,382 +417,471 @@ void	ft_plane_fb(char **data, t_scene *scene)
 
 	if(count_comma(data[3]) != 2)
 		exit_error("more or less in color", "in plane", scene->cleaner);
+	ft_free_split(vects);
+	
+}
+void	color_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
+{
+	new_plane->color_plane = malloc(sizeof(t_color_fb));
+
 	char **colors = ft_split(data[3], ',');	
 	new_plane->color_plane->r = ft_atoi_color(colors[0], "plane");
 	new_plane->color_plane->g = ft_atoi_color(colors[1], "plane");
 	new_plane->color_plane->b = ft_atoi_color(colors[2], "plane");
 	if(new_plane->color_plane->r == -1 || new_plane->color_plane->g == -1 ||new_plane->color_plane->b == -1)
 		exit_error("somthing wrong with colors", "in plane", scene->cleaner);
-	
-	plane_linked_list(new_plane, scene);
-
 	ft_free_split(colors);
-	ft_free_split(coors);
-	ft_free_split(vects);
+	
+}
+void	ft_plane_fb(char **data, t_scene *scene)
+{
+	t_plane_fb *new_plane;
+	
+	int i = 0;
+	while(data[i] != NULL)
+		i++;
+	i--;
+	if(!verify_data_plane(data))
+		exit_error("data not in the correct format", "in plane", scene->cleaner);
+	scene->type = T_PLAN;
+	new_plane = malloc(sizeof(t_plane_fb));
+	new_plane->flag_bump = false;
+	if (i == 4 || i == 5)
+		bump_mapping_plane_constractor(new_plane, data, scene, i);
+
+	new_plane->next = NULL;
+	coor_plane(new_plane, data, scene);
+	vects_plane(new_plane, data, scene);
+	color_plane(new_plane, data, scene);
+	plane_linked_list(new_plane, scene);
 }
 
+/*--------------------------------------*/
+t_texture	*create_checker_bump_sphere(void)
+{
+    t_texture *test_bump_checker = malloc(sizeof(t_texture));
+    if (!test_bump_checker)
+        return (NULL);
+    test_bump_checker->type = 1;
+    test_bump_checker->color_solid = (t_color_fb){0, 0, 0};
+    test_bump_checker->color_checkerd = (t_color_fb){255, 255, 255};
+    test_bump_checker->scale = 0.1;
+    test_bump_checker->image = NULL;
+    return (test_bump_checker);
+}
+
+t_texture	*create_image_bump_sphere(char *img_path, t_scene *scene)
+{
+    t_texture *test_bump = malloc(sizeof(t_texture));
+    if (!test_bump)
+        return (NULL);
+    test_bump->type = 2;
+    test_bump->color_solid = (t_color_fb){0, 0, 0};
+    test_bump->color_checkerd = (t_color_fb){0, 0, 0};
+    test_bump->scale = 0.1;
+    test_bump->image = mlx_load_png(img_path);
+    if (!test_bump->image)
+    {
+        free(img_path);
+        free(test_bump);
+        perror("png");
+        exit_error("incorrect image path", "in sphere", scene->cleaner);
+    }
+    return (test_bump);
+}
+
+void	bump_mapping_sphere_type_1(t_sphere_fb *new_sphere, int i, t_scene *scene)
+{
+    if (i == 5)
+        exit_error("nothing should be after this type of bump", "in sphere", scene->cleaner);
+    new_sphere->img_path = NULL;
+    new_sphere->bump_texture = create_checker_bump_sphere();
+}
+
+void	bump_mapping_sphere_type_2(t_sphere_fb *new_sphere, char **data, int i, t_scene *scene)
+{
+    if (i != 5)
+    {
+        free(new_sphere);
+        exit_error("need a png", "in sphere", scene->cleaner);
+    }
+    new_sphere->img_path = ft_strdup(data[5]);
+    new_sphere->bump_texture = create_image_bump_sphere(new_sphere->img_path, scene);
+}
+
+void	bump_mapping_sphere_constractor(t_sphere_fb *new_sphere, char **data, t_scene *scene, int i)
+{
+    int type_bump = ft_atoi_color(data[4], "bump in sphere");
+    if (type_bump != 1 && type_bump != 2)
+    {
+        free(new_sphere);
+        exit_error("malformat in type of bump", "in sphere", scene->cleaner);
+    }
+    new_sphere->flag_bump = true;
+    if (type_bump == 1)
+        bump_mapping_sphere_type_1(new_sphere, i, scene);
+    else
+        bump_mapping_sphere_type_2(new_sphere, data, i, scene);
+}
+
+/*--------------------------------------*/
+
+void	coor_sphere(t_sphere_fb *new_sphere, char **data, t_scene *scene)
+{
+    new_sphere->coor_sphere = malloc(sizeof(t_vec3));
+    char **coors = ft_split(data[1], ',');
+    new_sphere->coor_sphere->x = ft_atoi_double(coors[0], scene->cleaner);
+    new_sphere->coor_sphere->y = ft_atoi_double(coors[1], scene->cleaner);
+    new_sphere->coor_sphere->z = ft_atoi_double(coors[2], scene->cleaner);
+    if (scene->cleaner->flag_exit)
+        exit_error("invalid thing in coor", "sp", scene->cleaner);
+    ft_free_split(coors);
+}
+
+void	color_sphere(t_sphere_fb *new_sphere, char **data, t_scene *scene)
+{
+    new_sphere->color_sphere = malloc(sizeof(t_color_fb));
+    if (count_comma(data[3]) != 2)
+        exit_error("more or less in color", "in spher", scene->cleaner);
+    char **colors = ft_split(data[3], ',');
+    new_sphere->color_sphere->r = ft_atoi_color(colors[0], "sphere");
+    new_sphere->color_sphere->g = ft_atoi_color(colors[1], "sphere");
+    new_sphere->color_sphere->b = ft_atoi_color(colors[2], "sphere");
+    if (new_sphere->color_sphere->r == -1 || new_sphere->color_sphere->g == -1 || new_sphere->color_sphere->b == -1)
+        exit_error("somthing wrong with colors", "in sphere", scene->cleaner);
+    ft_free_split(colors);
+}
 
 void	ft_sphere_fb(char **data, t_scene *scene)
 {
-	t_sphere_fb *new_sphere;
-	t_sphere_fb  *current;
-	if(!verify_data_sphere(data, scene->cleaner))
-	{
-		exit_error("data not in the correct format", "in sphere", scene->cleaner);
-	}
-	new_sphere = malloc(sizeof(t_sphere_fb));
+    t_sphere_fb *new_sphere;
 
-	new_sphere->next = NULL;
-	new_sphere->bump_texture = NULL;
-	new_sphere->img_path = NULL;
-	new_sphere->flag_bump = false;
-	int i = 0;
-	while(data[i] != NULL)
-	{
-		i++;
-	}
-	i--;
-	scene->type = T_SPHERE;
-	if (i == 4 || i == 5)
-	{
-		int type_bump = ft_atoi_color(data[4], "bump in sphere");
-		if(type_bump == 1 || type_bump == 2)
-		{
-			if(type_bump == 1)
-			{
-				if(i == 5)
-					exit_error("nothing should be after this type of bump", "in sphere", scene->cleaner);
-				new_sphere->flag_bump = true;
-				t_texture *test_bump_checker = malloc(sizeof(t_texture));
-				test_bump_checker->type = 1;
-				test_bump_checker->color_solid = (t_color_fb){0,0,0};
-				test_bump_checker->color_checkerd = (t_color_fb){255,255,255};
-				test_bump_checker->scale = 0.1;
-				test_bump_checker->image = NULL;	
-				new_sphere->bump_texture = test_bump_checker;	
-			}
-			else if(type_bump == 2)
-			{
-				if(i == 5)
-				{
-					new_sphere->flag_bump = true;
-					new_sphere->img_path = ft_strdup(data[5]);
-					t_texture *test_bump = malloc(sizeof(t_texture));
-					test_bump->type = 2;
-					test_bump->color_solid = (t_color_fb){0,0,0};
-					test_bump->color_checkerd = (t_color_fb){0,0,0};
-					test_bump->scale = 0.1;  // bump strength
-					test_bump->image = mlx_load_png(new_sphere->img_path);
-					if (!test_bump->image)
-					{
-						free(new_sphere->img_path);
-						free(test_bump);
-						free(new_sphere);
-						perror("png");
-						exit_error("incorrect image path", "in plane", scene->cleaner);
-					}
-					else
-					{
-						new_sphere->bump_texture = test_bump;
-					}
-				}
-				else
-				{
-					free(new_sphere);
-					exit_error("need a png", "in sphere", scene->cleaner);
-				}
-			}
-		}
-		else
-		{
+    if (!verify_data_sphere(data, scene->cleaner))
+        exit_error("data not in the correct format", "in sphere", scene->cleaner);
 
-			free(new_sphere);
-			exit_error("malformat in type of bump", "in sphere", scene->cleaner);
+    new_sphere = malloc(sizeof(t_sphere_fb));
+    new_sphere->next = NULL;
+    new_sphere->bump_texture = NULL;
+    new_sphere->img_path = NULL;
+    new_sphere->flag_bump = false;
 
-		}
-
-	}
-
-	new_sphere->color_sphere = malloc(sizeof(t_color_fb));
-	new_sphere->coor_sphere = malloc(sizeof(t_vec3));
-	new_sphere->next = NULL;
-
-	char **coors = ft_split(data[1], ',');
-	new_sphere->coor_sphere->x = ft_atoi_double(coors[0], scene->cleaner);
-	new_sphere->coor_sphere->y = ft_atoi_double(coors[1], scene->cleaner);
-	new_sphere->coor_sphere->z = ft_atoi_double(coors[2], scene->cleaner);
-	// new_sphere->coor_sphere->w = ft_atoi_double("0.1");
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in coor", "sp", scene->cleaner);
-
-	new_sphere->diameter_sphere = ft_atoi_double(data[2], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in diameter", "sp", scene->cleaner);
-	
-	if(new_sphere->diameter_sphere <= 0)
-		exit_error("invalid diametre", "in sphere", scene->cleaner);
-	
-	if(count_comma(data[3]) != 2)
-		exit_error("more or less in color", "in spher", scene->cleaner);
-	char **colors = ft_split(data[3], ',');
-	new_sphere->color_sphere->r = ft_atoi_color(colors[0], "sphere");
-	new_sphere->color_sphere->g = ft_atoi_color(colors[1], "sphere");
-	new_sphere->color_sphere->b = ft_atoi_color(colors[2], "sphere");
-	if(new_sphere->color_sphere->r == -1 || new_sphere->color_sphere->g == -1 ||new_sphere->color_sphere->b == -1)
-		exit_error("somthing wrong with colors", "in sphere", scene->cleaner);
-	sphere_linked_list(new_sphere, scene);
-	ft_free_split(colors);
-	ft_free_split(coors);
+    int i = 0;
+    while (data[i] != NULL)
+        i++;
+    i--;
+    scene->type = T_SPHERE;
+    if (i == 4 || i == 5)
+        bump_mapping_sphere_constractor(new_sphere, data, scene, i);
+    coor_sphere(new_sphere, data, scene);
+    new_sphere->diameter_sphere = ft_atoi_double(data[2], scene->cleaner);
+    if (scene->cleaner->flag_exit)
+        exit_error("invalid thing in diameter", "sp", scene->cleaner);
+    if (new_sphere->diameter_sphere <= 0)
+        exit_error("invalid diametre", "in sphere", scene->cleaner);
+    color_sphere(new_sphere, data, scene);
+    sphere_linked_list(new_sphere, scene);
 }
+t_texture	*create_checker_bump_cylinder(void)
+{
+    t_texture *test_bump_checker = malloc(sizeof(t_texture));
+    if (!test_bump_checker)
+        return (NULL);
+    test_bump_checker->type = 1;
+    test_bump_checker->scale = 0.1;
+    test_bump_checker->image = NULL;
+    return (test_bump_checker);
+}
+
+t_texture	*create_image_bump_cylinder(char *img_path, t_scene *scene)
+{
+    t_texture *test_bump = malloc(sizeof(t_texture));
+    if (!test_bump)
+        return (NULL);
+    test_bump->type = 2;
+    test_bump->color_solid = (t_color_fb){0, 0, 0};
+    test_bump->color_checkerd = (t_color_fb){0, 0, 0};
+    test_bump->scale = 0.1;
+    test_bump->image = mlx_load_png(img_path);
+    if (!test_bump->image)
+    {
+        free(img_path);
+        free(test_bump);
+        perror("png");
+        exit_error("incorrect image path", "in cylinder", scene->cleaner);
+    }
+    return (test_bump);
+}
+
+void	bump_mapping_cylinder_type_1(t_cylinder_fb *new_cylinder, int i, t_scene *scene)
+{
+    if (i != 7)
+        exit_error("nothing should be after this type of bump", "in cylinder", scene->cleaner);
+    new_cylinder->img_path = NULL;
+    new_cylinder->bump_texture = create_checker_bump_cylinder();
+}
+
+void	bump_mapping_cylinder_type_2(t_cylinder_fb *new_cylinder, char **data, int i, t_scene *scene)
+{
+    if (i != 8)
+    {
+        free(new_cylinder);
+        exit_error("need a png", "in cylinder", scene->cleaner);
+    }
+    new_cylinder->img_path = ft_strdup(data[8]);
+    new_cylinder->bump_texture = create_image_bump_cylinder(new_cylinder->img_path, scene);
+}
+
+void	bump_mapping_cylinder_constractor(t_cylinder_fb *new_cylinder, char **data, t_scene *scene, int i)
+{
+    int type_bump = ft_atoi_color(data[7], "bump in cylinder");
+    if (type_bump != 1 && type_bump != 2)
+    {
+        free(new_cylinder);
+        exit_error("malformat in type of bump", "in cylinder", scene->cleaner);
+    }
+    new_cylinder->flag_bump = true;
+    if (type_bump == 1)
+        bump_mapping_cylinder_type_1(new_cylinder, i, scene);
+    else
+        bump_mapping_cylinder_type_2(new_cylinder, data, i, scene);
+}
+
+void	coor_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
+{
+    new_cylinder->coor_cylinder = malloc(sizeof(t_vec3));
+    char **coors = ft_split(data[1], ',');
+    new_cylinder->coor_cylinder->x = ft_atoi_double(coors[0], scene->cleaner);
+    new_cylinder->coor_cylinder->y = ft_atoi_double(coors[1], scene->cleaner);
+    new_cylinder->coor_cylinder->z = ft_atoi_double(coors[2], scene->cleaner);
+    if (scene->cleaner->flag_exit)
+        exit_error("invalid thing in coor", "cy", scene->cleaner);
+    ft_free_split(coors);
+}
+
+void	vects_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
+{
+    new_cylinder->vector_cylinder = malloc(sizeof(t_vec3));
+    char **vects = ft_split(data[2], ',');
+    new_cylinder->vector_cylinder->x = ft_atoi_double(vects[0], scene->cleaner);
+    new_cylinder->vector_cylinder->y = ft_atoi_double(vects[1], scene->cleaner);
+    new_cylinder->vector_cylinder->z = ft_atoi_double(vects[2], scene->cleaner);
+    if (scene->cleaner->flag_exit)
+        exit_error("invalid thing in vectors", "cy", scene->cleaner);
+    double range_x = new_cylinder->vector_cylinder->x;
+    double range_y = new_cylinder->vector_cylinder->y;
+    double range_z = new_cylinder->vector_cylinder->z;
+    if (range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
+        exit_error("invalid range vectors", "CY", scene->cleaner);
+    ft_free_split(vects);
+}
+
+void	color_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
+{
+    new_cylinder->color_cylinder = malloc(sizeof(t_color_fb));
+    char **colors = ft_split(data[6], ',');
+    new_cylinder->color_cylinder->r = ft_atoi_color(colors[0], "cylinder");
+    new_cylinder->color_cylinder->g = ft_atoi_color(colors[1], "cylinder");
+    new_cylinder->color_cylinder->b = ft_atoi_color(colors[2], "cylinder");
+    ft_free_split(colors);
+}
+
 void	ft_cylinder_fb(char **data, t_scene *scene)
 {
-	printf("in cylinder ----------------------------------------------\n");
-	t_cylinder_fb *new_cylinder;
-	if(!verify_data_cylinder(data, scene->cleaner))
-	{
-		exit_error("data not in the correct format", "in cylinder", scene->cleaner);
-	}
-	int i = 0;
-	while(data[i])
-		i++;
-	i--;
-	new_cylinder = malloc(sizeof(t_cylinder_fb));
-	new_cylinder->flag_bump = false;
-	new_cylinder->closed = false;
-	new_cylinder->bump_texture = NULL;
-	new_cylinder->img_path = NULL;
-	scene->type = T_CYLINDRE;
+    t_cylinder_fb *new_cylinder;
 
-	if (i == 7 || i == 8) 
-	{
-		int type_bump = ft_atoi_color(data[7], "bump in cylinder");
-		if(type_bump == 1 || type_bump == 2)
-		{
-			if(type_bump == 1)
-			{
-				if(i != 7 )
-					exit_error("nothing should be after this type of bump", "in cylinder", scene->cleaner);
-				new_cylinder->flag_bump = true;
-				t_texture *test_bump_checker = malloc(sizeof(t_texture));
-				test_bump_checker->type = 1;
-				test_bump_checker->scale = 0.1;
-				test_bump_checker->image = NULL;	
-				new_cylinder->bump_texture = test_bump_checker;	
-			}
-			else if(type_bump == 2)
-			{
-				if(i == 8)
-				{
-					new_cylinder->flag_bump = true;
-					new_cylinder->img_path = ft_strdup(data[8]);
-					t_texture *test_bump = malloc(sizeof(t_texture));
-					test_bump->type = 2;
-					test_bump->color_solid = (t_color_fb){0,0,0};
-					test_bump->color_checkerd = (t_color_fb){0,0,0};
-					// test_bump->scale = 0.1;
-					test_bump->image = mlx_load_png(new_cylinder->img_path);
-					if (!test_bump->image)
-					{
-						free(new_cylinder->img_path);
-						free(test_bump);
-						free(new_cylinder);
-						perror("png");
-						exit_error("incorrect image path", "in cylinder", scene->cleaner);
-					}
-					else
-					{
-						new_cylinder->bump_texture = test_bump;
-					}
-				}
-				else
-				{
-					free(new_cylinder);
-					exit_error("need a png", "in cylinder", scene->cleaner);
-				}
-			}
-		}
-		else
-		{
-			free(new_cylinder);
-			exit_error("malformat in type of bump", "in cylinder", scene->cleaner);
-		}
-	}
-	
-	new_cylinder->color_cylinder = malloc(sizeof(t_color_fb));
-	new_cylinder->coor_cylinder = malloc(sizeof(t_vec3));
-	new_cylinder->vector_cylinder = malloc(sizeof(t_vec3));
-	new_cylinder->next = NULL;
-	char **coors = ft_split(data[1], ',');
-	new_cylinder->coor_cylinder->x = ft_atoi_double(coors[0], scene->cleaner);
-	new_cylinder->coor_cylinder->y = ft_atoi_double(coors[1], scene->cleaner);
-	new_cylinder->coor_cylinder->z = ft_atoi_double(coors[2], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in coor", "cy", scene->cleaner);
-	char **vects = ft_split(data[2], ',');
-	new_cylinder->vector_cylinder->x = ft_atoi_double(vects[0], scene->cleaner);
-	new_cylinder->vector_cylinder->y = ft_atoi_double(vects[1], scene->cleaner);
-	new_cylinder->vector_cylinder->z = ft_atoi_double(vects[2], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in vectors", "cy", scene->cleaner);
-	double range_x = new_cylinder->vector_cylinder->x;
-	double range_y = new_cylinder->vector_cylinder->y;
-	double range_z = new_cylinder->vector_cylinder->z;
-	if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
-		exit_error("invalid range vectors", "CY", scene->cleaner);
-	
-	new_cylinder->diameter_cylinder = ft_atoi_double(data[3], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in diameter_cylinder", "cy", scene->cleaner);
-	new_cylinder->height_cylinder_fb = ft_atoi_double(data[4], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in hight cylinder", "cy", scene->cleaner);
-	if (new_cylinder->height_cylinder_fb <= 0 || new_cylinder->diameter_cylinder <= 0)
-		exit_error("invalid range in height or diameter", "CY", scene->cleaner);
-	int open_or_close = atoi(data[5]);
-	if(open_or_close == 0)
-		new_cylinder->closed = true;
-	else if (open_or_close == -1)
-		new_cylinder->closed = false;
-	else
-		exit_error("flag for closed or open required to be 0 or -1", "in Cylinder", scene->cleaner);
-	char **colors = ft_split(data[6], ',');
-	new_cylinder->color_cylinder->r = ft_atoi_color(colors[0], "cylinder");
-	new_cylinder->color_cylinder->g = ft_atoi_color(colors[1], "cylinder");
-	new_cylinder->color_cylinder->b = ft_atoi_color(colors[2], "cylinder");
-	cylinder_linked_list(new_cylinder, scene);
-	ft_free_split(colors);
-	ft_free_split(coors);
-	ft_free_split(vects);
+    if (!verify_data_cylinder(data, scene->cleaner))
+        exit_error("data not in the correct format", "in cylinder", scene->cleaner);
+
+    int i = 0;
+    while (data[i])
+        i++;
+    i--;
+    new_cylinder = malloc(sizeof(t_cylinder_fb));
+    new_cylinder->flag_bump = false;
+    new_cylinder->closed = false;
+    new_cylinder->bump_texture = NULL;
+    new_cylinder->img_path = NULL;
+    new_cylinder->next = NULL;
+    scene->type = T_CYLINDRE;
+
+    if (i == 7 || i == 8)
+        bump_mapping_cylinder_constractor(new_cylinder, data, scene, i);
+
+    coor_cylinder(new_cylinder, data, scene);
+    vects_cylinder(new_cylinder, data, scene);
+
+    new_cylinder->diameter_cylinder = ft_atoi_double(data[3], scene->cleaner);
+    if (scene->cleaner->flag_exit)
+        exit_error("invalid thing in diameter_cylinder", "cy", scene->cleaner);
+
+    new_cylinder->height_cylinder_fb = ft_atoi_double(data[4], scene->cleaner);
+    if (scene->cleaner->flag_exit)
+        exit_error("invalid thing in hight cylinder", "cy", scene->cleaner);
+
+    if (new_cylinder->height_cylinder_fb <= 0 || new_cylinder->diameter_cylinder <= 0)
+        exit_error("invalid range in height or diameter", "CY", scene->cleaner);
+
+    int open_or_close = atoi(data[5]);
+    if (open_or_close == 0)
+        new_cylinder->closed = true;
+    else if (open_or_close == -1)
+        new_cylinder->closed = false;
+    else
+        exit_error("flag for closed or open required to be 0 or -1", "in Cylinder", scene->cleaner);
+
+    color_cylinder(new_cylinder, data, scene);
+    cylinder_linked_list(new_cylinder, scene);
+}
+
+/*----------------------------------------------------------------*/
+t_texture	*create_checker_bump_cone(void)
+{
+    t_texture *test_bump_checker = malloc(sizeof(t_texture));
+    if (!test_bump_checker)
+        return (NULL);
+    test_bump_checker->type = 1;
+    test_bump_checker->scale = 0.1;
+    test_bump_checker->image = NULL;
+    return (test_bump_checker);
+}
+
+t_texture	*create_image_bump_cone(char *img_path, t_scene *scene)
+{
+    t_texture *test_bump = malloc(sizeof(t_texture));
+    if (!test_bump)
+        return (NULL);
+    test_bump->type = 2;
+    test_bump->color_solid = (t_color_fb){0, 0, 0};
+    test_bump->color_checkerd = (t_color_fb){0, 0, 0};
+    test_bump->scale = 0.1;
+    test_bump->image = mlx_load_png(img_path);
+    if (!test_bump->image)
+    {
+        free(img_path);
+        free(test_bump);
+        perror("png");
+        exit_error("incorrect image path", "in cone", scene->cleaner);
+    }
+    return (test_bump);
+}
+
+void	bump_mapping_cone_type_1(t_cone_fb *new_cone, int i, t_scene *scene)
+{
+    if (i != 8)
+        exit_error("nothing should be after this type of bump", "in cone", scene->cleaner);
+    new_cone->img_path = NULL;
+    new_cone->bump_texture = create_checker_bump_cone();
+}
+
+void	bump_mapping_cone_type_2(t_cone_fb *new_cone, char **data, int i, t_scene *scene)
+{
+    if (i != 9)
+    {
+        free(new_cone);
+        exit_error("need a png", "in cone", scene->cleaner);
+    }
+    new_cone->img_path = ft_strdup(data[9]);
+    new_cone->bump_texture = create_image_bump_cone(new_cone->img_path, scene);
+}
+
+void	bump_mapping_cone_constractor(t_cone_fb *new_cone, char **data, t_scene *scene, int i)
+{
+    int type_bump = ft_atoi_color(data[8], "bump in cone");
+    if (type_bump != 1 && type_bump != 2)
+    {
+        free(new_cone);
+        exit_error("malformat in type of bump", "in cone", scene->cleaner);
+    }
+    new_cone->flag_bump = true;
+    if (type_bump == 1)
+        bump_mapping_cone_type_1(new_cone, i, scene);
+    else
+        bump_mapping_cone_type_2(new_cone, data, i, scene);
 }
 
 
+void	coor_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
+{
+    new_cone->coor_cone = malloc(sizeof(t_vec3));
+    char **coors = ft_split(data[1], ',');
+    new_cone->coor_cone->x = ft_atoi_double(coors[0], scene->cleaner);
+    new_cone->coor_cone->y = ft_atoi_double(coors[1], scene->cleaner);
+    new_cone->coor_cone->z = ft_atoi_double(coors[2], scene->cleaner);
+    if(scene->cleaner->flag_exit)
+        exit_error("invalid thing in coor", "cone", scene->cleaner);
+    ft_free_split(coors);
+}
 
-/*----------------------------------------------------------------*/
+void	vects_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
+{
+    new_cone->vector_cone = malloc(sizeof(t_vec3));
+    char **vects = ft_split(data[2], ',');
+    new_cone->vector_cone->x = ft_atoi_double(vects[0], scene->cleaner);
+    new_cone->vector_cone->y = ft_atoi_double(vects[1], scene->cleaner);
+    new_cone->vector_cone->z = ft_atoi_double(vects[2], scene->cleaner);
+    if(scene->cleaner->flag_exit)
+        exit_error("invalid thing in vectors", "cone", scene->cleaner);
+    double range_x = new_cone->vector_cone->x;
+    double range_y = new_cone->vector_cone->y;
+    double range_z = new_cone->vector_cone->z;
+    if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
+        exit_error("invalid range vectors", "cone", scene->cleaner);
+    ft_free_split(vects);
+}
+
+void	color_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
+{
+    new_cone->color_cone = malloc(sizeof(t_color_fb));
+    char **colors = ft_split(data[7], ',');
+    new_cone->color_cone->r = ft_atoi_color(colors[0], "cone");
+    new_cone->color_cone->g = ft_atoi_color(colors[1], "cone");
+    new_cone->color_cone->b = ft_atoi_color(colors[2], "cone");
+    ft_free_split(colors);
+}
 
 void	ft_cone_fb(char **data, t_scene *scene)
 {
-	printf("------------------constructor cone -------------------------\n");
-	t_cone_fb *new_cone;
-	t_cone_fb *current;
-	if(!verify_data_cone(data, scene->cleaner))
-	{
-		exit_error("data not in the correct format", "in cone", scene->cleaner);
-	}
-	int i = 0;
-	while(data[i])
-		i++;
-	i--;
-	new_cone = malloc(sizeof(t_cone_fb));
-	new_cone->flag_bump = false;
-	new_cone->bump_texture = NULL;
-	new_cone->img_path = NULL;
-	new_cone->closed_flag = false;
-	scene->type = T_CONE;
+    t_cone_fb *new_cone;
 
-	if (i == 8 || i == 9) 
-	{
-		puts("**********************\n");
-		int type_bump = ft_atoi_color(data[8], "bump in cone");
-		if(type_bump == 1 || type_bump == 2)
-		{
-			if(type_bump == 1)
-			{
-				if(i == 7)
-					exit_error("nothing should be after this type of bump", "in cone", scene->cleaner);
-				new_cone->flag_bump = true;
-				t_texture *test_bump_checker = malloc(sizeof(t_texture));
-				test_bump_checker->type = 1;
-				test_bump_checker->scale = 0.1;
-				test_bump_checker->image = NULL;	
-				new_cone->bump_texture = test_bump_checker;	
-			}
-			else if(type_bump == 2)
-			{
-				if(i == 9)
-				{
-					new_cone->flag_bump = true;
-					new_cone->img_path = ft_strdup(data[9]);
-					t_texture *test_bump = malloc(sizeof(t_texture));
-					test_bump->type = 2;
-					test_bump->color_solid = (t_color_fb){0,0,0};
-					test_bump->color_checkerd = (t_color_fb){0,0,0};
-					// test_bump->scale = 0.1;
-					test_bump->image = mlx_load_png(new_cone->img_path);
-					if (!test_bump->image)
-					{
-						free(new_cone->img_path);
-						free(test_bump);
-						free(new_cone);
-						perror("png");
-						exit_error("incorrect image path", "in cone", scene->cleaner);
-					}
-					else
-					{
-						new_cone->bump_texture = test_bump;
-					}
-				}
-				else
-				{
-					free(new_cone);
-					exit_error("need a png", "in cone", scene->cleaner);
-				}
-			}
-		}
-		else
-		{
-			free(new_cone);
-			exit_error("malformat in type of bump", "in cone", scene->cleaner);
-		}
-	}
-	
-	new_cone->color_cone = malloc(sizeof(t_color_fb));
-	new_cone->coor_cone = malloc(sizeof(t_vec3));
-	new_cone->vector_cone = malloc(sizeof(t_vec3));
-	new_cone->next = NULL;
-	char **coors = ft_split(data[1], ',');
-	new_cone->coor_cone->x = ft_atoi_double(coors[0], scene->cleaner);
-	new_cone->coor_cone->y = ft_atoi_double(coors[1], scene->cleaner);
-	new_cone->coor_cone->z = ft_atoi_double(coors[2], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in coor", "cone", scene->cleaner);
-	char **vects = ft_split(data[2], ',');
-	new_cone->vector_cone->x = ft_atoi_double(vects[0], scene->cleaner);
-	new_cone->vector_cone->y = ft_atoi_double(vects[1], scene->cleaner);
-	new_cone->vector_cone->z = ft_atoi_double(vects[2], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in vectors", "cone", scene->cleaner);
-	double range_x = new_cone->vector_cone->x;
-	double range_y = new_cone->vector_cone->y;
-	double range_z = new_cone->vector_cone->z;
-	if(range_x < -1 || range_x > 1 || range_y < -1 || range_y > 1 || range_z < -1 || range_z > 1)
-		exit_error("invalid range vectors", "cone", scene->cleaner);
-	
-	new_cone->minimum = ft_atoi_double(data[3], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in minimum", "cone", scene->cleaner);
-	new_cone->maximum = ft_atoi_double(data[4], scene->cleaner);
-	if(scene->cleaner->flag_exit)
-		exit_error("invalid thing in hight cone", "cone", scene->cleaner);
-	// if (new_cone->maximum <= 0 || new_cone->minimum <= 0)
-	// 	exit_error("invalid range in maximum/minimum", "cone", scene->cleaner);
-	new_cone->angle = ft_atoi_double(data[5], scene->cleaner);
-	if (new_cone->angle < 0 || new_cone->angle > 180)
-		exit_error("invalid range inangle", "cone", scene->cleaner);
-	int open_or_close = atoi(data[6]);
-	if(open_or_close == 0)
-		new_cone->closed_flag = true;
-	else if (open_or_close == -1)
-		new_cone->closed_flag = false;
-	else
-		exit_error("flag for closed or open required to be 0 or -1", "in Cylinder", scene->cleaner);
-	char **colors = ft_split(data[7], ',');
-	new_cone->color_cone->r = ft_atoi_color(colors[0], "cone");
-	new_cone->color_cone->g = ft_atoi_color(colors[1], "cone");
-	new_cone->color_cone->b = ft_atoi_color(colors[2], "cone");
-	
-	cone_linked_list(new_cone, scene);
+    if(!verify_data_cone(data, scene->cleaner))
+        exit_error("data not in the correct format", "in cone", scene->cleaner);
 
-	ft_free_split(colors);
-	ft_free_split(coors);
-	ft_free_split(vects);
+    int i = 0;
+    while(data[i])
+        i++;
+    i--;
+    new_cone = malloc(sizeof(t_cone_fb));
+    new_cone->flag_bump = false;
+    new_cone->bump_texture = NULL;
+    new_cone->img_path = NULL;
+    new_cone->closed_flag = false;
+    new_cone->next = NULL;
+    scene->type = T_CONE;
+
+    if (i == 8 || i == 9)
+        bump_mapping_cone_constractor(new_cone, data, scene, i);
+
+    coor_cone(new_cone, data, scene);
+    vects_cone(new_cone, data, scene);
+
+    new_cone->minimum = ft_atoi_double(data[3], scene->cleaner);
+    if(scene->cleaner->flag_exit)
+        exit_error("invalid thing in minimum", "cone", scene->cleaner);
+    new_cone->maximum = ft_atoi_double(data[4], scene->cleaner);
+    if(scene->cleaner->flag_exit)
+        exit_error("invalid thing in hight cone", "cone", scene->cleaner);
+    new_cone->angle = ft_atoi_double(data[5], scene->cleaner);
+    if (new_cone->angle < 0 || new_cone->angle > 180)
+        exit_error("invalid range inangle", "cone", scene->cleaner);
+
+    int open_or_close = atoi(data[6]);
+    if(open_or_close == 0)
+        new_cone->closed_flag = true;
+    else if (open_or_close == -1)
+        new_cone->closed_flag = false;
+    else
+        exit_error("flag for closed or open required to be 0 or -1", "in Cylinder", scene->cleaner);
+
+    color_cone(new_cone, data, scene);
+    cone_linked_list(new_cone, scene);
 }

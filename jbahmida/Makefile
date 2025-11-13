@@ -48,6 +48,10 @@ SRCS		= making_scene/world.c \
 				making_scene/passing_data.c\
 				../fbenalla/miniRT/printer.c \
 				../fbenalla/miniRT/textures.c \
+				../fbenalla/miniRT/plane_create.c \
+				../fbenalla/miniRT/sphere_create.c \
+				../fbenalla/miniRT/cylinder_create.c \
+				../fbenalla/miniRT/cone_create.c \
 
 # Object files
 OBJS		= $(SRCS:.c=.o)

@@ -392,5 +392,5 @@ void parsing(int fd);
 void    set_scene(t_scene *scene, bool flag);
 void validate_scene(t_scene *scene);
 void    close_window(mlx_key_data_t keydata, void* param);
-
+bool is_coordinate(char *coor);
 #endif

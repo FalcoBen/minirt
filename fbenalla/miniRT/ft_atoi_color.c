@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/11/03 03:29:42 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/11/13 22:21:40 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,60 +50,69 @@ int	ft_atoi(char *str)
 
 int	count_comma(char *str)
 {
-	int i = 0;
-	int comma = 0;
-	while(str[i])
+	int	i;
+	int	comma;
+
+	i = 0;
+	comma = 0;
+	while (str[i])
 	{
-		if(str[i] == ',')
+		if (str[i] == ',')
 			comma++;
 		i++;
 	}
-	return comma;
+	return (comma);
 }
 
-bool verify_color(char *str)
+bool	verify_color(char *str)
 {
-	char **splitted = ft_split(str, ',');
-	int i = 0;
-	while(splitted[i])
+	char	**splitted;
+	int		i;
+	int		nb;
+
+	splitted = ft_split(str, ',');
+	i = 0;
+	while (splitted[i])
 	{
-		int nb = ft_atoi(splitted[i]);
-		if(nb > 255 || nb < 0)
+		nb = ft_atoi(splitted[i]);
+		if (nb > 255 || nb < 0)
 		{
 			ft_free_split(splitted);
-			return false;
+			return (false);
 		}
 		i++;
 	}
 	ft_free_split(splitted);
-	return true;
+	return (true);
 }
-bool check_after_split(char **str)
+bool	check_after_split(char **str)
 {
-	int i = 0;
-	while(str[i])
+	int	i;
+
+	i = 0;
+	while (str[i])
 	{
-		if(count_comma(str[i]) != 2)
-			return false;
-		if(!verify_color(str[i]))
-			return false;
+		if (count_comma(str[i]) != 2)
+			return (false);
+		if (!verify_color(str[i]))
+			return (false);
 		i++;
 	}
-	return true;
+	return (true);
 }
 
 bool	verify_number(char *str)
 {
-	int i = 0;
-	// printf("]]%s[[\n", str);
-	while(str[i])
+	int	i;
+
+	i = 0;
+	while (str[i])
 	{
-		// if(!(str[i] >= '0' && str[i] <= '9'))
-		if(!ft_isdigit(str[i]))
-			return false;
+		if (!ft_isdigit(str[i]))
+			return (false);
 		i++;
 	}
-	return true;
+	return (true);
 }
 
 int	ft_atoi_color(char *str, char *scene)
@@ -111,21 +120,22 @@ int	ft_atoi_color(char *str, char *scene)
 	int						i;
 	int						signe;
 	unsigned long long		nb;
+	int						j;
 
-	int j = 0;
-	if(!str)
-		return -1;
+	j = 0;
+	if (!str)
+		return (-1);
 	// if(count_comma(str) != 2)
 	// {
 	// 	puts("kkkkkkkkkkkkkkkk\n");
-	// 	return -1;
+	// 	return (-1);
 	// }
-	if(!verify_color(str))
-		return -1;
-	if(!verify_number(str))
+	if (!verify_color(str))
+		return (-1);
+	if (!verify_number(str))
 	{
 		puts("here\n");
-		return -1;
+		return (-1);
 	}
 	i = 0;
 	nb = 0;
@@ -147,11 +157,6 @@ int	ft_atoi_color(char *str, char *scene)
 	}
 	if (signe % 2 != 0)
 		nb *= -1;
-	if((int)nb < 0 || (int)nb > 255)
-	{
-		printf("[[%d]]\n", (int)nb);
-		// exit_error("invalid range color", scene);
-	}
 	return ((int)nb);
 }
 

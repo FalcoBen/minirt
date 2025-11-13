@@ -157,6 +157,7 @@ void parsing(int fd)
 	validate_scene(scene);
 	t_scene *holder = linking_fucntion(scene, true);
 	jassim_mlx(holder);
+	// ft_lstclear((void **)&current_obj, del, 'o');
 }
 
 

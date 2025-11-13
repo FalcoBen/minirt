@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 01:47:38 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/11/13 22:21:40 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/11/13 23:11:52 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,18 +125,10 @@ int	ft_atoi_color(char *str, char *scene)
 	j = 0;
 	if (!str)
 		return (-1);
-	// if(count_comma(str) != 2)
-	// {
-	// 	puts("kkkkkkkkkkkkkkkk\n");
-	// 	return (-1);
-	// }
 	if (!verify_color(str))
 		return (-1);
 	if (!verify_number(str))
-	{
-		puts("here\n");
 		return (-1);
-	}
 	i = 0;
 	nb = 0;
 	signe = 0;

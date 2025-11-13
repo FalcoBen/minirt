@@ -11,7 +11,7 @@ sp 2.5,1.5,-3 2 80,120,255 2 ../jbahmida/textures/starts.png
 
 cone 3.2,0,5  1,1,0   0 1 45 0 120,80,255
 cone -3.2,0,1  0,1,-1   0 2  45 0 120,80,255 1
-cone 0,0,1  0,1,1   0 2  45 0 120,80,255 2 ../jbahmida/textures/starts.png
+cone 0,0,1  0,1,1   0 2  45 0 120,80,255 2 ../jbahmida/textures/wall.png
 cy 0,0,-2   0,1,0      1.2  4.5  0 200,180,50 1
 cy -3.5,0,0 0,1,0      0.8  3    0 50,220,120
 cy 3.2,0,1  0.15,1,0   0.7  3.2  0 120,80,255 2 ../jbahmida/textures/starts.png

@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 21:33:01 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/11/03 03:29:42 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/11/13 23:14:51 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char	**ft_split(char const *s, char c)
 	char	**arr;
 	int		i;
 	char	*str;
+
 	i = 0;
 	if (!s)
 		return (NULL);

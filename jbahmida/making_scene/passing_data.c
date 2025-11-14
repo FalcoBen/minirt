@@ -1,6 +1,7 @@
 #include "../MiniRt.h"
 #include "../../fbenalla/miniRT/parsing.h"
 
+
 void obj_creator_sphere(t_obj *obj, t_sphere_fb *src, t_ambient_light_fb *ambient_light)
 {
     if (!obj || !src)
@@ -430,6 +431,13 @@ t_world s_world(t_scene *scene)
     }
 
     world.obj_num = number_of_all_objects(scene);
+    // t_sphere_fb *sp_count = scene->sphere;
+    // while (sp_count)
+    // {
+    //     world.obj_num++;
+    //     sp_count = sp_count->next;
+    // }
+    
     
     world.objects = malloc(sizeof(t_object *) * (world.obj_num + 1));
     if (!world.objects)
@@ -542,45 +550,3 @@ t_world s_world(t_scene *scene)
 
     return world;
 }
-
-// void validate_scene(t_scene *scene)
-// {
-//     printf("=== Validating Scene ===\n");
-    
-//     if (!scene->camera)
-//     {
-//         fprintf(stderr, "No camera in scene!\n");
-//         exit(1);
-//     }
-//     printf("Camera: pos(%.2f,%.2f,%.2f) orient(%.2f,%.2f,%.2f) FOV=%.2f\n",
-//            scene->camera->coor_camera->x,
-//            scene->camera->coor_camera->y,
-//            scene->camera->coor_camera->z,
-//            scene->camera->vector_camera->x,
-//            scene->camera->vector_camera->y,
-//            scene->camera->vector_camera->z,
-//            scene->camera->angle_view);
-    
-//     if (!scene->ambient_light)
-//     {
-//         fprintf(stderr, "No ambient light in scene!\n");
-//         exit(1);
-//     }
-//     printf("Ambient light: brightness=%.2f color(%d,%d,%d)\n",
-//            scene->ambient_light->bright_ambient_light_fb,
-//            scene->ambient_light->color_ambient_light->r,
-//            scene->ambient_light->color_ambient_light->g,
-//            scene->ambient_light->color_ambient_light->b);
-    
-//     int sphere_count = 0;
-//     t_sphere_fb *sp = scene->sphere;
-//     while (sp)
-//     {
-//         validate_sphere_data(sp);
-//         sphere_count++;
-//         sp = sp->next;
-//     }
-//     printf("Total spheres: %d\n", sphere_count);
-    
-//     printf("=== Scene Validation Complete ===\n\n");
-// }

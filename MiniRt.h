@@ -33,10 +33,10 @@ extern int g_fd;
 
 
 #define BPP sizeof(int32_t)
-#define WIDTH 1000
-#define HEIGHT 500
+#define WIDTH 1500
+#define HEIGHT 1500
 
-#define DW 500
+#define DW 100
 #define DH 500
 // #define WIDTH 100
 // #define HEIGHT 100
@@ -89,9 +89,6 @@ typedef struct s_plane
     t_matrix *transform;
     t_matrix *inv;
     t_material *material;
-      // ADD THESE:
-    ld width;   // Physical width of plane
-    ld height;  // Physical height of plane
 } t_plane;
 
 typedef struct s_sphere
@@ -198,7 +195,7 @@ typedef struct s_material
 
     bool has_color_texture;
     t_texture *color_texture;
-    
+
     bool has_bump_map;
     t_texture *bump_map;
     double bump_strength;
@@ -303,6 +300,77 @@ typedef struct s_camera
 }t_camera;
 
 
+
+
+typedef struct s_norminette_cam
+{
+    t_tuple cam_pos;
+	t_tuple cam_dir;
+	t_tuple to;
+	t_tuple up;
+	ld length;
+    ld fov_radians;
+	t_matrix tran;
+}t_ncam;
+
+typedef struct s_nor_write_pixel
+{
+    t_canva *canva;
+	t_stack_ray ray;
+	t_color color;
+	int a;
+	ld x;
+	ld y;
+}t_nwrite_pixel;
+
+typedef struct s_nor_ray_for_camera
+{
+    ld	xoffset;
+	ld	yoffset;
+	ld	world_x;
+	ld	world_y;
+	t_tuple t;
+	t_tuple t1;
+	t_matrix tmp;
+	t_matrix tmp1;
+	t_tuple pixel;
+	t_tuple origin;
+	t_tuple direction;
+}t_nor_ray_for_camera;
+
+typedef struct  n_nor_intersect
+{
+    ld          a;
+	ld			b;
+	ld			c;
+	ld			delta;
+	ld			sqrt_delta;
+	t_stack_ray	local_ray;
+}t_nor_intersect;
+
+typedef struct n_v_tran
+{
+    t_tuple		forward;
+	t_tuple		upn;
+	t_tuple		left;
+	t_tuple		true_up;
+	t_matrix	tmp;
+}t_v_tran;
+
+
+void write_pixel(void *c);
+t_tuple get_up_vector(t_tuple *orientation);
+void    close_window(mlx_key_data_t keydata, void* param);
+t_camera *create_camera(t_scene *scene);
+void jassim_mlx(t_scene *scene);
+int combine_color(t_color color);
+t_canva s_canva_create(mlx_t *p, int w, int h);
+t_color color_at(t_world *w, t_stack_ray *ray);
+t_color s_create_color(ld *vals);
+void copy_matrix_contant(t_matrix *m);
+void s_intersect_world(t_stack_intersections *in, t_world world, t_stack_ray ray);
+void s_intersect_concatenate(t_stack_intersections *arr1, t_stack_intersections *arr2);
+void sort_intersctions(t_stack_intersections *inters);
 
 t_tuple *create_vector(ld *coord);
 t_tuple *create_point(ld *coord);
@@ -486,4 +554,8 @@ void plane_uv_with_dimensions(t_tuple *point, t_plane *plane, ld *u, ld *v);
 
 void plane_uv_autodetect(t_tuple *point, t_plane *plane, ld *u, ld *v);
 void plane_uv_simple_fix(t_tuple *point, t_plane *plane, ld *u, ld *v);
+void s_plane_normal_bonus(t_tuple *local_normal,
+	t_plane *plane, t_tuple *point);
+void s_cylinder_normal_bonus(t_tuple *local_normal,
+	t_cylinder *cylinder, t_tuple *point);
 #endif

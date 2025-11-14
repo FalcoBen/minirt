@@ -44,21 +44,28 @@ t_material	*get_material(t_comp *comp)
 	return (NULL);
 }
 
+void	get_uv_coors(t_comp *comp, ld *u, ld *v)
+{
+	if (comp->obj_type == T_SPHERE)
+        sphere_uv(&comp->point, (t_sphere *)comp->obj, u, v);
+    else if (comp->obj_type == T_PLAN)
+        plane_uv(&comp->point, (t_plane *)comp->obj, u, v);
+    else if (comp->obj_type == T_CYLINDRE)
+        cylinder_uv(&comp->point, (t_cylinder *)comp->obj, u, v);
+    else if (comp->obj_type == T_CONE)
+        cone_uv(&comp->point, (t_cone *)comp->obj, u, v);
+	return ;
+}
+
+
 t_color shade_helper(t_material *material, t_comp *comp)
 {
-    t_color base_color = *(material->color);
+    t_color base_color;
     ld u;
 	ld v;
-
-    if (comp->obj_type == T_SPHERE)
-        sphere_uv(&comp->point, (t_sphere *)comp->obj, &u, &v);
-    else if (comp->obj_type == T_PLAN)
-        plane_uv(&comp->point, (t_plane *)comp->obj, &u, &v);
-    else if (comp->obj_type == T_CYLINDRE)
-        cylinder_uv(&comp->point, (t_cylinder *)comp->obj, &u, &v);
-    else if (comp->obj_type == T_CONE)
-        cone_uv(&comp->point, (t_cone *)comp->obj, &u, &v);
-    
+	
+	base_color = *(material->color);
+	get_uv_coors(comp, &u, &v);
     if (material->has_color_texture 
         && material->color_texture 
         && material->color_texture->type == 1)

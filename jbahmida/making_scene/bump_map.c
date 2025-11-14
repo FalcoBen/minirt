@@ -81,45 +81,35 @@ void	cone_uv(t_tuple *point, t_cone *cone, ld *u, ld *v)
 
 static void plane_uv_checker(t_tuple *point, t_plane *plane, ld *u, ld *v)
 {
-	/* 1. point → object space */
-	t_matrix m   = s_matrix_tuple(plane->inv, point);
-	t_tuple  loc = s_matrix_to_tuple(&m);
-
-	/* 2. scale – honour user value, otherwise a visible default */
-	ld scale = 10.0;                                   /* ≈ 0.5×0.5 squares */
-	// if (plane->material->has_color_texture &&
-	//     plane->material->color_texture &&
-	//     plane->material->color_texture->type == 1 &&
-	//     plane->material->color_texture->scale > 0.001)
-	// {
-	//     scale = plane->material->color_texture->scale;
-	// }
-
-	/* 3. raw UV (still infinite) */
+	t_matrix 	m;
+	t_tuple		loc;
+	
+	m = s_matrix_tuple(plane->inv, point);
+	loc = s_matrix_to_tuple(&m);
+	ld scale = 10.0;                                  
 	*u = loc.x / scale;
 	*v = loc.z / scale;
 
-	/* 4. wrap forever – checkerboard tiles */
 	*u = fmod(*u, 1.0);
 	*v = fmod(*v, 1.0);
-	if (*u < 0) *u += 1.0;
-	if (*v < 0) *v += 1.0;
+	if (*u < 0) 
+		*u += 1.0;
+	if (*v < 0)
+		*v += 1.0;
 }
 
 
 static void plane_uv_image(t_tuple *point, t_plane *plane, ld *u, ld *v)
 {
-	t_matrix m   = s_matrix_tuple(plane->inv, point);
-	t_tuple  loc = s_matrix_to_tuple(&m);
-
-	/* Image textures are **not** scaled by the texture’s .scale field.
-	   They are mapped **once** over the whole plane (or a user-defined
-	   rectangle if you ever add width/height). */
-	ld scale = 12.0;                     /* same default as checkerboard */
+	t_matrix	m;
+	t_tuple		loc;
+	ld			scale;
+	
+	m   = s_matrix_tuple(plane->inv, point);
+	loc = s_matrix_to_tuple(&m);
+	scale = 12.0;                   
 	*u = loc.x / scale;
 	*v = loc.z / scale;
-
-	/* Show the image once → clamp to [0,1] */
 	*u = *u * 0.5 + 0.5;
 	*v = *v * 0.5 + 0.5;
 	*u = fmax(0.0, fmin(1.0, *u));
@@ -143,7 +133,6 @@ void plane_uv(t_tuple *point, t_plane *plane, ld *u, ld *v)
 	}
 	else
 	{
-		/* fallback – should never be hit for textured objects */
 		*u = 0.0; *v = 0.0;
 	}
 }

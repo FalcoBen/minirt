@@ -6,102 +6,11 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 22:12:31 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/11/13 22:16:43 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/11/14 00:52:10 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-void	cylinder_linked_list(t_cylinder_fb *new_cylinder, t_scene *scene)
-{
-	t_cylinder_fb	*current;
-
-	if (scene->cylinder == NULL)
-		scene->cylinder = new_cylinder;
-	else
-	{
-		current = scene->cylinder;
-		while (current->next)
-			current = current->next;
-		current->next = new_cylinder;
-	}
-}
-
-t_texture	*create_checker_bump_cylinder(void)
-{
-	t_texture	*test_bump_checker;
-
-	test_bump_checker = malloc(sizeof(t_texture));
-	if (!test_bump_checker)
-		return (NULL);
-	test_bump_checker->type = 1;
-	test_bump_checker->scale = 0.1;
-	test_bump_checker->image = NULL;
-	return (test_bump_checker);
-}
-
-t_texture	*create_image_bump_cylinder(char *img_path, t_scene *scene)
-{
-	t_texture	*test_bump;
-
-	test_bump = malloc(sizeof(t_texture));
-	if (!test_bump)
-		return (NULL);
-	test_bump->type = 2;
-	test_bump->color_solid = (t_color_fb){0, 0, 0};
-	test_bump->color_checkerd = (t_color_fb){0, 0, 0};
-	test_bump->scale = 0.1;
-	test_bump->image = mlx_load_png(img_path);
-	if (!test_bump->image)
-	{
-		free(img_path);
-		free(test_bump);
-		perror("png");
-		exit_error("incorrect image path", "in cylinder", scene->cleaner);
-	}
-	return (test_bump);
-}
-
-void	bump_mapping_cylinder_type_1(t_cylinder_fb *new_cylinder, \
-		int i, t_scene *scene)
-{
-	if (i != 7)
-		exit_error("nothing should be after this type of bump", \
-				"in cylinder", scene->cleaner);
-	new_cylinder->img_path = NULL;
-	new_cylinder->bump_texture = create_checker_bump_cylinder();
-}
-
-void	bump_mapping_cylinder_type_2(t_cylinder_fb *new_cylinder, \
-		char **data, int i, t_scene *scene)
-{
-	if (i != 8)
-	{
-		free(new_cylinder);
-		exit_error("need a png", "in cylinder", scene->cleaner);
-	}
-	new_cylinder->img_path = ft_strdup(data[8]);
-	new_cylinder->bump_texture = \
-		create_image_bump_cylinder(new_cylinder->img_path, scene);
-}
-
-void	bump_mapping_cylinder_constractor(t_cylinder_fb *new_cylinder, \
-		char **data, t_scene *scene, int i)
-{
-	int	type_bump;
-
-	type_bump = ft_atoi_color(data[7], "bump in cylinder");
-	if (type_bump != 1 && type_bump != 2)
-	{
-		free(new_cylinder);
-		exit_error("malformat in type of bump", "in cylinder", scene->cleaner);
-	}
-	new_cylinder->flag_bump = true;
-	if (type_bump == 1)
-		bump_mapping_cylinder_type_1(new_cylinder, i, scene);
-	else
-		bump_mapping_cylinder_type_2(new_cylinder, data, i, scene);
-}
 
 void	coor_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
 {
@@ -150,15 +59,6 @@ void	color_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
 	new_cylinder->color_cylinder->g = ft_atoi_color(colors[1], "cylinder");
 	new_cylinder->color_cylinder->b = ft_atoi_color(colors[2], "cylinder");
 	ft_free_split(colors);
-}
-
-void	init_new_cylinder(t_cylinder_fb *new_cylinder)
-{
-	new_cylinder->flag_bump = false;
-	new_cylinder->closed = false;
-	new_cylinder->bump_texture = NULL;
-	new_cylinder->img_path = NULL;
-	new_cylinder->next = NULL;
 }
 
 void	other_paranms_check(t_cylinder_fb *new_cylinder, \

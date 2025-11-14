@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/14 01:04:08 by fbenalla          #+#    #+#             */
+/*   Updated: 2025/11/14 02:06:09 by fbenalla         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINI_RT_H
 #define MINI_RT_H
 
@@ -16,7 +28,14 @@
 
 // #define WIDTH 1400
 // #define HEIGHT 1400
-
+typedef struct s_parse
+{
+	int						i;
+	int						signe;
+	unsigned long long		nb;
+	double					frac;
+	double					divisor;
+}	t_parse;
 
 typedef struct s_cleanup t_cleanup;
 // typedef struct s_tuple t_tuple;
@@ -203,90 +222,6 @@ typedef struct s_cleanup
 }t_cleanup;
 
 
-
-
-// malloc(sizeof(t_objects_fb)*num_obj);
-// for(int i = 0; i < obj_num; i++)
-// {
-//     = malloc(sizeof(t_obj));
-//     if(type == t_sphere_fb)
-//     {
-//         plan(&t_obj.plan, [point], [vector]);
-//     }
-// }
-// typedef struct {
-//     t_type type;
-//     t_obj *obj;
-// }k;
-
-// typedef struct {
-//     int obj_num;
-//     int lighy_num;
-//     k *objects;
-// }l;
-// #define ld double
-// /*====================jbahmida===========================*/
-
-// typedef struct s_color_ja
-// {
-//     ld r;
-//     ld g;
-//     ld b;
-// } t_color_fb_ja;
-
-// // typedef struct s_material
-// // {
-// //     t_color_fb_ja *color_ja;
-// //     ld ambient;
-// //     ld diffuse;
-// //     ld specular;
-// //     ld shininess;
-// // } t_material;
-
-// typedef struct s_sphere_ja
-// {
-    
-//     int id;
-//     t_tuple *origin;
-//     ld radius;
-//     // t_matrix transform;
-//     // t_matrix inv;
-//     t_material *material;
-// } t_sphere_fb_ja;
-
-// typedef union s_obj
-// {
-// 	t_sphere_fb_ja *sphere_ja;
-// 	// t_cylinder_fb_ja *cylinder_ja;
-// 	// t_plane_fb_ja *plan_ja;
-// }t_obj;
-
-
-
-// typedef struct s_object_ja
-// {
-// 	t_type type;
-// 	t_obj *obj;
-// }t_object_ja;
-
-
-// typedef struct s_world
-// {
-// 	int obj_num;
-//     t_light *light;
-// 	t_object_ja **objects;
-// }t_world;
-
-// typedef struct s_tuple
-// {
-//     ld x;
-//     ld y;
-//     ld z;
-//     ld w;
-// } t_tuple;
-
-
-
 /*-----------linked list----------------------*/
 void ft_lstadd_back(t_container **lst, t_container *new);
 void ft_lstadd_front(t_container **lst, t_container *new);
@@ -393,4 +328,52 @@ void    set_scene(t_scene *scene, bool flag);
 void validate_scene(t_scene *scene);
 void    close_window(mlx_key_data_t keydata, void* param);
 bool is_coordinate(char *coor);
+
+
+
+/*----------------------------------------------------*/
+void	bump_mapping_cone_constractor(t_cone_fb *new_cone, \
+		char **data, t_scene *scene, int i);
+void	init_new_cone(t_cone_fb *new_cone);
+bool	verify_data_cone(char **data, t_cleanup *clean);
+void	cone_linked_list(t_cone_fb *new_cone, t_scene *scene);
+
+
+
+bool	verify_data_cylinder(char **data, t_cleanup *clean);
+void	cylinder_linked_list(t_cylinder_fb *new_cylinder, t_scene *scene);
+void	init_new_cylinder(t_cylinder_fb *new_cylinder);
+void	bump_mapping_cylinder_constractor(t_cylinder_fb *new_cylinder, \
+		char **data, t_scene *scene, int i);
+
+
+void	sphere_linked_list(t_sphere_fb *new_sphere, t_scene *scene);
+void	init_new_sphere(t_sphere_fb *new_sphere);
+void	bump_mapping_sphere_constractor(t_sphere_fb *new_sphere, \
+		char **data, t_scene *scene, int i);
+
+
+
+void	bump_mapping_plane_constractor(t_plane_fb *new_plane, \
+		char **data, t_scene *scene, int i);
+void	init_new_plane(t_plane_fb *new_plane);
+void	plane_linked_list(t_plane_fb *new_plane, t_scene *scene);
+
+/*free*/
+void	free_cone(t_scene *scene);
+void	free_cylinder(t_scene *scene);
+void	free_plane(t_scene *scene);
+void	free_sphere(t_scene *scene);
+
+void	free_params_co(t_cone_fb *co);
+void	free_params_cy(t_cylinder_fb *cy);
+void	free_params_pl(t_plane_fb *pl);
+void	free_params_sp(t_sphere_fb *sp);
+t_container	*ft_lstlast(t_container *lst);
+/*----*/
+void	check_valid_args(char **data, t_scene *scene, char object);
+bool	verify_data_ambient_light(char **data, t_cleanup *clean);
+void	ft_camera_fb(char **data, t_scene *scene);
+int	ft_atoi(char *str);
+int	ft_check(int signe);
 #endif

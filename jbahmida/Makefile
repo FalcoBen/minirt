@@ -34,7 +34,6 @@ SRCS		= making_scene/world.c \
 			  ../garbage_collector/my_malloc.c \
 				../fbenalla/miniRT/main.c     \
 				../fbenalla/miniRT/linked_list.c \
-				../fbenalla/miniRT/initialize_scenes.c \
 				../fbenalla/miniRT/init_objects.c \
 				../fbenalla/miniRT/ft_split.c \
 				../fbenalla/miniRT/ft_isdigit.c \
@@ -46,13 +45,27 @@ SRCS		= making_scene/world.c \
 				../fbenalla/get_next_line/get_next_line.c \
 				../linking.c \
 				making_scene/passing_data.c\
-				../fbenalla/miniRT/printer.c \
 				../fbenalla/miniRT/textures.c \
 				../fbenalla/miniRT/plane_create.c \
 				../fbenalla/miniRT/sphere_create.c \
 				../fbenalla/miniRT/cylinder_create.c \
 				../fbenalla/miniRT/cone_create.c \
-
+				../fbenalla/miniRT/cone_bumpmap.c                \
+				../fbenalla/miniRT/cone_create_extra.c \
+				../fbenalla/miniRT/cylinder_bumpmap.c \
+				../fbenalla/miniRT/cylinder_create_extra.c \
+				../fbenalla/miniRT/plan_bumpmap.c \
+				../fbenalla/miniRT/plane_create_extra.c \
+				../fbenalla/miniRT/sphere_bumpmap.c \
+				../fbenalla/miniRT/sphere_create_extra.c \
+				../fbenalla/miniRT/free_alloc_extra.c \
+				../fbenalla/miniRT/free_alloc_extra_2.c \
+				../fbenalla/miniRT/parssing_helper.c \
+				../fbenalla/miniRT/init_ambient.c \
+				../fbenalla/miniRT/init_light.c \
+				../fbenalla/miniRT/camera_init.c \
+				../fbenalla/miniRT/verify_data.c \
+				../fbenalla/miniRT/ft_atoi.c \
 # Object files
 OBJS		= $(SRCS:.c=.o)
 

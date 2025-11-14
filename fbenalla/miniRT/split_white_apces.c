@@ -6,12 +6,11 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 23:28:56 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/11/13 23:30:40 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/11/14 01:22:38 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
 
 bool	ispace(char c)
 {

@@ -6,7 +6,7 @@
 /*   By: fbenalla <fbenalla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 23:19:20 by fbenalla          #+#    #+#             */
-/*   Updated: 2025/11/13 23:19:21 by fbenalla         ###   ########.fr       */
+/*   Updated: 2025/11/14 01:20:44 by fbenalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,3 @@ t_container	*ft_lstnew(void *content)
 	new->next = NULL;
 	return (new);
 }
-
-t_container	*ft_lstlast(t_container *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst->next)
-	{
-		lst = lst->next;
-	}
-	return (lst);
-}
-

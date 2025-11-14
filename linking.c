@@ -114,7 +114,7 @@ void parsing(int fd)
     }
 	ft_lstclear((void **)&dispatch_table, del, 'o');
 	set_scene(scene, false);
-	validate_scene(scene);
+	// validate_scene(scene);
 	// printer(scene);
 	// start_using_mlx(scene);
 	t_scene *holder = linking_fucntion(scene, true);

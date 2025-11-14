@@ -69,6 +69,10 @@ SRCS		= making_scene/world.c \
 				../fbenalla/miniRT/camera_init.c \
 				../fbenalla/miniRT/verify_data.c \
 				../fbenalla/miniRT/ft_atoi.c \
+				making_scene/passing_data_cone.c \
+				making_scene/passing_data_cy.c \
+				making_scene/passing_data_pl.c \
+				making_scene/passing_data_sp.c \
 # Object files
 OBJS		= $(SRCS:.c=.o)
 

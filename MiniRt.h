@@ -558,4 +558,9 @@ void s_plane_normal_bonus(t_tuple *local_normal,
 	t_plane *plane, t_tuple *point);
 void s_cylinder_normal_bonus(t_tuple *local_normal,
 	t_cylinder *cylinder, t_tuple *point);
+void	s_world_cone_constractor(t_world *world, t_scene *scene, int *i);
+void    s_world_plane_constractor(t_world *world, t_scene *scene, int *i);
+
+void	s_world_cylinder_constractor(t_world *world, t_scene *scene, int *i);
+void	s_world_sphere_constractor(t_world *world, t_scene *scene, int *i);
 #endif

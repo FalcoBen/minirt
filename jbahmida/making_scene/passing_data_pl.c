@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   passing_data_pl.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbenalla <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/16 02:46:38 by fbenalla          #+#    #+#             */
+/*   Updated: 2025/11/16 02:46:41 by fbenalla         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../fbenalla/miniRT/parsing.h"
 #include "../MiniRt.h"
 
@@ -19,7 +31,7 @@ void	checker_textures_pl(t_obj *obj, t_plane_fb *src)
 	}
 }
 
-void    assigne_plane_object(t_obj *obj, t_plane_fb *src, \
+void	assigne_plane_object(t_obj *obj, t_plane_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
 	obj->plane->material->color->r = src->color_plane->r / 255.0;
@@ -37,7 +49,8 @@ void    assigne_plane_object(t_obj *obj, t_plane_fb *src, \
 		obj->plane->material->has_bump_map = false;
 	}
 }
-void    assign_coor_and_vects_pl(t_tuple *origin, \
+
+void	assign_coor_and_vects_pl(t_tuple *origin, \
 		t_tuple *normal, t_plane_fb *src)
 {
 	origin->x = src->coor_plane->x;
@@ -49,7 +62,8 @@ void    assign_coor_and_vects_pl(t_tuple *origin, \
 	normal->z = src->vector_plane->z;
 	normal->w = 0;
 }
-void obj_creator_plane(t_obj *obj, t_plane_fb *src, \
+
+void	obj_creator_plane(t_obj *obj, t_plane_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
 	t_tuple		*origin;
@@ -58,8 +72,8 @@ void obj_creator_plane(t_obj *obj, t_plane_fb *src, \
 
 	if (!obj || !src)
 		return ;
-	origin = malloc(sizeof(t_tuple));
-	normal = malloc(sizeof(t_tuple));
+	origin = alloc(sizeof(t_tuple), false);
+	normal = alloc(sizeof(t_tuple), false);
 	assign_coor_and_vects_pl(origin, normal, src);
 	plane(&obj->plane, origin, normal);
 	transform = create_plane_transform(origin, normal);
@@ -68,24 +82,23 @@ void obj_creator_plane(t_obj *obj, t_plane_fb *src, \
 	assigne_plane_object(obj, src, ambient_light);
 	copy_matrix_contant(obj->plane->inv);
 	copy_matrix_contant(obj->plane->transform);
-	free(origin);
-	free(normal);
 }
-void    s_world_plane_constractor(t_world *world, t_scene *scene, int *i)
+
+void	s_world_plane_constractor(t_world *world, t_scene *scene, int *i)
 {
 	t_plane_fb	*current_plane;
 
 	current_plane = scene->plane;
 	while (current_plane && *i < world->obj_num)
 	{
-		world->objects[*i] = malloc(sizeof(t_object));
+		world->objects[*i] = alloc(sizeof(t_object), false);
 		if (!world->objects[*i])
 		{
 			fprintf(stderr, "Failed to allocate object  plane %d\n", *i);
 			exit(1);
 		}
 		world->objects[*i]->type = T_PLAN;
-		world->objects[*i]->obj = malloc(sizeof(t_obj));
+		world->objects[*i]->obj = alloc(sizeof(t_obj), false);
 		if (!world->objects[*i]->obj)
 		{
 			fprintf(stderr, "Failed to allocate obj  plane %d\n", *i);

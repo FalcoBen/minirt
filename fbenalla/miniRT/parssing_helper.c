@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 t_container	*ft_lstlast(t_container *lst)
 {
@@ -80,12 +81,6 @@ void	free_tokens(t_cleanup *cleanup)
 void	exit_error(char *str, char *scene_name, t_cleanup *cleanup)
 {
 	printf("Error\n%s in %s\n", str, scene_name);
-	free_tokens(cleanup);
-	if (cleanup->dispatched_table && *cleanup->dispatched_table)
-	{
-		ft_lstclear((void **)cleanup->dispatched_table, del, 'o');
-		*cleanup->dispatched_table = NULL;
-	}
 	if (cleanup->scene)
 	{
 		free_scene(cleanup->scene);
@@ -96,11 +91,6 @@ void	exit_error(char *str, char *scene_name, t_cleanup *cleanup)
 		free(cleanup->input_data);
 		cleanup->input_data = NULL;
 	}
-	if (cleanup->container)
-	{
-		ft_lstclear((void **)&cleanup->container, del, 'c');
-		cleanup->container = NULL;
-	}
-	free(cleanup);
+	alloc(0, true);
 	exit(1);
 }

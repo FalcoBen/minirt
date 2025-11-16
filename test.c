@@ -114,3 +114,9 @@ int main(void)
 	mlx_terminate(mlx);
 	return (EXIT_SUCCESS);
 }
+
+
+8==      possibly lost: 92,262 bytes in 273 blocks
+==808138==    still reachable: 18,246,436 bytes in 20,832 blocks
+
+still reachable: 9,609,102 bytes in 11,972 blocks

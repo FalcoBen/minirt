@@ -1,5 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   passing_data_cy.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbenalla <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/16 02:46:04 by fbenalla          #+#    #+#             */
+/*   Updated: 2025/11/16 02:46:08 by fbenalla         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../fbenalla/miniRT/parsing.h"
 #include "../MiniRt.h"
+
 void	checker_textures_cy(t_obj *obj, t_cylinder_fb *src)
 {
 	if (src->bump_texture && src->bump_texture->type == 1)
@@ -15,7 +28,7 @@ void	checker_textures_cy(t_obj *obj, t_cylinder_fb *src)
 		obj->cylinder->material->color_texture = src->bump_texture;
 		obj->cylinder->material->has_bump_map = true;
 		obj->cylinder->material->bump_map = src->bump_texture;
-		// obj->cylinder->material->bump_strength = 0.2;
+		obj->cylinder->material->bump_strength = 0.2;
 	}
 	else
 	{
@@ -41,7 +54,8 @@ void	assigne_cylinder_object(t_obj *obj, t_cylinder_fb *src, \
 	obj->cylinder->closed = src->closed;
 	checker_textures_cy(obj, src);
 }
-void    assign_coor_and_vects_cy(t_tuple *origin, t_tuple *normal, \
+
+void	assign_coor_and_vects_cy(t_tuple *origin, t_tuple *normal, \
 		t_cylinder_fb *src)
 {
 	origin->x = src->coor_cylinder->x;
@@ -53,7 +67,8 @@ void    assign_coor_and_vects_cy(t_tuple *origin, t_tuple *normal, \
 	normal->z = src->vector_cylinder->z;
 	normal->w = 0;
 }
-void obj_creator_cylinder(t_obj *obj, t_cylinder_fb *src, \
+
+void	obj_creator_cylinder(t_obj *obj, t_cylinder_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
 	t_tuple		*origin;
@@ -65,8 +80,8 @@ void obj_creator_cylinder(t_obj *obj, t_cylinder_fb *src, \
 		return ;
 	cylinder(&obj->cylinder, NULL, false);
 	radius = src->diameter_cylinder / 2.0;
-	origin = malloc(sizeof(t_tuple));
-	normal = malloc(sizeof(t_tuple));
+	origin = alloc(sizeof(t_tuple), false);
+	normal = alloc(sizeof(t_tuple), false);
 	assign_coor_and_vects_cy(origin, normal, src);
 	assigne_cylinder_object(obj, src, ambient_light);
 	transform = create_cylinder_transform(origin, normal, \
@@ -75,6 +90,7 @@ void obj_creator_cylinder(t_obj *obj, t_cylinder_fb *src, \
 	copy_matrix_contant(obj->cylinder->inv);
 	copy_matrix_contant(obj->cylinder->transform);
 }
+
 void	s_world_cylinder_constractor(t_world *world, t_scene *scene, int *i)
 {
 	t_cylinder_fb	*cuurent_cylinder;
@@ -82,14 +98,14 @@ void	s_world_cylinder_constractor(t_world *world, t_scene *scene, int *i)
 	cuurent_cylinder = scene->cylinder;
 	while (cuurent_cylinder && *i < world->obj_num)
 	{
-		world->objects[*i] = malloc(sizeof(t_object));
+		world->objects[*i] = alloc(sizeof(t_object), false);
 		if (!world->objects[*i])
 		{
 			fprintf(stderr, "Failed to allocate object  cylinder %d\n", *i);
 			exit(1);
 		}
 		world->objects[*i]->type = T_CYLINDRE;
-		world->objects[*i]->obj = malloc(sizeof(t_obj));
+		world->objects[*i]->obj = alloc(sizeof(t_obj), false);
 		if (!world->objects[*i]->obj)
 		{
 			fprintf(stderr, "Failed to allocate obj  cylinder %d\n", *i);
@@ -102,4 +118,3 @@ void	s_world_cylinder_constractor(t_world *world, t_scene *scene, int *i)
 		(*i)++;
 	}
 }
-

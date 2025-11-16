@@ -13,27 +13,40 @@ MLX_FLAGS	= -ldl -lglfw -pthread -lm
 # Source files
 SRCS		= making_scene/world.c \
 			  making_scene/world_2.c \
+			  making_scene/lighting_model.c \
 			  making_scene/intersection.c \
+			  making_scene/calculate_hit.c \
 			  making_scene/prepare_computations.c \
+			  making_scene/prepare_computations_2.c \
 			  making_scene/view_transformation.c \
 			  making_scene/iplementing_camera.c \
 			  making_scene/shadow.c \
 			  making_scene/cylinder.c \
+			  making_scene/cylinder_intersct.c \
+			  making_scene/cylinder_cylinder_transform.c \
 			  making_scene/plane.c \
+			  making_scene/plane_transform.c \
 			  making_scene/sphere.c \
 			  making_scene/cone.c \
+			  making_scene/cone_transform.c \
+			  making_scene/cone_intersct.c \
+			  making_scene/cone_normal.c \
 			  making_scene/bump_map.c \
-			  tupeles_test_rm/canva_1.c \
-			  tupeles_test_rm/Creating_Rays.c \
-			  tupeles_test_rm/light_and_shading.c \
-			  tupeles_test_rm/operations_on_tuple.c \
-			  tupeles_test_rm/tupels.c \
-			  tupeles_test_rm/matric_1.c \
-			  tupeles_test_rm/matric.c \
-			  tupeles_test_rm/Transformations.c \
-			  tupeles_test_rm/stack1.c \
-			  tupeles_test_rm/stack2.c \
-			  tupeles_test_rm/cmp_foalt.c \
+			  making_scene/operations_on_tuple.c \
+			  making_scene/matric_1.c \
+			  making_scene/matric.c \
+			  making_scene/matrix_inverte.c \
+			  making_scene/matrix_determinant.c \
+			  making_scene/matrix_cofactor.c \
+			  making_scene/matrix_multi.c \
+			  making_scene/Transformations.c \
+			  making_scene/stack1.c \
+		      making_scene/stack2.c \
+		      making_scene/stack3.c \
+		      making_scene/stack4.c \
+		      making_scene/stack5.c \
+		      making_scene/stack6.c \
+			  making_scene/cmp_foalt.c \
 			  ../garbage_collector/my_malloc.c \
 				../fbenalla/miniRT/main.c     \
 				../fbenalla/miniRT/linked_list.c \
@@ -73,6 +86,8 @@ SRCS		= making_scene/world.c \
 				making_scene/passing_data_cy.c \
 				making_scene/passing_data_pl.c \
 				making_scene/passing_data_sp.c \
+				making_scene/bump_map_extra.c \
+				../linking_extra.c \
 # Object files
 OBJS		= $(SRCS:.c=.o)
 

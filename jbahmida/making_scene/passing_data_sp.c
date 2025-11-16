@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   passing_data_sp.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbenalla <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/16 02:46:59 by fbenalla          #+#    #+#             */
+/*   Updated: 2025/11/16 02:47:04 by fbenalla         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../fbenalla/miniRT/parsing.h"
 #include "../MiniRt.h"
 
@@ -17,6 +29,7 @@ void	checker_textures_sp(t_obj *obj, t_sphere_fb *src)
 		obj->sphere->material->has_color_texture = false;
 	}
 }
+
 void	assign_spher_object(t_obj *obj, t_sphere_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
@@ -56,10 +69,10 @@ void	obj_creator_sphere(t_obj *obj, t_sphere_fb *src, \
 	transform = matrix_multi(trans, scale);
 	sphere(&obj->sphere, transform, true);
 	assign_spher_object(obj, src, ambient_light);
-
 	copy_matrix_contant(obj->sphere->inv);
 	copy_matrix_contant(obj->sphere->transform);
 }
+
 void	s_world_sphere_constractor(t_world *world, t_scene *scene, int *i)
 {
 	t_sphere_fb	*current_sphere;
@@ -67,14 +80,14 @@ void	s_world_sphere_constractor(t_world *world, t_scene *scene, int *i)
 	current_sphere = scene->sphere;
 	while (current_sphere && *i < world->obj_num)
 	{
-		world->objects[*i] = malloc(sizeof(t_object));
+		world->objects[*i] = alloc(sizeof(t_object), false);
 		if (!world->objects[*i])
 		{
 			fprintf(stderr, "Failed to allocate object sphere %d\n", *i);
 			exit(1);
 		}
 		world->objects[*i]->type = T_SPHERE;
-		world->objects[*i]->obj = malloc(sizeof(t_obj));
+		world->objects[*i]->obj = alloc(sizeof(t_obj), false);
 		if (!world->objects[*i]->obj)
 		{
 			fprintf(stderr, "Failed to allocate obj %d\n", *i);

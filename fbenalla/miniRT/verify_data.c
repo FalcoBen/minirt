@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	check_valid_args(char **data, t_scene *scene, char object)
 {
@@ -63,4 +64,26 @@ bool	verify_data_ambient_light(char **data, t_cleanup *clean)
 		return (false);
 	}
 	return (true);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	size_t	l;
+	size_t	i;
+	char	*dest;
+
+	if (!s1)
+		return (NULL);
+	l = ft_strlen(s1);
+	dest = (char *)alloc((l + 1) * sizeof(char), false);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	dest[l] = '\0';
+	return (dest);
 }

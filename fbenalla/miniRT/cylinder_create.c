@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	coor_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
 {
 	char	**coors;
 
-	new_cylinder->coor_cylinder = malloc(sizeof(t_vec3));
+	new_cylinder->coor_cylinder = alloc(sizeof(t_texture_color), false);
 	coors = ft_split(data[1], ',');
 	new_cylinder->coor_cylinder->x = ft_atoi_double(coors[0], scene->cleaner);
 	new_cylinder->coor_cylinder->y = ft_atoi_double(coors[1], scene->cleaner);
@@ -33,7 +34,7 @@ void	vects_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
 	double	range_y;
 	double	range_z;
 
-	new_cylinder->vector_cylinder = malloc(sizeof(t_vec3));
+	new_cylinder->vector_cylinder = alloc(sizeof(t_texture_color), false);
 	vects = ft_split(data[2], ',');
 	new_cylinder->vector_cylinder->x = ft_atoi_double(vects[0], scene->cleaner);
 	new_cylinder->vector_cylinder->y = ft_atoi_double(vects[1], scene->cleaner);
@@ -53,7 +54,7 @@ void	color_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
 {
 	char	**colors;
 
-	new_cylinder->color_cylinder = malloc(sizeof(t_color_fb));
+	new_cylinder->color_cylinder = alloc(sizeof(t_color_fb), false);
 	colors = ft_split(data[6], ',');
 	new_cylinder->color_cylinder->r = ft_atoi_color(colors[0], "cylinder");
 	new_cylinder->color_cylinder->g = ft_atoi_color(colors[1], "cylinder");
@@ -97,7 +98,7 @@ void	ft_cylinder_fb(char **data, t_scene *scene)
 	while (data[i])
 		i++;
 	i--;
-	new_cylinder = malloc(sizeof(t_cylinder_fb));
+	new_cylinder = alloc(sizeof(t_cylinder_fb), false);
 	init_new_cylinder(new_cylinder);
 	scene->type = T_CYLINDRE;
 	if (i == 7 || i == 8)

@@ -27,7 +27,7 @@ char	*read_from_file(int fd, char *block)
 	ssize_t	bytes;
 
 	if (!block)
-		block = ft_strdup("");
+		block = ft_strdup_get("");
 	buffer = malloc((unsigned int)(BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (free(block), NULL);
@@ -58,8 +58,6 @@ char	*get_preffix(char *str)
 	i = 0;
 	while (str[i] && str[i] != '\n')
 		i++;
-	// if (str[i] == '\n')
-	// 	i++;
 	preffix = malloc((i + 1) * sizeof(char));
 	if (!preffix)
 		return (NULL);
@@ -92,9 +90,6 @@ char	*get_suffix(char *str)
 	free(str);
 	return (suffix);
 }
-#include <fcntl.h>
-#include <stdio.h>
-
 
 char	*get_next_line(int fd)
 {
@@ -112,33 +107,3 @@ char	*get_next_line(int fd)
 	block = get_suffix(block);
 	return (line);
 }
-// int main()
-// {
-// 	int fd1= open("text.txt", O_RDWR | O_CREAT, 0644);
-// 	int fd2= open("text1.txt", O_RDWR | O_CREAT, 0644);
-// 	char *line1 = get_next_line(fd1);
-// 	char *line2 = get_next_line(fd2);
-
-// 	while(line1 || line2)
-// 	{
-// 		if(line1)
-// 		{
-// 			printf("fd 1: %s", line1);
-// 			free(line1);
-// 		}
-// 		if(line2)
-// 		{
-// 			printf("fd 2 : %s", line2);
-// 			free(line2);
-// 		}
-
-// 		line1 = get_next_line(fd1);
-// 		line2 = get_next_line(fd2);
-
-// 	}
-
-
-// 	close(fd1);
-// 	close(fd2);
-// 	return 0;
-// }

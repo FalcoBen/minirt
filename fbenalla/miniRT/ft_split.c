@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 static int	count_words(const char *s, char sep)
 {

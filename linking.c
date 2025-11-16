@@ -1,135 +1,112 @@
 #include "MiniRt.h"
-t_scene *linking_fucntion(t_scene *scene, bool set)
+#include "garbage_collector/my_malloc.h"
+
+void	reading_from_scene(int fd, t_container **head, int *counter)
 {
-    static t_scene *local; 
-    if (set == true)
-    {
-        local = scene;
-        return scene;
-    }
-    return local;
-}
-void    set_scene(t_scene *scene, bool flag)
-{
-    static void *holder = NULL; 
-    if(!flag)
-    {
-        puts("--------------------------------------stored ---------------------------------\n");
-        holder = scene->cleaner;
-    }
-    else
-    {
-        ((t_cleanup *)holder)->flag_input = true;
-        exit_error("closing", "window", ((t_cleanup *)holder));
-    }
-}
-void parsing(int fd)
-{
-	char *line = get_next_line(fd);
-	int counter = 0;
-	t_container *list = NULL;
-	t_container *head = NULL;
+	char		*line;
+	t_container	*list;
+
+	line = get_next_line(fd);
+	list = NULL;
 	while (line != NULL)
-    {
+	{
 		list = ft_lstnew(line);
-        ft_lstadd_back(&head, list);
-        counter++;
-        free(line);
-        line = get_next_line(fd);
-    }       
+		ft_lstadd_back(head, list);
+		(*counter)++;
+		free(line);
+		line = get_next_line(fd);
+	}
 	close(fd);
-	t_cleanup *cleaner = malloc(sizeof(t_cleanup));
-	cleaner->container = NULL;
-	cleaner->dispatched_table = NULL;
-	cleaner->scene = NULL;
-	cleaner->token_count = 0;
-	cleaner->tokens = NULL;
-	cleaner->flag_input = false;
-	cleaner->flag_exit = false;
-	cleaner->input_data = NULL;
-	
-	cleaner->container = head;
-	// if(counter == 0)
-	// {
-	// 	// exit_error("empty", "file", &head, 'e');
-	// 	exit_error("empty", "file", cleaner);
-	// 	return 1;
-	// }
-	char ***tokens = malloc(sizeof(char **) * (counter + 1));
-	cleaner->tokens = tokens;
-	t_container *curr = head;
-	int i = 0;
-	while(curr)
+}
+
+void	stor_tokens(char ***tokens, t_container *curr, t_cleanup *cleaner)
+{
+	int	i;
+
+	i = 0;
+	while (curr)
 	{
 		tokens[i] = ft_split_white(curr->line);
 		i++;
 		curr = curr->next;
 	}
 	cleaner->token_count = i;
-	
-	t_scene *scene = malloc(sizeof(t_scene));
-
-	int z = 0;
-	while(z < counter)
-	{
-			if(!tokens[z][0] || strcmp(tokens[z][0], "A") == 0 || strcmp(tokens[z][0], "C") == 0 || strcmp(tokens[z][0], "L") == 0 \
-				|| strcmp(tokens[z][0], "pl") == 0 || strcmp(tokens[z][0], "sp") == 0 ||  strcmp(tokens[z][0], "cy")  == 0 || strcmp(tokens[z][0], "cone")  == 0)
-			{
-				z++;
-				continue;
-			}	
-			else
-				exit_error("object should not render", tokens[z][0], cleaner);
-			z++;
-	}
-		
-	t_objects_fb *input_data = malloc(sizeof(t_objects_fb));
-	input_data->assign_object = NULL;
-	input_data->identifier = NULL;
-	input_data->nb = 0;
-	input_data->next = NULL;
-	cleaner->input_data = input_data;
-	t_objects_fb *dispatch_table = NULL;
-	init_object_dispatch_table(&dispatch_table);
-	cleaner->dispatched_table = &dispatch_table;
-	scene->cleaner = cleaner;
-	cleaner->scene = scene;
-    initialize_scenes(scene);
-    
-	t_objects_fb *current_obj = dispatch_table;
-    for(int x = 0; x < counter; x++)
-    {
-		if(!tokens[x] || !tokens[x][0]) 
-			continue;
-		current_obj = dispatch_table;
-        while(current_obj)
-        {
-			if(current_obj->identifier && strcmp(tokens[x][0], current_obj->identifier) == 0)
-            {
-                current_obj->assign_object(tokens[x], scene);
-                break;
-            }
-            current_obj = current_obj->next;
-        }
-    }
-	ft_lstclear((void **)&dispatch_table, del, 'o');
-	set_scene(scene, false);
-	// validate_scene(scene);
-	// printer(scene);
-	// start_using_mlx(scene);
-	t_scene *holder = linking_fucntion(scene, true);
-	jassim_mlx(holder);
-	// t_world jb = s_world(scene);
-	// puts("-------------------------------------------------------------------------------------------------------------\n");
-	// puts("-------------------------------------------------------------------------------------------------------------\n");
-	// puts("-------------------------------------------------------------------------------------------------------------\n");
-	// puts("-------------------------------------------------------------------------------------------------------------\n");
-	// puts("-------------------------------------------------------------------------------------------------------------\n");
-	// puts("-------------------------------------------------------------------------------------------------------------\n");
-	// puts("-------------------------------------------------------------------------------------------------------------\n");
-	// puts("-------------------------------------------------------------------------------------------------------------\n");
-	// print_world(&jb);
 }
 
+void	tokens_constractor(char ***tokens, t_container *head, \
+		int counter, t_cleanup *cleaner)
+{
+	t_container	*curr;
+	int			i;
+	int			z;
 
+	curr = head;
+	i = 0;
+	stor_tokens(tokens, curr, cleaner);
+	z = 0;
+	while (z < counter)
+	{
+		if (!tokens[z][0] || ft_strcmp(tokens[z][0], "A") == 0 || \
+			ft_strcmp(tokens[z][0], "C") == 0 || ft_strcmp(tokens[z][0], "L") == 0 \
+			|| ft_strcmp(tokens[z][0], "pl") == 0 || \
+				ft_strcmp(tokens[z][0], "sp") == 0 || ft_strcmp(tokens[z][0], "cy") \
+					== 0 || ft_strcmp(tokens[z][0], "cone") == 0)
+		{
+			z++;
+			continue ;
+		}
+		else
+			exit_error("object should not render", tokens[z][0], cleaner);
+		z++;
+	}
+}
 
+void	start_asigning_objects(t_scene *scene, \
+		t_objects_fb *dispatch_table, char ***tokens, int counter)
+{
+	t_objects_fb	*current_obj;
+	int				x;
+
+	current_obj = dispatch_table;
+	x = 0;
+	while (x < counter)
+	{
+		if (!tokens[x] || !tokens[x][0])
+		{
+			x++;
+			continue ;
+		}
+		current_obj = dispatch_table;
+		while (current_obj)
+		{
+			if (current_obj->identifier && \
+				ft_strcmp(tokens[x][0], current_obj->identifier) == 0)
+			{
+				current_obj->assign_object(tokens[x], scene);
+				break ;
+			}
+			current_obj = current_obj->next;
+		}
+		x++;
+	}
+}
+
+void	parsing(int fd)
+{
+	int			counter;
+	t_container	*head;
+	t_cleanup	*cleaner;
+	char		***tokens;
+
+	head = NULL;
+	counter = 0;
+	reading_from_scene(fd, &head, &counter);
+	cleaner = alloc(sizeof (t_cleanup), false);
+	init_cleaner(cleaner);
+	cleaner->container = head;
+
+	tokens = alloc(sizeof (char **) * ((counter) + 1), false);
+	cleaner->tokens = tokens;
+	tokens_constractor(tokens, head, counter, cleaner);
+	parsing_second_part(tokens, &counter, cleaner);
+}

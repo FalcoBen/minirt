@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 t_texture	*create_checker_bump(void)
 {
 	t_texture	*test_bump_checker;
 
-	test_bump_checker = malloc(sizeof(t_texture));
+	test_bump_checker = alloc(sizeof(t_texture), false);
 	test_bump_checker->type = 1;
 	test_bump_checker->scale = 0.1;
 	test_bump_checker->image = NULL;
@@ -27,7 +28,7 @@ t_texture	*create_image_bump(char *img_path, t_scene *scene)
 {
 	t_texture	*test_bump;
 
-	test_bump = malloc(sizeof(t_texture));
+	test_bump = alloc(sizeof(t_texture), false);
 	test_bump->type = 2;
 	test_bump->color_solid = (t_color_fb){0, 0, 0};
 	test_bump->color_checkerd = (t_color_fb){0, 0, 0};

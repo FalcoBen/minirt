@@ -119,4 +119,3 @@ void	s_normal_at(t_tuple *normal, t_sphere *s, t_tuple *point)
 	normal->w = w_normal.w;
 	return ;
 }
-

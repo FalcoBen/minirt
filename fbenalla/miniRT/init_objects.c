@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	objects_linking_constractor(char *identifier, \
 		void (*assign_object)(char **, t_scene *), \
@@ -18,7 +19,7 @@ void	objects_linking_constractor(char *identifier, \
 {
 	t_objects_fb	*new_node;
 
-	new_node = malloc(sizeof(t_objects_fb));
+	new_node = alloc(sizeof(t_objects_fb), false);
 	if (!new_node)
 		return ;
 	new_node->identifier = ft_strdup(identifier);
@@ -43,7 +44,7 @@ void	add_object(t_objects_fb **head, char *identifier, \
 	current = *head;
 	while (current)
 	{
-		if (current->identifier && strcmp(current->identifier, identifier) == 0)
+		if (current->identifier && ft_strcmp(current->identifier, identifier) == 0)
 		{
 			return ;
 		}

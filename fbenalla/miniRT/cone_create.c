@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	coor_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
 {
 	char	**coors;
 
-	new_cone->coor_cone = malloc(sizeof(t_vec3));
+	new_cone->coor_cone = alloc(sizeof(t_texture_color), false);
 	coors = ft_split(data[1], ',');
 	new_cone->coor_cone->x = ft_atoi_double(coors[0], scene->cleaner);
 	new_cone->coor_cone->y = ft_atoi_double(coors[1], scene->cleaner);
@@ -33,7 +34,7 @@ void	vects_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
 	double	range_y;
 	double	range_z;
 
-	new_cone->vector_cone = malloc(sizeof(t_vec3));
+	new_cone->vector_cone = alloc(sizeof(t_texture_color), false);
 	vects = ft_split(data[2], ',');
 	new_cone->vector_cone->x = ft_atoi_double(vects[0], scene->cleaner);
 	new_cone->vector_cone->y = ft_atoi_double(vects[1], scene->cleaner);
@@ -53,7 +54,7 @@ void	color_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
 {
 	char	**colors;
 
-	new_cone->color_cone = malloc(sizeof(t_color_fb));
+	new_cone->color_cone = alloc(sizeof(t_color_fb), false);
 	colors = ft_split(data[7], ',');
 	new_cone->color_cone->r = ft_atoi_color(colors[0], "cone");
 	new_cone->color_cone->g = ft_atoi_color(colors[1], "cone");
@@ -96,7 +97,7 @@ void	ft_cone_fb(char **data, t_scene *scene)
 	while (data[i])
 		i++;
 	i--;
-	new_cone = malloc(sizeof(t_cone_fb));
+	new_cone = alloc(sizeof(t_cone_fb), false);
 	init_new_cone(new_cone);
 	scene->type = T_CONE;
 	if (i == 8 || i == 9)

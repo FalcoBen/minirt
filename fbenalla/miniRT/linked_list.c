@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	ft_lstadd_back(t_container **lst, t_container *new)
 {
@@ -83,10 +84,10 @@ t_container	*ft_lstnew(void *content)
 {
 	t_container	*new;
 
-	new = malloc(sizeof(t_container));
+	new = alloc(sizeof(t_container), false);
 	if (!new)
 		return (NULL);
-	new->line = strdup((char *)content);
+	new->line = ft_strdup((char *)content);
 	if (!new->line)
 	{
 		free(new);
@@ -95,3 +96,5 @@ t_container	*ft_lstnew(void *content)
 	new->next = NULL;
 	return (new);
 }
+//e:               4,555,097 bytes in 259 blocks
+//still reachable: 4,555,081 bytes in 257 blocks

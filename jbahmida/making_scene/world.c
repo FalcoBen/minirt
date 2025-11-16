@@ -49,11 +49,12 @@ t_tuple	get_up_vector(t_tuple *orientation)
 
 void	close_window(mlx_key_data_t keydata, void *param)
 {
-	t_scene	*scene;
+	t_canva	*d;
 
+	d = (t_canva *)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
-		set_scene(scene, true);
+		mlx_close_window(d->mlx);
 	}
 }
 
@@ -103,7 +104,11 @@ void	jassim_mlx(t_scene *scene)
 	printf("=== Starting render ===\n");
 	write_pixel((void *)&canva);
 	mlx_image_to_window(canva.mlx, canva.image, 0, 0);
-	mlx_key_hook(mlx, &close_window, mlx);
+	mlx_key_hook(mlx, &close_window, &canva);
 	mlx_loop(mlx);
+	printf("Closing window normally.\n");
+	if (canva.image)
+		mlx_delete_image(mlx, canva.image);
 	mlx_terminate(mlx);
+	alloc(0, true);
 }

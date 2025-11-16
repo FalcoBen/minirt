@@ -26,58 +26,8 @@ void	plane(t_plane **plane, t_tuple *origin, t_tuple *vect)
 	(*plane)->material = material();
 	(*plane)->origin = origin;
 	(*plane)->vect = vect;
-
 	id++;
 }
-
-t_matrix	*create_plane_transform(t_tuple *origin, t_tuple *normal)
-{
-	t_tuple normalized_normal;
-	t_tuple default_y;
-	ld dot;
-	t_matrix *rotation;
-	t_matrix *trans;
-	t_matrix *result;
-	t_tuple axis;
-	ld angle;
-
-	normalized_normal = *normal;
-	s_vec_norm(&normalized_normal);
-	default_y = (t_tuple){0, 1, 0, 0};
-	dot = dot_product(&default_y, &normalized_normal);
-	rotation = NULL;
-	if (fabsf(dot - 1.0) < 0.001)
-		rotation = identity_matrix(4, 4);
-	else if (fabsf(dot + 1.0) < 0.001)
-		rotation = rotation_x(M_PI);
-	else
-	{
-		axis = *cross_product(&default_y, &normalized_normal);
-		s_vec_norm(&axis);
-		angle = acos(dot);
-		if (fabsf(normalized_normal.x) > 0.999)
-		{
-			if (normalized_normal.x > 0)
-				rotation = rotation_z(-M_PI/2);
-			else
-				rotation = rotation_z(M_PI/2);
-		}
-		else if (fabsf(normalized_normal.z) > 0.999)
-		{
-			if (normalized_normal.z > 0)
-				rotation = rotation_x(M_PI/2);
-			else
-				rotation = rotation_x(-M_PI/2);
-		}
-		else
-			rotation = identity_matrix(4, 4);
-	}
-	trans = translation(origin->x, origin->y, origin->z);
-	result = matrix_multi(trans, rotation);
-	copy_matrix_contant(result);
-	return (result);
-}
-
 
 void	plane_intersct(t_stack_intersections *xs,
 	t_plane *plane, t_stack_ray *ray)
@@ -105,7 +55,6 @@ void	plane_intersct(t_stack_intersections *xs,
 	xs->existence = true;
 }
 
-
 void	s_plane_normal(t_tuple *norm, t_plane *plane, t_tuple *point)
 {
 	t_tuple		local_normal;
@@ -119,4 +68,3 @@ void	s_plane_normal(t_tuple *norm, t_plane *plane, t_tuple *point)
 	norm->w = 0;
 	s_vec_norm(norm);
 }
-

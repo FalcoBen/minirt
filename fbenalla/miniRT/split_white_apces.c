@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 bool	ispace(char c)
 {
@@ -59,7 +60,7 @@ char	**ft_split_white(char *str)
 	int		i;
 
 	counts = count_word(str);
-	arr = malloc(sizeof(char *) * (counts + 1));
+	arr = alloc(sizeof(char *) * (counts + 1), false);
 	if (!arr)
 		return (NULL);
 	i = 0;
@@ -67,7 +68,7 @@ char	**ft_split_white(char *str)
 	{
 		while (*str == ' ' || (*str >= 9 && *str <= 13))
 			str++;
-		arr[i] = malloc(sizeof(char ) * lenght_word(str) + 1);
+		arr[i] = alloc((sizeof(char ) * lenght_word(str) + 1), false);
 		if (!arr[i])
 			return (NULL);
 		ft_strlcpy(arr[i], str, lenght_word(str) + 1);

@@ -1,5 +1,17 @@
-#include "../../fbenalla/miniRT/parsing.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   passing_data_cone.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbenalla <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/16 02:47:12 by fbenalla          #+#    #+#             */
+/*   Updated: 2025/11/16 02:47:14 by fbenalla         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../MiniRt.h"
+#include "../../fbenalla/miniRT/parsing.h"
 
 void	checker_textures_cone(t_obj *obj, t_cone_fb *src)
 {
@@ -13,12 +25,12 @@ void	checker_textures_cone(t_obj *obj, t_cone_fb *src)
 	{
 		obj->cone->material->has_bump_map = true;
 		obj->cone->material->bump_map = src->bump_texture;
-		// obj->cone->material->bump_strength = 0.3;
+		obj->cone->material->bump_strength = 0.3;
 		obj->cone->material->has_color_texture = false;
 	}
 }
 
-void    assigne_cone_object(t_obj *obj, t_cone_fb *src, \
+void	assigne_cone_object(t_obj *obj, t_cone_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
 	obj->cone->material->color->r = src->color_cone->r / 255.0;
@@ -42,11 +54,7 @@ void    assigne_cone_object(t_obj *obj, t_cone_fb *src, \
 	}
 }
 
-
-
-
-
-void    assign_coor_and_vects_cone(t_tuple *origin, \
+void	assign_coor_and_vects_cone(t_tuple *origin, \
 		t_tuple *normal, t_cone_fb *src)
 {
 	origin->x = src->coor_cone->x;
@@ -59,10 +67,7 @@ void    assign_coor_and_vects_cone(t_tuple *origin, \
 	normal->w = 0;
 }
 
-
-
-
-void obj_creator_cone(t_obj *obj, t_cone_fb *src, \
+void	obj_creator_cone(t_obj *obj, t_cone_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
 	ld			radius;
@@ -75,8 +80,8 @@ void obj_creator_cone(t_obj *obj, t_cone_fb *src, \
 		return ;
 	cone(&obj->cone, NULL, false);
 	radius = src->maximum / 2.0;
-	origin = malloc(sizeof(t_tuple));
-	normal = malloc(sizeof(t_tuple));
+	origin = alloc(sizeof(t_tuple), false);
+	normal = alloc(sizeof(t_tuple), false);
 	assign_coor_and_vects_cone(origin, normal, src);
 	height = src->maximum - src->minimum;
 	obj->cone->origin = origin;
@@ -86,6 +91,7 @@ void obj_creator_cone(t_obj *obj, t_cone_fb *src, \
 	copy_matrix_contant(obj->cone->inv);
 	copy_matrix_contant(obj->cone->transform);
 }
+
 void	s_world_cone_constractor(t_world *world, t_scene *scene, int *i)
 {
 	t_cone_fb	*current_cone;
@@ -93,14 +99,14 @@ void	s_world_cone_constractor(t_world *world, t_scene *scene, int *i)
 	current_cone = scene->cone;
 	while (current_cone && *i < world->obj_num)
 	{
-		world->objects[*i] = malloc(sizeof(t_object));
+		world->objects[*i] = alloc(sizeof(t_object), false);
 		if (!world->objects[*i])
 		{
 			fprintf(stderr, "Failed to allocate object  cone %d\n", *i);
 			exit(1);
 		}
 		world->objects[*i]->type = T_CONE;
-		world->objects[*i]->obj = malloc(sizeof(t_obj));
+		world->objects[*i]->obj = alloc(sizeof(t_obj), false);
 		if (!world->objects[*i]->obj)
 		{
 			fprintf(stderr, "Failed to allocate obj  cone %d\n", *i);

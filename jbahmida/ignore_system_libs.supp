@@ -121,32 +121,6 @@
 
 
 
-{
-   ignore_system_libs
-   Memcheck:Leak
-   obj:*
-}
-{
-   ignore_system_libs_addr
-   Memcheck:Addr8
-   obj:*
-}
-{
-   ignore_system_libs_addr
-   Memcheck:Addr4
-   obj:*
-}
-{
-   ignore_system_libs_val
-   Memcheck:Value8
-   obj:*
-}
-{
-   ignore_system_libs_val
-   Memcheck:Value4
-   obj:*
-}
-
 
 
 

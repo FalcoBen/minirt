@@ -16,7 +16,7 @@ t_tuple	s_cross_product(t_tuple *t1, t_tuple *t2)
 {
 	t_tuple	cross;
 
-	cross = (t_tuple){0,0,0,0};
+	cross = (t_tuple){0, 0, 0, 0};
 	if (!t1 || !t2 || t1->w || t2->w)
 		return (cross);
 	cross.x = (t1->y * t2->z) - (t1->z * t2->y);
@@ -55,7 +55,7 @@ t_matrix	view_transformation(t_tuple *from, t_tuple *to, t_tuple *up)
 	t_v_tran	var;
 
 	view = (t_matrix){0, 0, NULL, {{(ld){0}}}};
-	var.forward = (t_tuple){0,0,0,0};
+	var.forward = (t_tuple){0, 0, 0, 0};
 	s_sub_t(&var.forward, *to, *from);
 	s_vec_norm(&var.forward);
 	var.upn = *up;

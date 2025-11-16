@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	ambient_light_linked_list(t_ambient_light_fb *new_ambient, \
 		t_scene *scene)
@@ -62,8 +63,8 @@ void	ft_ambient_light_fb(char **data, t_scene *scene)
 	if (!verify_data_ambient_light(data, scene->cleaner))
 		exit_error("data not in the correct format", \
 			"in ambient_light", scene->cleaner);
-	new_ambient = malloc(sizeof(t_ambient_light_fb));
-	new_ambient->color_ambient_light = malloc(sizeof(t_color_fb));
+	new_ambient = alloc(sizeof(t_ambient_light_fb), false);
+	new_ambient->color_ambient_light = alloc(sizeof(t_color_fb), false);
 	new_ambient->next = NULL;
 	new_ambient->bright_ambient_light_fb = \
 		ft_atoi_double(data[1], scene->cleaner);

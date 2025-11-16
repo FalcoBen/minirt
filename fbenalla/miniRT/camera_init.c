@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	camera_linked_list(t_camera_fb *new_camera, t_scene *scene)
 {
@@ -42,7 +43,7 @@ void	coor_camera(t_camera_fb *new_camera, char **data, t_scene *scene)
 {
 	char	**coors;
 
-	new_camera->coor_camera = malloc(sizeof(t_vec3));
+	new_camera->coor_camera = alloc(sizeof(t_texture_color), false);
 	coors = ft_split(data[1], ',');
 	new_camera->coor_camera->x = ft_atoi_double(coors[0], scene->cleaner);
 	new_camera->coor_camera->y = ft_atoi_double(coors[1], scene->cleaner);
@@ -59,7 +60,7 @@ void	vector_camera(t_camera_fb *new_camera, char **data, t_scene *scene)
 	double	range_y;
 	double	range_z;
 
-	new_camera->vector_camera = malloc(sizeof(t_vec3));
+	new_camera->vector_camera = alloc(sizeof(t_texture_color), false);
 	vects = ft_split(data[2], ',');
 	new_camera->vector_camera->x = ft_atoi_double(vects[0], scene->cleaner);
 	new_camera->vector_camera->y = ft_atoi_double(vects[1], scene->cleaner);
@@ -112,7 +113,7 @@ void	ft_camera_fb(char **data, t_scene *scene)
 	if (!verify_data_camera(data, scene->cleaner))
 		exit_error("data not in the correct format", \
 				"in camera", scene->cleaner);
-	new_camera = malloc(sizeof(t_camera_fb));
+	new_camera = alloc(sizeof(t_camera_fb), false);
 	new_camera->next = NULL;
 	coor_camera(new_camera, data, scene);
 	vector_camera(new_camera, data, scene);

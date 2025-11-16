@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	light_linked_list(t_light_fb *new_light, t_scene *scene)
 {
@@ -31,7 +32,7 @@ void	coor_light(t_light_fb *new_light, char **data, t_scene *scene)
 {
 	char	**coors;
 
-	new_light->coor_light = malloc(sizeof(t_vec3));
+	new_light->coor_light = alloc(sizeof(t_texture_color), false);
 	coors = ft_split(data[1], ',');
 	new_light->coor_light->x = ft_atoi_double(coors[0], scene->cleaner);
 	new_light->coor_light->y = ft_atoi_double(coors[1], scene->cleaner);
@@ -82,10 +83,10 @@ void	ft_light(char **data, t_scene *scene)
 	if (!verify_data_light(data, scene->cleaner))
 		exit_error("data not in the correct format", \
 				"in light", scene->cleaner);
-	new_light = malloc(sizeof(t_light_fb));
+	new_light = alloc(sizeof(t_light_fb), false);
 	new_light->next = NULL;
 	coor_light(new_light, data, scene);
-	new_light->color_light = malloc(sizeof(t_color_fb));
+	new_light->color_light = alloc(sizeof(t_color_fb), false);
 	colors = ft_split(data[3], ',');
 	new_light->color_light->r = ft_atoi_color(colors[0], "light");
 	new_light->color_light->g = ft_atoi_color(colors[1], "light");

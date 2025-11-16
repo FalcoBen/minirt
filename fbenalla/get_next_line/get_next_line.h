@@ -27,7 +27,7 @@ char	*read_from_file(int fd, char *block);
 char	*ft_strjoin_free(char *dst, char *src);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s1);
+char	*ft_strdup_get(const char *s1);
 size_t	ft_strlen(const char *s);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 

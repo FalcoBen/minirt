@@ -48,18 +48,6 @@ void	free_light(t_scene *scene)
 
 void	free_scene(t_scene *scene)
 {
-	if (scene->ambient_light)
-	{
-		free(scene->ambient_light->color_ambient_light);
-		free(scene->ambient_light);
-	}
-	if (scene->camera)
-	{
-		free(scene->camera->coor_camera);
-		free(scene->camera->vector_camera);
-		free(scene->camera);
-	}
-	free_light(scene);
 	free_sphere(scene);
 	free_plane(scene);
 	free_cylinder(scene);

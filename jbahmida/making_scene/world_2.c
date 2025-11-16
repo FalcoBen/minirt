@@ -44,20 +44,6 @@ t_color	s_create_color(ld *vals)
 	return (color);
 }
 
-void	print_matrix(t_matrix *m, const char *name)
-{
-	printf("%s:\n", name);
-	for (int i = 0; i < m->row; i++)
-	{
-		for (int j = 0; j < m->col; j++)
-		{
-			printf("%f ", m->matrix[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-}
-
 t_color	color_at(t_world *w, t_stack_ray *ray)
 {
 	t_color					res;

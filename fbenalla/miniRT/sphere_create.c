@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	coor_sphere(t_sphere_fb *new_sphere, char **data, t_scene *scene)
 {
 	char	**coors;
 
-	new_sphere->coor_sphere = malloc(sizeof(t_vec3));
+	new_sphere->coor_sphere = alloc(sizeof(t_texture_color), false);
 	coors = ft_split(data[1], ',');
 	new_sphere->coor_sphere->x = ft_atoi_double(coors[0], scene->cleaner);
 	new_sphere->coor_sphere->y = ft_atoi_double(coors[1], scene->cleaner);
@@ -30,7 +31,7 @@ void	color_sphere(t_sphere_fb *new_sphere, char **data, t_scene *scene)
 {
 	char	**colors;
 
-	new_sphere->color_sphere = malloc(sizeof(t_color_fb));
+	new_sphere->color_sphere = alloc(sizeof(t_color_fb), false);
 	if (count_comma(data[3]) != 2)
 		exit_error("more or less in color", "in spher", scene->cleaner);
 	colors = ft_split(data[3], ',');
@@ -51,7 +52,7 @@ void	ft_sphere_fb(char **data, t_scene *scene)
 	if (!verify_data_sphere(data, scene->cleaner))
 		exit_error("data not in the correct format", \
 				"in sphere", scene->cleaner);
-	new_sphere = malloc(sizeof(t_sphere_fb));
+	new_sphere = alloc(sizeof(t_sphere_fb), false);
 	init_new_sphere(new_sphere);
 	i = 0;
 	while (data[i] != NULL)

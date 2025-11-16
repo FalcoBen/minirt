@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	coor_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
 {
 	char	**coors;
 
-	new_plane->coor_plane = malloc(sizeof(t_vec3));
+	new_plane->coor_plane = alloc(sizeof(t_texture_color), false);
 	coors = ft_split(data[1], ',');
 	new_plane->coor_plane->x = ft_atoi_double(coors[0], scene->cleaner);
 	new_plane->coor_plane->y = ft_atoi_double(coors[1], scene->cleaner);
@@ -33,7 +34,7 @@ void	vects_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
 	double		range_y;
 	double		range_z;
 
-	new_plane->vector_plane = malloc(sizeof(t_vec3));
+	new_plane->vector_plane = alloc(sizeof(t_texture_color), false);
 	vects = ft_split(data[2], ',');
 	new_plane->vector_plane->x = ft_atoi_double(vects[0], scene->cleaner);
 	new_plane->vector_plane->y = ft_atoi_double(vects[1], scene->cleaner);
@@ -55,7 +56,7 @@ void	color_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
 {
 	char	**colors;
 
-	new_plane->color_plane = malloc(sizeof(t_color_fb));
+	new_plane->color_plane = alloc(sizeof(t_color_fb), false);
 	colors = ft_split(data[3], ',');
 	new_plane->color_plane->r = ft_atoi_color(colors[0], "plane");
 	new_plane->color_plane->g = ft_atoi_color(colors[1], "plane");
@@ -79,7 +80,7 @@ void	ft_plane_fb(char **data, t_scene *scene)
 		exit_error("data not in the correct format", \
 				"in plane", scene->cleaner);
 	scene->type = T_PLAN;
-	new_plane = malloc(sizeof(t_plane_fb));
+	new_plane = alloc(sizeof(t_plane_fb), false);
 	init_new_plane(new_plane);
 	if (i == 4 || i == 5)
 		bump_mapping_plane_constractor(new_plane, data, scene, i);

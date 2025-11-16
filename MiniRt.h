@@ -33,8 +33,11 @@ extern int g_fd;
 
 
 #define BPP sizeof(int32_t)
-#define WIDTH 900
-#define HEIGHT 900
+// #define WIDTH 4480
+// #define HEIGHT 2520
+#define WIDTH 100
+#define HEIGHT 100
+
 
 #define DW 500
 #define DH 500
@@ -357,6 +360,142 @@ typedef struct n_v_tran
 	t_matrix	tmp;
 }t_v_tran;
 
+typedef struct n_nor_shade_hit
+{
+	t_color		final_color;
+	t_material	*material;
+	t_material	temp_material;
+	t_color		base_color;
+	t_color		light_contribution;
+	bool		shadowed;
+	int			i;
+}t_nor_shade_hit;
+
+typedef struct n_roaa
+{
+    t_tuple		norm_axis;
+	t_matrix	*skew;
+	ld			cos_theta;
+	ld			sin_theta;
+    ld      outer;
+    ld      diag_part;
+}t_roaa;
+
+typedef struct n_nor_cy_tran
+{
+    t_tuple		normalized_axis;
+	t_tuple		default_y;
+	t_matrix	*rotation;
+	t_tuple		rot_axis;
+	t_matrix	*scale;
+	t_matrix	*trans;
+	t_matrix	*temp;
+	t_matrix	*result;
+	ld			dot;
+	ld			angle;
+}t_nor_cy_tran;
+
+typedef struct n_nor_cy_nor
+{
+    t_matrix	point_matrix;
+	t_tuple		local_point;
+	t_tuple		local_normal;
+	ld			dist;
+	t_matrix	transpose;
+	t_matrix	world_normal_matrix;
+}t_nor_cy_nor;
+
+typedef struct n_nor_cy_inter
+{
+    t_stack_ray	local_ray;
+	ld			a;
+	ld			b;
+	ld			c;
+	ld			delta;
+	ld			t0;
+	ld			t1;
+	ld			y0;
+	ld			y1;
+	ld			tmp;
+}t_nor_cy_inter;
+
+typedef struct n_nor_cone_inter
+{
+    t_stack_ray	local_ray;
+	ld			a;
+	ld			b;
+	ld			c;
+	ld			delta;
+	ld			t;
+	ld			t0;
+	ld			t1;
+	ld			tmp;
+	ld			y;
+	ld			y0;
+	ld			y1;
+}t_nor_cone_inter;
+
+typedef struct n_nor_roft
+{
+    t_tuple		v;
+	ld			factor;
+	ld			s;
+	ld			c;
+	ld			vx[9];
+	t_matrix	*result;
+}t_nor_roft;
+
+
+typedef struct n_nor_cone_tran
+{
+    t_tuple normalized_axis;
+	t_tuple default_y;
+	t_matrix *rotation;
+	t_matrix *scale;
+	t_matrix *trans;
+	t_matrix *temp;
+	t_matrix *result;
+    
+}t_nor_cone_tran;
+
+typedef struct n_nor_lighting
+{
+    t_color	ambient;
+	t_color	diffuse;
+	t_color	specular;
+	t_color	effective_color;
+	t_tuple	*lightv;
+	t_tuple	*reflectv;
+	t_color	*result;
+	ld		light_dot_normal;
+	ld		reflect_dot_eye;
+	ld		factor;
+}t_nor_lighting;
+
+typedef struct n_nor_s_lighting
+{
+    t_color		effective_color;
+	t_tuple		lightv;
+	t_material	material;
+	t_light		light;
+	t_color		ambient;
+	t_color		diffuse;
+	t_color		specular;
+	t_color		tmp;
+	t_tuple		normalv;
+	t_tuple		eyev;
+} t_nor_s_lighting;
+
+typedef struct s_submatrix_data
+{
+	t_matrix	*m;
+	int			r;
+	int			c;
+	ld			*va_list;
+	int			va_size;
+}	t_submatrix_data;
+
+
 
 void write_pixel(void *c);
 t_tuple get_up_vector(t_tuple *orientation);
@@ -430,6 +569,23 @@ t_color *split_color(int c);
 t_color *create_color(ld *vals);
 t_color *lighting(t_material *material, t_light *light, 
     t_tuple *position, t_tuple *eyev, t_tuple *normalv);
+
+
+
+
+t_color	s_hadamard(t_color *c1, t_color *c2);
+t_color	s_color_scalar(t_color *c, ld s);
+t_color	s_color_add(t_color *c1, t_color *c2);
+t_tuple	s_reflect(t_tuple in, t_tuple normal);
+ld	tone_map(ld x);
+ld	gamma_correct(ld x, ld gamma);
+
+
+
+
+
+
+
 /*****************************************************/
 // t_matrix *view_transformation(t_tuple *from, t_tuple *to, t_tuple *up);
 /*****************************************************/
@@ -479,8 +635,10 @@ void s_sub_t(t_tuple *res, t_tuple t1, t_tuple t2);
 void s_add_t(t_tuple *res, t_tuple t1, t_tuple t2);
 t_tuple s_neg_t(t_tuple t);
 void s_neg_t1(t_tuple *t);
-t_color s_lighting(t_material material, t_light light, t_tuple position,
-    t_tuple eyev, t_tuple normalv, bool in_shadow);
+// t_color s_lighting(t_material material, t_light light, t_tuple position,
+//     t_tuple eyev, t_tuple normalv, bool in_shadow);
+
+t_color s_lighting(t_world *world, t_comp *comp, t_nor_shade_hit var);
 // t_color s_lighting(t_material material, t_light light, 
 //     t_tuple position, t_tuple eyev, t_tuple normalv);
 void copy_matrix_contant(t_matrix *m);
@@ -496,8 +654,11 @@ void s_intersect_concatenate(t_stack_intersections *arr1, t_stack_intersections 
 bool is_shadowed(t_world *world, t_tuple point, t_light *light);
 
 void cone(t_cone **cone, t_matrix *trans, bool flag);
+t_matrix	*rotation_from_to(t_tuple *from, t_tuple *to);
 void cone_intersct(t_stack_intersections *xs, t_cone *cone, t_stack_ray *ray);
 void s_cone_normal(t_tuple *norm, t_cone *cone, t_tuple *point);
+void	intersect_caps_cone(t_cone *cone,
+	t_stack_ray *ray, t_stack_intersections *xs);
 void cylinder(t_cylinder **cylinder, t_matrix *trans, bool flag);
 bool check_cap_cylinder(t_stack_ray *ray, ld t);
 void intersect_caps_cylinder(t_cylinder *cylinder, t_stack_ray *ray, t_stack_intersections *xs);
@@ -508,8 +669,7 @@ void plane(t_plane **plane, t_tuple *origin, t_tuple *vect);
 void plane_intersct(t_stack_intersections *xs, t_plane *plane, t_stack_ray *ray);
 void s_plane_normal(t_tuple *norm, t_plane *plane, t_tuple *point);
 t_color shade_hit_with_ambient(t_world *world, t_comp *comp);
-void print_matrix(t_matrix *m, const char *name);
-t_material* get_material(t_comp *comp);
+void print_matrix(t_matrix *m, const char *name);t_material* get_material(t_comp *comp);
 
 t_matrix *create_cone_transform(t_tuple *position, t_tuple *axis, 
                                 ld radius, ld height);
@@ -547,7 +707,7 @@ void cone_uv(t_tuple *point, t_cone *cone, ld *u, ld *v);
 
 // Your existing texture functions (from parsing.h)
 double sample_height(t_texture *tex, double u, double v);
-t_vec3 sample_color(t_texture *tex, double u, double v);
+t_texture_color sample_color(t_texture *tex, double u, double v);
 t_tuple *cross_product(t_tuple *t1, t_tuple *t2);
 t_tuple s_cross_product(t_tuple *t1, t_tuple *t2);
 void plane_uv_with_dimensions(t_tuple *point, t_plane *plane, ld *u, ld *v);
@@ -563,4 +723,15 @@ void    s_world_plane_constractor(t_world *world, t_scene *scene, int *i);
 
 void	s_world_cylinder_constractor(t_world *world, t_scene *scene, int *i);
 void	s_world_sphere_constractor(t_world *world, t_scene *scene, int *i);
+t_color	shade_helper(t_material *material, t_comp *comp);
+void	get_uv_coors(t_comp *comp, ld *u, ld *v);
+int	number_of_all_objects(t_scene *scene);
+void	plane_uv_checker(t_tuple *point, t_plane *plane, ld *u, ld *v);
+void	plane_uv_image(t_tuple *point, t_plane *plane, ld *u, ld *v);
+void	parsing_second_part(char ***tokens, int *counter, \
+		t_cleanup *cleaner);
+void	init_input_data(t_objects_fb *input_data);
+void	init_cleaner(t_cleanup *cleaner);
+void	start_asigning_objects(t_scene *scene, \
+		t_objects_fb *dispatch_table, char ***tokens, int counter);
 #endif

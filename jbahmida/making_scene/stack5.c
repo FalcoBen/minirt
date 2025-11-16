@@ -12,12 +12,12 @@
 
 #include "../../MiniRt.h"
 
-ld	tone_map(ld x)
+float	tone_map(float x)
 {
 	return (x / (1.0 + x));
 }
 
-ld	gamma_correct(ld x, ld gamma)
+float	gamma_correct(float x, float gamma)
 {
 	return (pow(x, 1.0 / gamma));
 }
@@ -33,7 +33,7 @@ t_color	s_hadamard(t_color *c1, t_color *c2)
 	return (local);
 }
 
-t_color	s_color_scalar(t_color *c, ld s)
+t_color	s_color_scalar(t_color *c, float s)
 {
 	t_color	local;
 

@@ -12,12 +12,12 @@
 
 #include "../../MiniRt.h"
 
-void	sphere_uv(t_tuple *point, t_sphere *sphere, ld *u, ld *v)
+void	sphere_uv(t_tuple *point, t_sphere *sphere, float *u, float *v)
 {
 	t_matrix	point_matrix;
 	t_tuple		local_point;
-	ld			phi;
-	ld			theta;
+	float		phi;
+	float		theta;
 
 	point_matrix = s_matrix_tuple(sphere->inv, point);
 	local_point = s_matrix_to_tuple(&point_matrix);
@@ -34,12 +34,12 @@ void	sphere_uv(t_tuple *point, t_sphere *sphere, ld *u, ld *v)
 	}
 }
 
-void	cone_uv(t_tuple *point, t_cone *cone, ld *u, ld *v)
+void	cone_uv(t_tuple *point, t_cone *cone, float *u, float *v)
 {
 	t_matrix	point_matrix;
 	t_tuple		local_point;
-	ld			theta;
-	ld			range;
+	float		theta;
+	float		range;
 
 	point_matrix = s_matrix_tuple(cone->inv, point);
 	local_point = s_matrix_to_tuple(&point_matrix);
@@ -56,7 +56,7 @@ void	cone_uv(t_tuple *point, t_cone *cone, ld *u, ld *v)
 	*v = fmax(0.0, fmin(1.0, *v));
 }
 
-void	plane_uv(t_tuple *point, t_plane *plane, ld *u, ld *v)
+void	plane_uv(t_tuple *point, t_plane *plane, float *u, float *v)
 {
 	if (plane->material->has_color_texture && \
 			plane->material->color_texture && \
@@ -81,8 +81,8 @@ void	plane_uv(t_tuple *point, t_plane *plane, ld *u, ld *v)
 t_color	shade_helper(t_material *material, t_comp *comp)
 {
 	t_color			base_color;
-	ld				u;
-	ld				v;
+	float			u;
+	float			v;
 	t_texture_color	tex_color;
 
 	base_color = *(material->color);

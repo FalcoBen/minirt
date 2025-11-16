@@ -13,7 +13,7 @@
 #include "../../MiniRt.h"
 
 static void	add_cone_intersection(t_stack_intersections *xs,
-		t_cone *cone, ld t_value)
+		t_cone *cone, float t_value)
 {
 	xs->inters_list[xs->count].inters_value = t_value;
 	xs->inters_list[xs->count].sphere = NULL;

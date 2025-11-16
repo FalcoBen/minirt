@@ -12,7 +12,7 @@
 
 #include "../../MiniRt.h"
 
-static void	initialize_result_array(t_matrix *m1, t_matrix *m2, ld *va_list)
+static void	initialize_result_array(t_matrix *m1, t_matrix *m2, float *va_list)
 {
 	int	i;
 	int	j;
@@ -58,7 +58,7 @@ t_matrix	s_matrix_multi(t_matrix *m1, t_matrix *m2)
 {
 	t_matrix	local;
 	int			v_size;
-	ld			*va_list;
+	float		*va_list;
 
 	if (m1->matrix)
 		copy_matrix_contant(m1);
@@ -67,7 +67,7 @@ t_matrix	s_matrix_multi(t_matrix *m1, t_matrix *m2)
 	if (!validate_matrices(m1, m2))
 		return (create_error_matrix());
 	v_size = m1->row * m2->col;
-	va_list = (ld *)malloc(sizeof(ld) * v_size);
+	va_list = (float *)malloc(sizeof(float) * v_size);
 	if (!va_list)
 		return (create_error_matrix());
 	initialize_result_array(m1, m2, va_list);
@@ -79,11 +79,11 @@ t_matrix	s_matrix_multi(t_matrix *m1, t_matrix *m2)
 t_matrix	s_matrix_tuple(t_matrix *m, t_tuple *t)
 {
 	t_matrix	result;
-	ld			tuple_col[4];
+	float		tuple_col[4];
 	int			i;
 	int			k;
 
-	result = (t_matrix){4, 1, NULL, {{(ld){0}}}};
+	result = (t_matrix){4, 1, NULL, {{(float){0}}}};
 	tuple_col[0] = t->x;
 	tuple_col[1] = t->y;
 	tuple_col[2] = t->z;

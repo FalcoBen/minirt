@@ -12,7 +12,7 @@
 
 #include "../../MiniRt.h"
 
-void	s_scalar_mult(t_tuple *res, t_tuple t, ld scalar)
+void	s_scalar_mult(t_tuple *res, t_tuple t, float scalar)
 {
 	res->x = t.x * scalar;
 	res->y = t.y * scalar;
@@ -45,7 +45,7 @@ t_matrix	s_matrix_transpos(t_matrix *m)
 
 void	s_vec_norm(t_tuple *t)
 {
-	ld	mgn;
+	float	mgn;
 
 	if (!magn(t))
 		return ;

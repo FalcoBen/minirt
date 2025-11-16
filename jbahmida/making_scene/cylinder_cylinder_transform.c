@@ -60,7 +60,7 @@ void	skew_symmetric(t_tuple *axis, t_matrix *result)
 	result->matrix[3][3] = 1;
 }
 
-t_matrix	*rotation_axis_angle(t_tuple *axis, ld angle)
+t_matrix	*rotation_axis_angle(t_tuple *axis, float angle)
 {
 	t_matrix	*rot;
 	t_roaa		var;
@@ -68,7 +68,7 @@ t_matrix	*rotation_axis_angle(t_tuple *axis, ld angle)
 	rot = identity_matrix(4, 4);
 	var.norm_axis = *axis;
 	s_vec_norm(&var.norm_axis);
-	var.skew = matrix_constractor(4, 4, (ld[16]){0}, 16);
+	var.skew = matrix_constractor(4, 4, (float [16]){0}, 16);
 	skew_symmetric(&var.norm_axis, var.skew);
 	var.cos_theta = cos(angle);
 	var.sin_theta = sin(angle);
@@ -77,7 +77,7 @@ t_matrix	*rotation_axis_angle(t_tuple *axis, ld angle)
 }
 
 t_matrix	*create_cylinder_transform(t_tuple *position, t_tuple *axis,
-		ld radius, ld height)
+		float radius, float height)
 {
 	t_nor_cy_tran	var;
 

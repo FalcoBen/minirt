@@ -12,7 +12,7 @@
 
 #include "../../MiniRt.h"
 
-t_tuple	s_create_tuple(ld *coord, int type)
+t_tuple	s_create_tuple(float *coord, int type)
 {
 	t_tuple	local;
 

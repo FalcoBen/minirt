@@ -44,7 +44,8 @@ void	add_object(t_objects_fb **head, char *identifier, \
 	current = *head;
 	while (current)
 	{
-		if (current->identifier && ft_strcmp(current->identifier, identifier) == 0)
+		if (current->identifier && \
+				ft_strcmp(current->identifier, identifier) == 0)
 		{
 			return ;
 		}

@@ -25,7 +25,7 @@ void	write_pixel(void *c)
 		{
 			var.ray = s_ray_for_camera(var.canva->cam, var.x, var.y);
 			var.color = color_at(var.canva->world, &var.ray);
-			var.a = (var.y * WIDTH + var.x) * BPP;
+			var.a = (var.y * WIDTH + var.x) * sizeof(int32_t);
 			*((int32_t *)(var.canva->image->pixels
 						+ var.a)) = combine_color(var.color);
 			var.x++;
@@ -62,9 +62,9 @@ t_camera	*create_camera(t_scene *scene)
 {
 	t_ncam	cam;
 
-	cam.cam_pos = s_create_tuple((ld[3]){scene->camera->coor_camera->x,
+	cam.cam_pos = s_create_tuple((float [3]){scene->camera->coor_camera->x, \
 			scene->camera->coor_camera->y, scene->camera->coor_camera->z}, 1);
-	cam.cam_dir = s_create_tuple((ld[3]){scene->camera->vector_camera->x,
+	cam.cam_dir = s_create_tuple((float [3]){scene->camera->vector_camera->x, \
 			scene->camera->vector_camera->y,
 			scene->camera->vector_camera->z}, 0);
 	cam.length = sqrtl(cam.cam_dir.x * cam.cam_dir.x + cam.cam_dir.y

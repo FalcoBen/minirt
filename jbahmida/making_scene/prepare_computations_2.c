@@ -75,7 +75,7 @@ t_color	shade_hit(t_world *world, t_comp *comp)
 	return (var.final_color);
 }
 
-t_tuple	s_position(t_stack_ray *ray, ld t)
+t_tuple	s_position(t_stack_ray *ray, float t)
 {
 	t_tuple	pos;
 	t_tuple	scalar_res;

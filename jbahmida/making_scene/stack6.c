@@ -36,7 +36,7 @@ t_tuple	s_reflect(t_tuple in, t_tuple normal)
 {
 	t_tuple	local;
 	t_tuple	local1;
-	ld		t;
+	float	t;
 
 	local = (t_tuple){0, 0, 0, 0};
 	local1 = (t_tuple){0, 0, 0, 0};

@@ -74,7 +74,7 @@ void	obj_creator_cylinder(t_obj *obj, t_cylinder_fb *src, \
 	t_tuple		*origin;
 	t_tuple		*normal;
 	t_matrix	*transform;
-	ld			radius;
+	float		radius;
 
 	if (!obj || !src)
 		return ;

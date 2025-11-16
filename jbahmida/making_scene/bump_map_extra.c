@@ -12,11 +12,11 @@
 
 #include "../../MiniRt.h"
 
-void	plane_uv_checker(t_tuple *point, t_plane *plane, ld *u, ld *v)
+void	plane_uv_checker(t_tuple *point, t_plane *plane, float *u, float *v)
 {
 	t_matrix	m;
 	t_tuple		loc;
-	ld			scale;
+	float		scale;
 
 	m = s_matrix_tuple(plane->inv, point);
 	loc = s_matrix_to_tuple(&m);
@@ -31,11 +31,11 @@ void	plane_uv_checker(t_tuple *point, t_plane *plane, ld *u, ld *v)
 		*v += 1.0;
 }
 
-void	plane_uv_image(t_tuple *point, t_plane *plane, ld *u, ld *v)
+void	plane_uv_image(t_tuple *point, t_plane *plane, float *u, float *v)
 {
 	t_matrix	m;
 	t_tuple		loc;
-	ld			scale;
+	float		scale;
 
 	m = s_matrix_tuple(plane->inv, point);
 	loc = s_matrix_to_tuple(&m);
@@ -89,7 +89,7 @@ int	number_of_all_objects(t_scene *scene)
 	return (counter);
 }
 
-void	get_uv_coors(t_comp *comp, ld *u, ld *v)
+void	get_uv_coors(t_comp *comp, float *u, float *v)
 {
 	if (comp->obj_type == T_SPHERE)
 		sphere_uv(&comp->point, (t_sphere *)comp->obj, u, v);

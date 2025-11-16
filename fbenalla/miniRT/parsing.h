@@ -16,12 +16,11 @@
 # include "../../MLX42/include/MLX42/MLX42.h"
 # include "../get_next_line/get_next_line.h"
 
-# include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
 # include <limits.h>
-# include <string.h>
+// # include <string.h>
 # include <stdio.h>
 # include <stdbool.h>
 
@@ -290,4 +289,5 @@ char				*ft_strdup(const char *s1);
 void				make_sure_of_objects(t_scene *scene, t_cleanup *cleaner);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strrchr(const char *s, int c);
+bool				count_dot(char *str, int i);
 #endif

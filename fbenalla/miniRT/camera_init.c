@@ -50,7 +50,6 @@ void	coor_camera(t_camera_fb *new_camera, char **data, t_scene *scene)
 	new_camera->coor_camera->z = ft_atoi_double(coors[2], scene->cleaner);
 	if (scene->cleaner->flag_exit)
 		exit_error("invalid thing in coors", "C", scene->cleaner);
-	ft_free_split(coors);
 }
 
 void	vector_camera(t_camera_fb *new_camera, char **data, t_scene *scene)
@@ -76,7 +75,6 @@ void	vector_camera(t_camera_fb *new_camera, char **data, t_scene *scene)
 		exit_error("invalid range vectors", "C in y", scene->cleaner);
 	if (range_z < -1 || range_z > 1)
 		exit_error("invalid range vectors", "C in z", scene->cleaner);
-	ft_free_split(vects);
 }
 
 bool	verify_data_camera(char **data, t_cleanup *clean)
@@ -115,6 +113,7 @@ void	ft_camera_fb(char **data, t_scene *scene)
 				"in camera", scene->cleaner);
 	new_camera = alloc(sizeof(t_camera_fb), false);
 	new_camera->next = NULL;
+	camera_linked_list(new_camera, scene);
 	coor_camera(new_camera, data, scene);
 	vector_camera(new_camera, data, scene);
 	new_camera->angle_view = ft_atoi_double(data[3], scene->cleaner);
@@ -122,5 +121,4 @@ void	ft_camera_fb(char **data, t_scene *scene)
 		exit_error("invalid thing in angle", "C", scene->cleaner);
 	if (new_camera->angle_view < 0 || new_camera->angle_view > 180)
 		exit_error("invalid range angle view", "C", scene->cleaner);
-	camera_linked_list(new_camera, scene);
 }

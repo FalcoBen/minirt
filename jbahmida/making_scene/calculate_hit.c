@@ -26,9 +26,9 @@ static bool	is_valid_intersection(t_inters *intersection)
 }
 
 static void	process_intersection(t_inters *intersection, t_inters *best_hit,
-	ld *min_t, bool *found)
+	float *min_t, bool *found)
 {
-	ld	t;
+	float	t;
 
 	t = intersection->inters_value;
 	if (t < 0)
@@ -47,7 +47,7 @@ static void	process_intersection(t_inters *intersection, t_inters *best_hit,
 static void	find_closest_intersection(t_stack_intersections *inters,
 	t_inters *best_hit)
 {
-	ld		min_t;
+	float	min_t;
 	bool	found;
 	int		i;
 

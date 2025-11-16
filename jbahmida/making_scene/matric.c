@@ -12,17 +12,17 @@
 
 #include "../../MiniRt.h"
 
-ld	**grid(int row, int col, ld *arr)
+float	**grid(int row, int col, float *arr)
 {
-	ld	**grid;
-	int	i;
-	int	j;
+	float	**grid;
+	int		i;
+	int		j;
 
-	grid = alloc((sizeof(ld *) * row), false);
+	grid = alloc((sizeof(float *) * row), false);
 	i = 0;
 	while (i < row)
 	{
-		grid[i] = alloc(sizeof(ld) * col, false);
+		grid[i] = alloc(sizeof(float) * col, false);
 		j = 0;
 		while (j < col)
 		{
@@ -37,7 +37,7 @@ ld	**grid(int row, int col, ld *arr)
 	return (grid);
 }
 
-t_matrix	*matrix_constractor(int row, int col, ld *arr, size_t arr_s)
+t_matrix	*matrix_constractor(int row, int col, float *arr, size_t arr_s)
 {
 	t_matrix	*matrix;
 

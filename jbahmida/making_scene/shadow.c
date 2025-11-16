@@ -12,7 +12,7 @@
 
 #include "../../MiniRt.h"
 
-static bool	is_shadowed_help(t_stack_intersections	xs, ld distance)
+static bool	is_shadowed_help(t_stack_intersections	xs, float distance)
 {
 	t_inters	h;
 	bool		shadowed;
@@ -33,7 +33,7 @@ static bool	is_shadowed_help(t_stack_intersections	xs, ld distance)
 bool	is_shadowed(t_world *world, t_tuple point, t_light *light)
 {
 	t_tuple					light_direction;
-	ld						distance;
+	float					distance;
 	t_stack_ray				shadow_ray;
 	t_stack_intersections	xs;
 

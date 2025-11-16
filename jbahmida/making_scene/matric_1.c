@@ -12,10 +12,10 @@
 
 #include "../../MiniRt.h"
 
-ld	det_small_matrix(t_matrix *m)
+float	det_small_matrix(t_matrix *m)
 {
-	ld	det;
-	ld	**ptr;
+	float	det;
+	float	**ptr;
 
 	if (!m || m->row != 2 || m->col != 2)
 		return (0);
@@ -65,14 +65,14 @@ static bool	is_valid_submatrix_request(t_matrix *m, int va_size)
 t_matrix	*submatrix(t_matrix *m, int r, int c)
 {
 	t_matrix			*sub;
-	ld					*va_list;
+	float				*va_list;
 	int					va_size;
 	t_submatrix_data	data;
 
 	va_size = calculate_submatrix_size(m);
 	if (!is_valid_submatrix_request(m, va_size))
 		return (NULL);
-	va_list = alloc(sizeof(ld) * va_size, false);
+	va_list = alloc(sizeof(float) * va_size, false);
 	data.m = m;
 	data.r = r;
 	data.c = c;

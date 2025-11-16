@@ -12,17 +12,17 @@
 
 #include "../../MiniRt.h"
 
-static ld	**allocate_matrix_from_stack(t_matrix *m)
+static float	**allocate_matrix_from_stack(t_matrix *m)
 {
-	ld	**ptr;
-	int	i;
-	int	j;
+	float	**ptr;
+	int		i;
+	int		j;
 
-	ptr = alloc((sizeof(ld *) * m->row), false);
+	ptr = alloc((sizeof(float *) * m->row), false);
 	i = 0;
 	while (i < m->row)
 	{
-		ptr[i] = alloc((sizeof(ld) * m->col), false);
+		ptr[i] = alloc((sizeof(float) * m->col), false);
 		j = 0;
 		while (j < m->col)
 		{
@@ -34,7 +34,7 @@ static ld	**allocate_matrix_from_stack(t_matrix *m)
 	return (ptr);
 }
 
-static void	free_allocated_matrix(ld **ptr, int rows)
+static void	free_allocated_matrix(float **ptr, int rows)
 {
 	int	i;
 
@@ -47,10 +47,10 @@ static void	free_allocated_matrix(ld **ptr, int rows)
 	free(ptr);
 }
 
-static ld	calculate_large_determinant(t_matrix *m, ld **ptr)
+static float	calculate_large_determinant(t_matrix *m, float **ptr)
 {
-	ld	det;
-	int	i;
+	float	det;
+	int		i;
 
 	det = 0;
 	i = 0;
@@ -62,7 +62,7 @@ static ld	calculate_large_determinant(t_matrix *m, ld **ptr)
 	return (det);
 }
 
-static void	setup_matrix_pointer(t_matrix *m, ld ***ptr_ptr)
+static void	setup_matrix_pointer(t_matrix *m, float ***ptr_ptr)
 {
 	if (m->matrix)
 		*ptr_ptr = m->matrix;
@@ -70,10 +70,10 @@ static void	setup_matrix_pointer(t_matrix *m, ld ***ptr_ptr)
 		*ptr_ptr = allocate_matrix_from_stack(m);
 }
 
-ld	matrix_determinant(t_matrix *m)
+float	matrix_determinant(t_matrix *m)
 {
-	ld	**ptr;
-	ld	det;
+	float	**ptr;
+	float	det;
 
 	if (!m)
 		return (EIO);

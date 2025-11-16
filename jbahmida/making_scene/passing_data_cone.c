@@ -70,8 +70,8 @@ void	assign_coor_and_vects_cone(t_tuple *origin, \
 void	obj_creator_cone(t_obj *obj, t_cone_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
-	ld			radius;
-	ld			height;
+	float		radius;
+	float		height;
 	t_tuple		*origin;
 	t_tuple		*normal;
 	t_matrix	*transform;

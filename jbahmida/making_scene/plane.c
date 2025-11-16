@@ -33,7 +33,7 @@ void	plane_intersct(t_stack_intersections *xs,
 	t_plane *plane, t_stack_ray *ray)
 {
 	t_stack_ray	local_ray;
-	ld			t;
+	float		t;
 
 	xs->count = 0;
 	xs->existence = false;

@@ -12,8 +12,8 @@
 
 #include "../../MiniRt.h"
 
-t_tuple	*tuple_constractor(ld x, ld y,
-		ld z, ld w)
+t_tuple	*tuple_constractor(float x, float y,
+		float z, float w)
 {
 	t_tuple	*t;
 
@@ -25,7 +25,7 @@ t_tuple	*tuple_constractor(ld x, ld y,
 	return (t);
 }
 
-ld	magn(t_tuple *t)
+float	magn(t_tuple *t)
 {
 	if (!t || t->w)
 		return (-1);
@@ -33,9 +33,9 @@ ld	magn(t_tuple *t)
 			+ powf(fabsf(t->y), 2) + powf(fabsf(t->z), 2)));
 }
 
-ld	dot_product(t_tuple *t1, t_tuple *t2)
+float	dot_product(t_tuple *t1, t_tuple *t2)
 {
-	ld	dot_res;
+	float	dot_res;
 
 	if (!t1 || !t2)
 		return (-1);

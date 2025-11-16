@@ -24,7 +24,6 @@ void	coor_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
 	new_cylinder->coor_cylinder->z = ft_atoi_double(coors[2], scene->cleaner);
 	if (scene->cleaner->flag_exit)
 		exit_error("invalid thing in coor", "cy", scene->cleaner);
-	ft_free_split(coors);
 }
 
 void	vects_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
@@ -47,7 +46,6 @@ void	vects_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
 	if (range_x < -1 || range_x > 1 || range_y < -1 || \
 			range_y > 1 || range_z < -1 || range_z > 1)
 		exit_error("invalid range vectors", "CY", scene->cleaner);
-	ft_free_split(vects);
 }
 
 void	color_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
@@ -59,7 +57,6 @@ void	color_cylinder(t_cylinder_fb *new_cylinder, char **data, t_scene *scene)
 	new_cylinder->color_cylinder->r = ft_atoi_color(colors[0], "cylinder");
 	new_cylinder->color_cylinder->g = ft_atoi_color(colors[1], "cylinder");
 	new_cylinder->color_cylinder->b = ft_atoi_color(colors[2], "cylinder");
-	ft_free_split(colors);
 }
 
 void	other_paranms_check(t_cylinder_fb *new_cylinder, \
@@ -76,7 +73,7 @@ void	other_paranms_check(t_cylinder_fb *new_cylinder, \
 	if (new_cylinder->height_cylinder_fb <= 0 || \
 			new_cylinder->diameter_cylinder <= 0)
 		exit_error("invalid range in height or diameter", "CY", scene->cleaner);
-	open_or_close = atoi(data[5]);
+	open_or_close = ft_atoi(data[5]);
 	if (open_or_close == 0)
 		new_cylinder->closed = true;
 	else if (open_or_close == -1)
@@ -103,9 +100,9 @@ void	ft_cylinder_fb(char **data, t_scene *scene)
 	scene->type = T_CYLINDRE;
 	if (i == 7 || i == 8)
 		bump_mapping_cylinder_constractor(new_cylinder, data, scene, i);
+	cylinder_linked_list(new_cylinder, scene);
 	coor_cylinder(new_cylinder, data, scene);
 	vects_cylinder(new_cylinder, data, scene);
 	other_paranms_check(new_cylinder, data, scene);
 	color_cylinder(new_cylinder, data, scene);
-	cylinder_linked_list(new_cylinder, scene);
 }

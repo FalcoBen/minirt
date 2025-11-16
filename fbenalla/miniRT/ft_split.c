@@ -41,20 +41,6 @@ static int	len_word(const char *s, char sep)
 	return (i);
 }
 
-static char	**freeing(char **c, int i)
-{
-	int	index;
-
-	index = 0;
-	while (index < i)
-	{
-		free(c[index]);
-		index++;
-	}
-	free(c);
-	return (NULL);
-}
-
 char	**ft_split(char const *s, char c)
 {
 	char	**arr;
@@ -65,20 +51,34 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	str = (char *)s;
-	arr = (char **)malloc(sizeof(char *) * (count_words(str, c) + 1));
+	arr = (char **)alloc(sizeof(char *) * (count_words(str, c) + 1), false);
 	if (!arr)
 		return (NULL);
 	while (i < count_words((char *)s, c))
 	{
 		while (*str == c)
 			str++;
-		arr[i] = (char *)malloc(sizeof(char) *(len_word(str, c) + 1));
-		if (!arr[i])
-			return (freeing(arr, i));
+		arr[i] = (char *)alloc(sizeof(char) *(len_word(str, c) + 1), false);
 		ft_strlcpy(arr[i], str, (len_word(str, c) + 1));
 		str = str + len_word(str, c);
 		i++;
 	}
 	arr[i] = NULL;
 	return (arr);
+}
+
+bool	count_dot(char *str, int i)
+{
+	int	count;
+
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '.')
+			count++;
+		i++;
+	}
+	if (count >= 2)
+		return (false);
+	return (true);
 }

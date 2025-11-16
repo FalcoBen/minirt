@@ -24,7 +24,6 @@ void	coor_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
 	new_cone->coor_cone->z = ft_atoi_double(coors[2], scene->cleaner);
 	if (scene->cleaner->flag_exit)
 		exit_error("invalid thing in coor", "cone", scene->cleaner);
-	ft_free_split(coors);
 }
 
 void	vects_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
@@ -47,7 +46,6 @@ void	vects_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
 	if (range_x < -1 || range_x > 1 || range_y < -1 || \
 			range_y > 1 || range_z < -1 || range_z > 1)
 		exit_error("invalid range vectors", "cone", scene->cleaner);
-	ft_free_split(vects);
 }
 
 void	color_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
@@ -59,7 +57,6 @@ void	color_cone(t_cone_fb *new_cone, char **data, t_scene *scene)
 	new_cone->color_cone->r = ft_atoi_color(colors[0], "cone");
 	new_cone->color_cone->g = ft_atoi_color(colors[1], "cone");
 	new_cone->color_cone->b = ft_atoi_color(colors[2], "cone");
-	ft_free_split(colors);
 }
 
 void	other_params_check_cone(t_cone_fb *new_cone, \
@@ -76,7 +73,7 @@ void	other_params_check_cone(t_cone_fb *new_cone, \
 	new_cone->angle = ft_atoi_double(data[5], scene->cleaner);
 	if (new_cone->angle < 0 || new_cone->angle > 180)
 		exit_error("invalid range inangle", "cone", scene->cleaner);
-	open_or_close = atoi(data[6]);
+	open_or_close = ft_atoi(data[6]);
 	if (open_or_close == 0)
 		new_cone->closed_flag = true;
 	else if (open_or_close == -1)
@@ -102,9 +99,9 @@ void	ft_cone_fb(char **data, t_scene *scene)
 	scene->type = T_CONE;
 	if (i == 8 || i == 9)
 		bump_mapping_cone_constractor(new_cone, data, scene, i);
+	cone_linked_list(new_cone, scene);
 	coor_cone(new_cone, data, scene);
 	vects_cone(new_cone, data, scene);
 	other_params_check_cone(new_cone, data, scene);
 	color_cone(new_cone, data, scene);
-	cone_linked_list(new_cone, scene);
 }

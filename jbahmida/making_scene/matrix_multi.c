@@ -16,7 +16,7 @@ typedef struct s_matrix_mult_data
 {
 	t_matrix	*m1;
 	t_matrix	*m2;
-	ld			*va_list;
+	float		*va_list;
 	int			v_size;
 }	t_matrix_mult_data;
 
@@ -56,14 +56,14 @@ static void	calculate_matrix_product(t_matrix_mult_data *data)
 t_matrix	*matrix_multi(t_matrix *m1, t_matrix *m2)
 {
 	t_matrix			*res;
-	ld					*va_list;
+	float				*va_list;
 	int					v_size;
 	t_matrix_mult_data	data;
 
 	if (!is_valid_matrix_multiplication(m1, m2))
 		return (NULL);
 	v_size = m1->row * m2->col;
-	va_list = alloc(sizeof(ld) * v_size, false);
+	va_list = alloc(sizeof(float) * v_size, false);
 	data.m1 = m1;
 	data.m2 = m2;
 	data.va_list = va_list;

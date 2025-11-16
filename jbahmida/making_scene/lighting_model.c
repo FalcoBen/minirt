@@ -20,7 +20,7 @@ static t_color	calculate_ambient(t_color *effective_color,
 
 static t_color	calculate_diffuse(t_nor_s_lighting *local)
 {
-	ld	light_dot_normal;
+	float	light_dot_normal;
 
 	light_dot_normal = dot_product(&local->lightv, &local->normalv);
 	if (light_dot_normal >= 0)
@@ -35,8 +35,8 @@ static t_color	calculate_specular(t_nor_s_lighting *local)
 {
 	t_tuple	neg_lightv;
 	t_tuple	reflectv;
-	ld		reflect_dot_eye;
-	ld		factor;
+	float	reflect_dot_eye;
+	float	factor;
 
 	neg_lightv = s_neg_t(local->lightv);
 	reflectv = s_reflect(neg_lightv, local->normalv);

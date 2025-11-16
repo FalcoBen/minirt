@@ -33,7 +33,7 @@ void	copy_matrix_contant(t_matrix *m)
 	return ;
 }
 
-t_color	s_create_color(ld *vals)
+t_color	s_create_color(float *vals)
 {
 	t_color	color;
 

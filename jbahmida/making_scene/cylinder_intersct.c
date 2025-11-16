@@ -82,7 +82,7 @@ void	cylinder_intersct(t_stack_intersections *xs,
 		xs->world_inters_list = NULL;
 }
 
-void	infinit_cylinder_detect(t_tuple *local_point, ld *v)
+void	infinit_cylinder_detect(t_tuple *local_point, float *v)
 {
 	*v = local_point->y * 0.1;
 	*v = fmod(*v, 1.0);
@@ -90,12 +90,12 @@ void	infinit_cylinder_detect(t_tuple *local_point, ld *v)
 		*v += 1.0;
 }
 
-void	cylinder_uv(t_tuple *point, t_cylinder *cylinder, ld *u, ld *v)
+void	cylinder_uv(t_tuple *point, t_cylinder *cylinder, float *u, float *v)
 {
 	t_matrix	point_matrix;
 	t_tuple		local_point;
-	ld			theta;
-	ld			range;
+	float		theta;
+	float		range;
 
 	point_matrix = s_matrix_tuple(cylinder->inv, point);
 	local_point = s_matrix_to_tuple(&point_matrix);

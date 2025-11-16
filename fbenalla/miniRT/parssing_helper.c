@@ -60,24 +60,6 @@ bool	verify_data_plane(char **data)
 	return (true);
 }
 
-void	free_tokens(t_cleanup *cleanup)
-{
-	int	i;
-
-	i = 0;
-	if (cleanup->tokens)
-	{
-		while (i < cleanup->token_count)
-		{
-			if (cleanup->tokens[i])
-				ft_free_split(cleanup->tokens[i]);
-			i++;
-		}
-		free(cleanup->tokens);
-		cleanup->tokens = NULL;
-	}
-}
-
 void	exit_error(char *str, char *scene_name, t_cleanup *cleanup)
 {
 	printf("Error\n%s in %s\n", str, scene_name);
@@ -85,11 +67,6 @@ void	exit_error(char *str, char *scene_name, t_cleanup *cleanup)
 	{
 		free_scene(cleanup->scene);
 		cleanup->scene = NULL;
-	}
-	if (cleanup->input_data)
-	{
-		free(cleanup->input_data);
-		cleanup->input_data = NULL;
 	}
 	alloc(0, true);
 	exit(1);

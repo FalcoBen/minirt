@@ -36,10 +36,10 @@ void	cylinder(t_cylinder **cylinder, t_matrix *trans, bool flag)
 	id++;
 }
 
-bool	check_cap_cylinder(t_stack_ray *ray, ld t)
+bool	check_cap_cylinder(t_stack_ray *ray, float t)
 {
-	ld	x;
-	ld	z;
+	float	x;
+	float	z;
 
 	x = ray->point.x + t * ray->vect.x;
 	z = ray->point.z + t * ray->vect.z;
@@ -47,7 +47,7 @@ bool	check_cap_cylinder(t_stack_ray *ray, ld t)
 }
 
 static void	set_cap_value(t_stack_intersections *xs,
-	t_cylinder *cylinder, ld t)
+	t_cylinder *cylinder, float t)
 {
 	xs->inters_list[xs->count].inters_value = t;
 	xs->inters_list[xs->count].sphere = NULL;
@@ -62,7 +62,7 @@ static void	set_cap_value(t_stack_intersections *xs,
 void	intersect_caps_cylinder(t_cylinder *cylinder,
 	t_stack_ray *ray, t_stack_intersections *xs)
 {
-	ld	t;
+	float	t;
 
 	if (!cylinder->closed || ldbl_cmp(ray->vect.y, 0.0))
 		return ;

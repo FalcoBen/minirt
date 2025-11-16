@@ -47,15 +47,9 @@ bool	verify_data_ambient_light(char **data, t_cleanup *clean)
 		return (false);
 	ambient = ft_atoi_double(data[1], clean);
 	if (clean->flag_exit)
-	{
-		printf("333333333333333344444444444444444444\n");
 		return (false);
-	}
 	if (!verify_color(data[2]))
-	{
-		printf("22222222222222222222222222222222222222\n");
 		return (false);
-	}
 	while (data[i])
 		i++;
 	if (i > 3)

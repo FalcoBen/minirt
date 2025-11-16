@@ -52,5 +52,4 @@ void	free_scene(t_scene *scene)
 	free_plane(scene);
 	free_cylinder(scene);
 	free_cone(scene);
-	free(scene);
 }

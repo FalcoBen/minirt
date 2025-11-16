@@ -24,7 +24,6 @@ void	coor_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
 	new_plane->coor_plane->z = ft_atoi_double(coors[2], scene->cleaner);
 	if (scene->cleaner->flag_exit)
 		exit_error("invalid thing in coor", "pl", scene->cleaner);
-	ft_free_split(coors);
 }
 
 void	vects_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
@@ -49,7 +48,6 @@ void	vects_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
 		exit_error("invalid range vectors", "PL", scene->cleaner);
 	if (count_comma(data[3]) != 2)
 		exit_error("more or less in color", "in plane", scene->cleaner);
-	ft_free_split(vects);
 }
 
 void	color_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
@@ -64,7 +62,6 @@ void	color_plane(t_plane_fb *new_plane, char **data, t_scene *scene)
 	if (new_plane->color_plane->r == -1 || new_plane->color_plane->g == -1 \
 			||new_plane->color_plane->b == -1)
 		exit_error("somthing wrong with colors", "in plane", scene->cleaner);
-	ft_free_split(colors);
 }
 
 void	ft_plane_fb(char **data, t_scene *scene)
@@ -85,8 +82,8 @@ void	ft_plane_fb(char **data, t_scene *scene)
 	if (i == 4 || i == 5)
 		bump_mapping_plane_constractor(new_plane, data, scene, i);
 	new_plane->next = NULL;
+	plane_linked_list(new_plane, scene);
 	coor_plane(new_plane, data, scene);
 	vects_plane(new_plane, data, scene);
 	color_plane(new_plane, data, scene);
-	plane_linked_list(new_plane, scene);
 }

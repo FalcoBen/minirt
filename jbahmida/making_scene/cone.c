@@ -34,7 +34,7 @@ void	cone(t_cone **cone, t_matrix *trans, bool flag)
 }
 
 t_matrix	*create_cone_transform(t_tuple *position, t_tuple *axis,
-	ld radius, ld height)
+	float radius, float height)
 {
 	t_nor_cone_tran	var;
 
@@ -50,10 +50,10 @@ t_matrix	*create_cone_transform(t_tuple *position, t_tuple *axis,
 	return (var.result);
 }
 
-bool	check_cap_cone(t_stack_ray *ray, ld t, ld y)
+bool	check_cap_cone(t_stack_ray *ray, float t, float y)
 {
-	ld	x;
-	ld	z;
+	float	x;
+	float	z;
 
 	x = ray->point.x + t * ray->vect.x;
 	z = ray->point.z + t * ray->vect.z;
@@ -61,7 +61,7 @@ bool	check_cap_cone(t_stack_ray *ray, ld t, ld y)
 }
 
 static void	set_cap_value(t_stack_intersections *xs,
-	t_cone *cone, ld t)
+	t_cone *cone, float t)
 {
 	xs->inters_list[xs->count].inters_value = t;
 	xs->inters_list[xs->count].sphere = NULL;
@@ -77,7 +77,7 @@ static void	set_cap_value(t_stack_intersections *xs,
 void	intersect_caps_cone(t_cone *cone,
 	t_stack_ray *ray, t_stack_intersections *xs)
 {
-	ld	t;
+	float	t;
 
 	if (!cone->closed || ldbl_cmp(ray->vect.y, 0.0))
 		return ;

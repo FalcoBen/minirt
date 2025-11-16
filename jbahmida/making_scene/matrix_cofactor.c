@@ -17,11 +17,11 @@ static void	allocate_matrix_from_stack_data(t_matrix *m)
 	int	i;
 	int	j;
 
-	m->matrix = alloc(sizeof(ld *) * m->row, false);
+	m->matrix = alloc(sizeof(float *) * m->row, false);
 	i = 0;
 	while (i < m->row)
 	{
-		m->matrix[i] = alloc(sizeof(ld) * m->col, false);
+		m->matrix[i] = alloc(sizeof(float) * m->col, false);
 		j = 0;
 		while (j < m->col)
 		{
@@ -32,7 +32,7 @@ static void	allocate_matrix_from_stack_data(t_matrix *m)
 	}
 }
 
-static ld	calculate_cofactor_value(int row, int col, ld determinant)
+static float	calculate_cofactor_value(int row, int col, float determinant)
 {
 	if ((row + col) % 2 == 0)
 		return (determinant);
@@ -40,19 +40,19 @@ static ld	calculate_cofactor_value(int row, int col, ld determinant)
 		return (-determinant);
 }
 
-static ld	compute_minor_determinant(t_matrix *m, int row, int col)
+static float	compute_minor_determinant(t_matrix *m, int row, int col)
 {
 	t_matrix	*minor;
-	ld			det;
+	float		det;
 
 	minor = submatrix(m, row, col);
 	det = matrix_determinant(minor);
 	return (det);
 }
 
-ld	matrix_cofactor(t_matrix *m, int row, int col)
+float	matrix_cofactor(t_matrix *m, int row, int col)
 {
-	ld	determinant;
+	float	determinant;
 
 	if (!m)
 		return (EIO);

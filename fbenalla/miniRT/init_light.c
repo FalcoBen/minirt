@@ -46,7 +46,6 @@ void	coor_light(t_light_fb *new_light, char **data, t_scene *scene)
 		exit_error("invalid range bright light", "L", scene->cleaner);
 	if (count_comma(data[3]) != 2)
 		exit_error("more or less in color", "in light", scene->cleaner);
-	ft_free_split(coors);
 }
 
 bool	verify_data_light(char **data, t_cleanup *clean)
@@ -85,6 +84,7 @@ void	ft_light(char **data, t_scene *scene)
 				"in light", scene->cleaner);
 	new_light = alloc(sizeof(t_light_fb), false);
 	new_light->next = NULL;
+	light_linked_list(new_light, scene);
 	coor_light(new_light, data, scene);
 	new_light->color_light = alloc(sizeof(t_color_fb), false);
 	colors = ft_split(data[3], ',');
@@ -94,6 +94,4 @@ void	ft_light(char **data, t_scene *scene)
 	if (new_light->color_light->r == -1 || \
 			new_light->color_light->g == -1 || new_light->color_light->b == -1)
 		exit_error("somthing wrong with colors", "in light", scene->cleaner);
-	light_linked_list(new_light, scene);
-	ft_free_split(colors);
 }

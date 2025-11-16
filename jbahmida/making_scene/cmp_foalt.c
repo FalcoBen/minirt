@@ -12,12 +12,12 @@
 
 #include "../../MiniRt.h"
 
-bool	ldbl_cmp(ld a, ld b)
+bool	ldbl_cmp(float a, float b)
 {
-	ld	diff;
-	ld	largest;
-	ld	abs_epsilon;
-	ld	rel_epsilon;
+	float	diff;
+	float	largest;
+	float	abs_epsilon;
+	float	rel_epsilon;
 
 	diff = fabsl(a - b);
 	largest = fmaxl(fabsl(a), fabsl(b));

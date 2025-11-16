@@ -12,7 +12,7 @@
 
 #include "../../MiniRt.h"
 
-t_stack_ray	s_ray_for_camera(t_camera *cam, ld x, ld y)
+t_stack_ray	s_ray_for_camera(t_camera *cam, float x, float y)
 {
 	t_stack_ray				ray;
 	t_nor_ray_for_camera	var;
@@ -21,10 +21,10 @@ t_stack_ray	s_ray_for_camera(t_camera *cam, ld x, ld y)
 	var.yoffset = (y + 0.5) * cam->pixel_size;
 	var.world_x = cam->half_width - var.xoffset;
 	var.world_y = cam->half_height - var.yoffset;
-	var.t = s_create_tuple((ld[3]){var.world_x, var.world_y, -1}, 1);
+	var.t = s_create_tuple((float [3]){var.world_x, var.world_y, -1}, 1);
 	var.tmp = s_matrix_tuple(cam->tran_inv, &var.t);
 	var.pixel = s_matrix_to_tuple(&var.tmp);
-	var.t1 = s_create_tuple((ld[3]){0, 0, 0}, 1);
+	var.t1 = s_create_tuple((float [3]){0, 0, 0}, 1);
 	var.tmp1 = s_matrix_tuple(cam->tran_inv, &var.t1);
 	var.origin = s_matrix_to_tuple(&var.tmp1);
 	s_sub_t(&var.direction, var.pixel, var.origin);
@@ -43,10 +43,10 @@ static void	camera_helper(t_camera *new, t_matrix *m)
 	return ;
 }
 
-t_camera	*camera(ld hsize, ld vsize, ld field_ov, t_matrix *m)
+t_camera	*camera(float hsize, float vsize, float field_ov, t_matrix *m)
 {
 	t_camera	*new;
-	ld			half_view;
+	float		half_view;
 
 	half_view = tanf(field_ov / 2);
 	new = alloc(sizeof(t_camera), false);

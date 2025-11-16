@@ -28,7 +28,7 @@ t_tuple	s_cross_product(t_tuple *t1, t_tuple *t2)
 
 static t_matrix	build_array(t_v_tran var)
 {
-	ld	arr[16];
+	float	arr[16];
 
 	arr[0] = var.left.x;
 	arr[1] = var.left.y;
@@ -54,7 +54,7 @@ t_matrix	view_transformation(t_tuple *from, t_tuple *to, t_tuple *up)
 	t_matrix	view;
 	t_v_tran	var;
 
-	view = (t_matrix){0, 0, NULL, {{(ld){0}}}};
+	view = (t_matrix){0, 0, NULL, {{(float){0}}}};
 	var.forward = (t_tuple){0, 0, 0, 0};
 	s_sub_t(&var.forward, *to, *from);
 	s_vec_norm(&var.forward);

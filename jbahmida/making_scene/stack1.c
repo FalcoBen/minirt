@@ -55,7 +55,7 @@ t_stack_ray	s_transform(t_stack_ray *ray, t_matrix *m)
 	return (local);
 }
 
-void	s_grid(int row, int col, ld *arr, ld grid[4][4])
+void	s_grid(int row, int col, float *arr, float grid[4][4])
 {
 	int	i;
 	int	j;
@@ -77,7 +77,7 @@ void	s_grid(int row, int col, ld *arr, ld grid[4][4])
 	return ;
 }
 
-t_matrix	s_matrix_constractor(int row, int col, ld *arr)
+t_matrix	s_matrix_constractor(int row, int col, float *arr)
 {
 	t_matrix	matrix;
 

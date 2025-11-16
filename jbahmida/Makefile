@@ -3,7 +3,7 @@ NAME		= minirt
 # Compiler and flags
 CC			= gcc
 CFLAGS		= -g3 -O3 -Ofast -ffast-math -mfpmath=sse -fno-math-errno
-DEBUG_FLAGS	= -g3 -pg -fsanitize=address
+# DEBUG_FLAGS	= -g3 -pg -fsanitize=address
 INCLUDES	= -I. -I../../ -I../tupeles_test_rm
 
 # MLX42 library

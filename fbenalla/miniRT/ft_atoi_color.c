@@ -41,12 +41,10 @@ bool	verify_color(char *str)
 		nb = ft_atoi(splitted[i]);
 		if (nb > 255 || nb < 0)
 		{
-			ft_free_split(splitted);
 			return (false);
 		}
 		i++;
 	}
-	ft_free_split(splitted);
 	return (true);
 }
 

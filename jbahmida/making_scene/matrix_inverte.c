@@ -33,7 +33,7 @@ static t_matrix	*create_cofactor_matrix(t_matrix *m)
 	return (c);
 }
 
-static t_matrix	*create_inverse_matrix(t_matrix *c, ld det, int size)
+static t_matrix	*create_inverse_matrix(t_matrix *c, float det, int size)
 {
 	t_matrix	*invert;
 	int			i;
@@ -54,7 +54,7 @@ static t_matrix	*create_inverse_matrix(t_matrix *c, ld det, int size)
 	return (invert);
 }
 
-static bool	is_matrix_invertible(t_matrix *m, ld *det)
+static bool	is_matrix_invertible(t_matrix *m, float *det)
 {
 	*det = matrix_determinant(m);
 	if (!m || fabs(*det) < 0.0001)
@@ -66,7 +66,7 @@ t_matrix	*matrix_inverte(t_matrix *m)
 {
 	t_matrix	*invert;
 	t_matrix	*c;
-	ld			det;
+	float		det;
 
 	if (!is_matrix_invertible(m, &det))
 		return (NULL);

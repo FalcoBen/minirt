@@ -34,10 +34,9 @@ t_texture	*create_image_bump(char *img_path, t_scene *scene)
 	test_bump->color_checkerd = (t_color_fb){0, 0, 0};
 	test_bump->scale = 0.002;
 	test_bump->image = mlx_load_png(img_path);
+	printf("11111111 %p\n", test_bump->image);
 	if (!test_bump->image)
 	{
-		free(img_path);
-		free(test_bump);
 		perror("png");
 		exit_error("incorrect image path", "in plane", scene->cleaner);
 	}

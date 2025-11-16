@@ -39,10 +39,10 @@ static t_matrix	*handle_special_cases(t_tuple *normalized_normal)
 static t_matrix	*create_rotation_matrix(t_tuple *normalized_normal)
 {
 	t_tuple		default_y;
-	ld			dot;
+	float		dot;
 	t_matrix	*rotation;
 	t_tuple		axis;
-	ld			angle;
+	float		angle;
 
 	default_y = (t_tuple){0, 1, 0, 0};
 	dot = dot_product(&default_y, normalized_normal);

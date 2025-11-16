@@ -12,7 +12,7 @@
 
 #include "../../MiniRt.h"
 
-t_matrix	*translation(ld x, ld y, ld z)
+t_matrix	*translation(float x, float y, float z)
 {
 	t_matrix	*m;
 
@@ -24,7 +24,7 @@ t_matrix	*translation(ld x, ld y, ld z)
 	return (m);
 }
 
-t_matrix	*scaling(ld x, ld y, ld z)
+t_matrix	*scaling(float x, float y, float z)
 {
 	t_matrix	*m;
 
@@ -36,7 +36,7 @@ t_matrix	*scaling(ld x, ld y, ld z)
 	return (m);
 }
 
-t_matrix	*rotation_x(ld angle)
+t_matrix	*rotation_x(float angle)
 {
 	t_matrix	*m_x;
 
@@ -49,7 +49,7 @@ t_matrix	*rotation_x(ld angle)
 	return (m_x);
 }
 
-t_matrix	*rotation_y(ld angle)
+t_matrix	*rotation_y(float angle)
 {
 	t_matrix	*m_y;
 
@@ -62,7 +62,7 @@ t_matrix	*rotation_y(ld angle)
 	return (m_y);
 }
 
-t_matrix	*rotation_z(ld angle)
+t_matrix	*rotation_z(float angle)
 {
 	t_matrix	*m_z;
 

@@ -15,8 +15,8 @@
 static t_tuple	calculate_local_normal(t_cone *cone, t_tuple *local_point)
 {
 	t_tuple	local_normal;
-	ld		dist;
-	ld		y;
+	float	dist;
+	float	y;
 
 	dist = powf(local_point->x, 2) + powf(local_point->z, 2);
 	if (cone->closed && dist < fabsf(cone->maximum)

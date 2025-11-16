@@ -12,7 +12,7 @@
 
 #include "../../MiniRt.h"
 
-static t_matrix	*handle_parallel_vectors(ld c)
+static t_matrix	*handle_parallel_vectors(float c)
 {
 	if (c > 0)
 		return (identity_matrix(4, 4));
@@ -20,7 +20,7 @@ static t_matrix	*handle_parallel_vectors(ld c)
 		return (rotation_x(M_PI));
 }
 
-static void	initialize_vx_matrix(t_tuple *v, ld vx[9])
+static void	initialize_vx_matrix(t_tuple *v, float vx[9])
 {
 	vx[0] = 0.0;
 	vx[1] = -v->z;
@@ -33,7 +33,8 @@ static void	initialize_vx_matrix(t_tuple *v, ld vx[9])
 	vx[8] = 0.0;
 }
 
-static void	calculate_rotation_matrix(t_matrix *result, ld vx[9], ld factor)
+static void	calculate_rotation_matrix(t_matrix *result, \
+			float vx[9], float factor)
 {
 	int	i;
 	int	j;

@@ -24,7 +24,6 @@ void	coor_sphere(t_sphere_fb *new_sphere, char **data, t_scene *scene)
 	new_sphere->coor_sphere->z = ft_atoi_double(coors[2], scene->cleaner);
 	if (scene->cleaner->flag_exit)
 		exit_error("invalid thing in coor", "sp", scene->cleaner);
-	ft_free_split(coors);
 }
 
 void	color_sphere(t_sphere_fb *new_sphere, char **data, t_scene *scene)
@@ -41,7 +40,6 @@ void	color_sphere(t_sphere_fb *new_sphere, char **data, t_scene *scene)
 	if (new_sphere->color_sphere->r == -1 || new_sphere->color_sphere->g == -1 \
 			|| new_sphere->color_sphere->b == -1)
 		exit_error("somthing wrong with colors", "in sphere", scene->cleaner);
-	ft_free_split(colors);
 }
 
 void	ft_sphere_fb(char **data, t_scene *scene)
@@ -61,6 +59,7 @@ void	ft_sphere_fb(char **data, t_scene *scene)
 	scene->type = T_SPHERE;
 	if (i == 4 || i == 5)
 		bump_mapping_sphere_constractor(new_sphere, data, scene, i);
+	sphere_linked_list(new_sphere, scene);
 	coor_sphere(new_sphere, data, scene);
 	new_sphere->diameter_sphere = ft_atoi_double(data[2], scene->cleaner);
 	if (scene->cleaner->flag_exit)
@@ -68,5 +67,4 @@ void	ft_sphere_fb(char **data, t_scene *scene)
 	if (new_sphere->diameter_sphere <= 0)
 		exit_error("invalid diametre", "in sphere", scene->cleaner);
 	color_sphere(new_sphere, data, scene);
-	sphere_linked_list(new_sphere, scene);
 }

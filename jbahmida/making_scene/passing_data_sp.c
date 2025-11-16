@@ -53,7 +53,7 @@ void	assign_spher_object(t_obj *obj, t_sphere_fb *src, \
 void	obj_creator_sphere(t_obj *obj, t_sphere_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
-	ld			radius;
+	float		radius;
 	t_matrix	*trans;
 	t_matrix	*scale;
 	t_matrix	*transform;

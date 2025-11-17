@@ -109,6 +109,7 @@ void	jassim_mlx(t_scene *scene)
 	printf("Closing window normally.\n");
 	if (canva.image)
 		mlx_delete_image(mlx, canva.image);
+	
 	if (scene)
 	{
 		free_scene(scene);

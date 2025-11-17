@@ -12,10 +12,31 @@
 
 #include "../../MiniRt.h"
 
+static void	compute_rotation_element(t_matrix *rot, t_roaa *var, int i, int j)
+{
+	float	components[3];
+
+	components[0] = var->norm_axis.x;
+	components[1] = var->norm_axis.y;
+	components[2] = var->norm_axis.z;
+	if (i == j)
+		var->diag_part = var->cos_theta;
+	else
+		var->diag_part = 0.0;
+	if (i < 3 && j < 3)
+		var->outer = (1.0 - var->cos_theta)
+			* components[i] * components[j];
+	else
+		var->outer = 0.0;
+	rot->matrix[i][j] = var->diag_part
+		+ var->outer
+		+ var->skew->matrix[i][j] * var->sin_theta;
+}
+
 static void	build_rotation(t_matrix *rot, t_roaa *var)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (i < 4)
@@ -23,17 +44,7 @@ static void	build_rotation(t_matrix *rot, t_roaa *var)
 		j = 0;
 		while (j < 4)
 		{
-			if (i == j)
-				var->diag_part = var->cos_theta;
-			else
-				var->diag_part = 0.0;
-			var->outer = (1.0 - var->cos_theta)
-				* (var->norm_axis.x * var->norm_axis.x * (i == 0)
-					+ var->norm_axis.y * var->norm_axis.y * (i == 1)
-					+ var->norm_axis.z * var->norm_axis.z * (i == 2));
-			rot->matrix[i][j] = var->diag_part
-				+ var->outer
-				+ var->skew->matrix[i][j] * var->sin_theta;
+			compute_rotation_element(rot, var, i, j);
 			j++;
 		}
 		i++;
@@ -105,3 +116,4 @@ t_matrix	*create_cylinder_transform(t_tuple *position, t_tuple *axis,
 	copy_matrix_contant(var.result);
 	return (var.result);
 }
+

@@ -42,7 +42,6 @@ void	free_plane(t_scene *scene)
 	pl = scene->plane;
 	while (pl)
 	{
-		printf("===> %p\n", pl);
 		next_pl = pl->next;
 		if (pl->flag_bump && pl->bump_texture)
 		{

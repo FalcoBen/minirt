@@ -21,7 +21,7 @@ t_stack_ray	s_ray_for_camera(t_camera *cam, float x, float y)
 	var.yoffset = (y + 0.5) * cam->pixel_size;
 	var.world_x = cam->half_width - var.xoffset;
 	var.world_y = cam->half_height - var.yoffset;
-	var.t = s_create_tuple((float [3]){var.world_x, var.world_y, -1}, 1);
+	var.t = s_create_tuple((float [3]){var.world_x, var.world_y, 1}, 1);
 	var.tmp = s_matrix_tuple(cam->tran_inv, &var.t);
 	var.pixel = s_matrix_to_tuple(&var.tmp);
 	var.t1 = s_create_tuple((float [3]){0, 0, 0}, 1);

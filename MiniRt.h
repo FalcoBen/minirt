@@ -36,8 +36,8 @@
 
 // # define WIDTH 4480
 // # define HEIGHT 2520
-# define WIDTH 1000
-# define HEIGHT 800
+# define WIDTH 500
+# define HEIGHT 500
 // #define WIDTH 100
 // #define HEIGHT 100
 

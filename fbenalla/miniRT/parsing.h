@@ -39,7 +39,6 @@ typedef struct s_scene		t_scene;
 typedef struct t_objects_fb
 {
 	char					*identifier;
-	int						nb;
 	void					(*assign_object)(char **data, t_scene *scene);
 	struct t_objects_fb		*next;
 }	t_objects_fb;
@@ -180,13 +179,7 @@ typedef struct s_scene
 
 typedef struct s_cleanup
 {
-	t_container		*container;
 	t_scene			*scene;
-	t_objects_fb	**dispatched_table;
-	t_objects_fb	*input_data;
-	char			***tokens;
-	int				token_count;
-	bool			flag_input;
 	bool			flag_exit;
 }t_cleanup;
 

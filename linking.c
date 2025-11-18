@@ -30,7 +30,6 @@ void	stor_tokens(char ***tokens, t_container *curr, t_cleanup *cleaner)
 		i++;
 		curr = curr->next;
 	}
-	cleaner->token_count = i;
 }
 
 void	tokens_constractor(char ***tokens, t_container *head, \
@@ -47,9 +46,9 @@ void	tokens_constractor(char ***tokens, t_container *head, \
 	while (z < counter)
 	{
 		if (!tokens[z][0] || ft_strcmp(tokens[z][0], "A") == 0 || \
-			ft_strcmp(tokens[z][0], "C") == 0 || ft_strcmp(tokens[z][0], "L") == 0 \
+		ft_strcmp(tokens[z][0], "C") == 0 || ft_strcmp(tokens[z][0], "L") == 0 \
 			|| ft_strcmp(tokens[z][0], "pl") == 0 || \
-				ft_strcmp(tokens[z][0], "sp") == 0 || ft_strcmp(tokens[z][0], "cy") \
+			ft_strcmp(tokens[z][0], "sp") == 0 || ft_strcmp(tokens[z][0], "cy") \
 					== 0 || ft_strcmp(tokens[z][0], "cone") == 0)
 		{
 			z++;
@@ -103,10 +102,7 @@ void	parsing(int fd)
 	reading_from_scene(fd, &head, &counter);
 	cleaner = alloc(sizeof (t_cleanup), false);
 	init_cleaner(cleaner);
-	cleaner->container = head;
-
 	tokens = alloc(sizeof (char **) * ((counter) + 1), false);
-	cleaner->tokens = tokens;
 	tokens_constractor(tokens, head, counter, cleaner);
 	parsing_second_part(tokens, &counter, cleaner);
 }

@@ -72,7 +72,8 @@
     "stdbool.h": "c",
     "fcntl.h": "c",
     "limits.h": "c",
-    "parsing.h": "c"
+    "parsing.h": "c",
+    "my_malloc.h": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

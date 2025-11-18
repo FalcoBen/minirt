@@ -14,6 +14,7 @@
 
 void	write_pixel(void *c)
 {
+	printf("=== Starting render ===\n");
 	t_nwrite_pixel	var;
 
 	var.canva = (t_canva *)c;
@@ -101,7 +102,6 @@ void	jassim_mlx(t_scene *scene)
 	w = s_world(scene);
 	canva.world = &w;
 	canva.cam = create_camera(scene);
-	printf("=== Starting render ===\n");
 	write_pixel((void *)&canva);
 	mlx_image_to_window(canva.mlx, canva.image, 0, 0);
 	mlx_key_hook(mlx, &close_window, &canva);

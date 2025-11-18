@@ -88,13 +88,6 @@ t_container	*ft_lstnew(void *content)
 	if (!new)
 		return (NULL);
 	new->line = ft_strdup((char *)content);
-	if (!new->line)
-	{
-		free(new);
-		return (NULL);
-	}
 	new->next = NULL;
 	return (new);
 }
-//e:               4,555,097 bytes in 259 blocks
-//still reachable: 4,555,081 bytes in 257 blocks

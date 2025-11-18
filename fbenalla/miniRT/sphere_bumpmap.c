@@ -42,8 +42,6 @@ t_texture	*create_image_bump_sphere(char *img_path, t_scene *scene)
 	test_bump->image = mlx_load_png(img_path);
 	if (!test_bump->image)
 	{
-		free(img_path);
-		free(test_bump);
 		perror("png");
 		exit_error("incorrect image path", "in sphere", scene->cleaner);
 	}
@@ -65,7 +63,6 @@ void	bump_mapping_sphere_type_2(t_sphere_fb *new_sphere, \
 {
 	if (i != 5)
 	{
-		free(new_sphere);
 		exit_error("need a png", "in sphere", scene->cleaner);
 	}
 	new_sphere->img_path = ft_strdup(data[5]);
@@ -81,7 +78,6 @@ void	bump_mapping_sphere_constractor(t_sphere_fb *new_sphere, \
 	type_bump = ft_atoi_color(data[4], "bump in sphere");
 	if (type_bump != 1 && type_bump != 2)
 	{
-		free(new_sphere);
 		exit_error("malformat in type of bump", "in sphere", scene->cleaner);
 	}
 	new_sphere->flag_bump = true;

@@ -40,8 +40,6 @@ t_texture	*create_image_bump_cone(char *img_path, t_scene *scene)
 	test_bump->image = mlx_load_png(img_path);
 	if (!test_bump->image)
 	{
-		free(img_path);
-		free(test_bump);
 		perror("png");
 		exit_error("incorrect image path", "in cone", scene->cleaner);
 	}
@@ -62,7 +60,6 @@ void	bump_mapping_cone_type_2(t_cone_fb *new_cone, char **data, \
 {
 	if (i != 9)
 	{
-		free(new_cone);
 		exit_error("need a png", "in cone", scene->cleaner);
 	}
 	new_cone->img_path = ft_strdup(data[9]);
@@ -77,7 +74,6 @@ void	bump_mapping_cone_constractor(t_cone_fb *new_cone, \
 	type_bump = ft_atoi_color(data[8], "bump in cone");
 	if (type_bump != 1 && type_bump != 2)
 	{
-		free(new_cone);
 		exit_error("malformat in type of bump", "in cone", scene->cleaner);
 	}
 	new_cone->flag_bump = true;

@@ -34,7 +34,6 @@ t_texture	*create_image_bump(char *img_path, t_scene *scene)
 	test_bump->color_checkerd = (t_color_fb){0, 0, 0};
 	test_bump->scale = 0.002;
 	test_bump->image = mlx_load_png(img_path);
-	printf("11111111 %p\n", test_bump->image);
 	if (!test_bump->image)
 	{
 		perror("png");
@@ -57,7 +56,6 @@ void	bump_mapping_plane_type_2(t_plane_fb *new_plane, \
 {
 	if (i != 5)
 	{
-		free(new_plane);
 		exit_error("need a png", "in plane", scene->cleaner);
 	}
 	new_plane->img_path = ft_strdup(data[5]);
@@ -72,7 +70,6 @@ void	bump_mapping_plane_constractor(t_plane_fb *new_plane, \
 	type_bump = ft_atoi_color(data[4], "bump plane");
 	if (type_bump != 1 && type_bump != 2)
 	{
-		free(new_plane);
 		exit_error("malformat in type of bump ", "in plane", scene->cleaner);
 	}
 	new_plane->flag_bump = true;

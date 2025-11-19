@@ -1,17 +1,13 @@
 NAME		= miniRT
 
-# Compiler and flags
 CC			= gcc
 CFLAGS		= -g3 -O3 -Ofast -ffast-math -mfpmath=sse -fno-math-errno
 # DEBUG_FLAGS	= -g3 -pg -fsanitize=address
-# INCLUDES	= -I. -I../../ -I../tupeles_test_rm
 
-# MLX42 library
 HEADER = MiniRt.h \
 		 fbenalla/miniRT/parsing.h
 MLX42		= libmlx42.a
 MLX_FLAGS	= -ldl -lglfw -pthread -lm
-# Source files
 SRCS		= jbahmida/making_scene/world.c \
 			  jbahmida/making_scene/world_2.c \
 			  jbahmida/making_scene/lighting_model.c \
@@ -93,17 +89,15 @@ SRCS		= jbahmida/making_scene/world.c \
 				jbahmida/making_scene/null_check.c \
 				jbahmida/making_scene/cone_normal_extra.c \
 				jbahmida/making_scene/passing_data_cone_extra_2.c \
-# Object files
+
 OBJS		= $(SRCS:.c=.o)
 
-# Colors for output
 GREEN		= \033[0;32m
 RED			= \033[0;31m
 BLUE		= \033[0;34m
 YELLOW		= \033[0;33m
 RESET		= \033[0m
 
-# Rules
 all: $(NAME) 
 
 $(NAME): $(OBJS) 
@@ -113,7 +107,7 @@ $(NAME): $(OBJS)
 
 %.o: %.c $(HEADER)
 	@echo "$(YELLOW)Compiling $<...$(RESET)"
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
 	@echo "$(RED)Cleaning object files...$(RESET)"
@@ -131,18 +125,15 @@ run: all
 	@echo "$(BLUE)Running $(NAME)...$(RESET)"
 	@./$(NAME)
 
-# Specific build without sanitizer (for performance testing)
 release: CFLAGS = -Wall -Wextra -Werror -O3 -Ofast -ffast-math -mfpmath=sse -fno-math-errno
 release: DEBUG_FLAGS =
 release: fclean $(NAME)
 	@echo "$(GREEN)✓ Release build completed!$(RESET)"
 
-# Specific build with debug symbols only (no sanitizer)
 debug: DEBUG_FLAGS = -g3
 debug: fclean $(NAME)
 	@echo "$(GREEN)✓ Debug build completed!$(RESET)"
 
-# Show help
 help:
 	@echo "$(BLUE)Available targets:$(RESET)"
 	@echo "  $(GREEN)all$(RESET)      - Build minirt (default)"

@@ -71,17 +71,9 @@ void	intersect_caps_cone(t_cone *cone,
 	if (!cone->closed || ldbl_cmp(ray->vect.y, 0.0))
 		return ;
 	t = (cone->minimum - ray->point.y) / ray->vect.y;
-	x = ray->point.x + t * ray->vect.x;
-	z = ray->point.z + t * ray->vect.z;
-	radius = fabsf(cone->minimum);
-	dist = sqrtf(powf(x, 2) + powf(z, 2));
 	if (check_cap_cone(ray, t, cone->minimum))
 		set_cap_value(xs, cone, t);
 	t = (cone->maximum - ray->point.y) / ray->vect.y;
-	x = ray->point.x + t * ray->vect.x;
-	z = ray->point.z + t * ray->vect.z;
-	radius = fabsf(cone->maximum);
-	dist = sqrtf(powf(x, 2) + powf(z, 2));
 	if (check_cap_cone(ray, t, cone->maximum))
 		set_cap_value(xs, cone, t);
 	return ;

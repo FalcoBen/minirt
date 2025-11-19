@@ -14,46 +14,19 @@
 
 static t_tuple	calculate_local_normal(t_cone *cone, t_tuple *local_point)
 {
-	t_tuple	local_normal;
+	t_tuple	normal;
 	float	dist_squared;
 	float	radius;
-	float	y_tolerance = 0.0001;
-	float	radius_tolerance = 0.001;
 
 	dist_squared = powf(local_point->x, 2) + powf(local_point->z, 2);
-	if (cone->closed 
-		&& local_point->y >= (cone->maximum - y_tolerance))
-	{
-		float max_radius_sq = powf(fabsf(cone->maximum), 2);
-		if (dist_squared <= max_radius_sq + radius_tolerance)
-		{
-			return (t_tuple){0, 1, 0, 0};
-		}
-	}
-	if (cone->closed \
-		&& local_point->y <= (cone->minimum + y_tolerance))
-	{
-		float min_radius_sq = powf(fabsf(cone->minimum), 2);
-		if (dist_squared <= min_radius_sq + radius_tolerance)
-		{
-			return ((t_tuple){0, -1, 0, 0});
-		}
-	}
+	normal = cap_normal_max(cone, local_point, dist_squared);
+	if (normal.w == 0 && (normal.x != 0 || normal.y != 0 || normal.z != 0))
+		return (normal);
+	normal = cap_normal_min(cone, local_point, dist_squared);
+	if (normal.w == 0 && (normal.x != 0 || normal.y != 0 || normal.z != 0))
+		return (normal);
 	radius = sqrtf(dist_squared);
-	if (local_point->y >= 0)
-	{
-		local_normal.x = local_point->x;
-		local_normal.y = -radius;
-		local_normal.z = local_point->z;
-	}
-	else
-	{
-		local_normal.x = local_point->x;
-		local_normal.y = radius;
-		local_normal.z = local_point->z;
-	}
-	local_normal.w = 0;
-	return (local_normal);
+	return (side_normal(local_point, radius));
 }
 
 static t_tuple	transform_to_world_space(t_cone *cone, t_tuple *local_normal)

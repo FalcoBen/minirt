@@ -36,8 +36,8 @@
 
 // # define WIDTH 4480
 // # define HEIGHT 2520
-# define WIDTH 1800
-# define HEIGHT 1400
+# define WIDTH 1300
+# define HEIGHT 1000
 // # define WIDTH 2200
 // # define HEIGHT 1800
 // #define WIDTH 100
@@ -448,6 +448,22 @@ typedef struct s_submatrix_data
 	int			va_size;
 }	t_submatrix_data;
 
+typedef struct s_cone_params
+{
+	float	angle_degrees;
+	float	height;
+	float	minimum;
+	float	maximum;
+}	t_cone_params;
+
+typedef struct s_matrix_mult_data
+{
+	t_matrix	*m1;
+	t_matrix	*m2;
+	float		*va_list;
+	int			v_size;
+}	t_matrix_mult_data;
+
 void			write_pixel(void *c);
 t_tuple			get_up_vector(t_tuple *orientation);
 void			close_window(mlx_key_data_t keydata, void *param);
@@ -586,8 +602,10 @@ void			plane_intersct(t_stack_intersections *xs,
 					t_plane *plane, t_stack_ray *ray);
 void			s_plane_normal(t_tuple *norm, t_plane *plane, t_tuple *point);
 t_color			shade_hit_with_ambient(t_world *world, t_comp *comp);
-t_matrix		*create_cone_transform(t_tuple *position, t_tuple *axis,
-					float radius, float height);
+// t_matrix		*create_cone_transform(t_tuple *position, t_tuple *axis,
+// 					float radius, float height);
+t_matrix    *create_cone_transform_v2(t_tuple *position, t_tuple *axis,
+                    t_cone_params *params, t_matrix *pre_allocated);
 t_matrix		*create_cylinder_transform(t_tuple *position, t_tuple *axis,
 					float radius, float height);
 t_matrix		*create_plane_transform(t_tuple *origin, t_tuple *normal);
@@ -646,9 +664,8 @@ void			init_input_data(t_objects_fb *input_data);
 void			init_cleaner(t_cleanup *cleaner);
 void			start_asigning_objects(t_scene *scene, \
 					t_objects_fb *dispatch_table, char ***tokens, int counter);
-
-t_matrix		*create_cone_transform_v2(t_tuple *position, t_tuple *axis,
-				float angle_degrees, float height, float minimum, float maximum);
+static t_matrix *apply_cone_transforms(t_tuple *position, t_tuple *axis,
+                    t_cone_params *p, t_matrix *temp);
 t_matrix		*rotation_axis_angle(t_tuple *axis, float angle);
 void			check_against_null(t_canva *canva, t_scene *scene);
 bool	check_sphere_object(t_object *obj);
@@ -656,5 +673,11 @@ bool	check_camera_and_world(t_camera *cam, t_world *world);
 bool	check_lights(t_world *world);
 bool	check_plane_object(t_object *obj);
 bool	check_cylinder_object(t_object *obj);
-
+t_tuple  cap_normal_max(t_cone *cone, t_tuple *p, float dist_sq);
+t_tuple  cap_normal_min(t_cone *cone, t_tuple *p, float dist_sq);
+t_tuple  side_normal(t_tuple *p, float radius);
+int  is_aligned_with_y(t_tuple *norm_axis);
+t_matrix *handle_special_cases_cone(int align_code);
+t_matrix *rotate_to_y(t_tuple *norm_axis);
+t_matrix    *get_axis_alignment_rotation(t_tuple *axis);
 #endif

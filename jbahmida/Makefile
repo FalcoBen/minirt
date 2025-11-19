@@ -89,6 +89,8 @@ SRCS		= making_scene/world.c \
 				making_scene/passing_data_cone_extra.c \
 				making_scene/null_check_extra.c \
 				making_scene/null_check.c \
+				making_scene/cone_normal_extra.c \
+				making_scene/passing_data_cone_extra_2.c \
 # Object files
 OBJS		= $(SRCS:.c=.o)
 

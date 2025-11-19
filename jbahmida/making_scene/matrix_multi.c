@@ -12,14 +12,6 @@
 
 #include "../../MiniRt.h"
 
-typedef struct s_matrix_mult_data
-{
-	t_matrix	*m1;
-	t_matrix	*m2;
-	float		*va_list;
-	int			v_size;
-}	t_matrix_mult_data;
-
 static bool	is_valid_matrix_multiplication(t_matrix *m1, t_matrix *m2)
 {
 	if (!m1 || !m2 || m1->col != m2->row)

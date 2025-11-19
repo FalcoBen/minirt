@@ -67,16 +67,15 @@ void	assign_coor_and_vects_cone(t_tuple *origin, \
 	normal->w = 0;
 }
 
-void	obj_creator_cone(t_obj *obj, t_cone_fb *src, \
-		t_ambient_light_fb *ambient_light)
+void	obj_creator_cone(t_obj *obj, t_cone_fb *src,
+			t_ambient_light_fb *ambient_light)
 {
-	float		height;
-	t_tuple		*origin;
-	t_tuple		*normal;
-	t_matrix	*transform;
+	float			height;
+	t_tuple		 	*origin;
+	t_tuple		 	*normal;
+	t_matrix		*transform;
+	t_cone_params   params;
 
-	if (!obj || !src)
-		return ;
 	cone(&obj->cone, NULL, false);
 	obj->cone->minimum = src->minimum;
 	obj->cone->maximum = src->maximum;
@@ -85,9 +84,12 @@ void	obj_creator_cone(t_obj *obj, t_cone_fb *src, \
 	normal = alloc(sizeof(t_tuple), false);
 	assign_coor_and_vects_cone(origin, normal, src);
 	height = src->maximum - src->minimum;
+	params.angle_degrees = src->angle;
+	params.height = height;
+	params.minimum = src->minimum;
+	params.maximum = src->maximum;
 	obj->cone->origin = origin;
-	transform = create_cone_transform_v2(origin, normal, src->angle, \
-		height, src->minimum, src->maximum);
+	transform = create_cone_transform_v2(origin, normal, &params, NULL);
 	cone(&obj->cone, transform, true);
 	assigne_cone_object(obj, src, ambient_light);
 	copy_matrix_contant(obj->cone->inv);

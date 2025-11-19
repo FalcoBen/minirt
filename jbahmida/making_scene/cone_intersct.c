@@ -77,29 +77,6 @@ static void	calculate_cone_coefficients(t_nor_cone_inter *var)
 		- powf(var->local_ray.point.y, 2) + powf(var->local_ray.point.z, 2);
 }
 
-// void	cone_intersct(t_stack_intersections *xs, t_cone *cone, t_stack_ray *ray)
-// {
-// 	t_nor_cone_inter	var;
-
-// 	var.local_ray = s_transform(ray, cone->inv);
-// 	calculate_cone_coefficients(&var);
-// 	xs->count = 0;
-// 	xs->existence = false;
-// 	if (ldbl_cmp(var.a, 0.0))
-// 	{
-// 		handle_single_root_case(&var, cone, xs);
-// 	}
-// 	else
-// 	{
-// 		handle_double_root_case(&var, cone, xs);
-// 	}
-// 	intersect_caps_cone(cone, &var.local_ray, xs);
-// 	xs->existence = xs->count > 0;
-// 	if (!xs->existence)
-// 		xs->world_inters_list = NULL;
-// }
-
-
 void	cone_intersct(t_stack_intersections *xs, t_cone *cone, t_stack_ray *ray)
 {
 	t_nor_cone_inter	var;
@@ -108,31 +85,11 @@ void	cone_intersct(t_stack_intersections *xs, t_cone *cone, t_stack_ray *ray)
 	calculate_cone_coefficients(&var);
 	xs->count = 0;
 	xs->existence = false;
-	
-	// printf("\n=== CONE INTERSECTION DEBUG ===\n");
-	// printf("Cone closed flag: %d\n", cone->closed);
-	// printf("Cone min: %f, max: %f\n", cone->minimum, cone->maximum);
-	// printf("Local ray origin: (%f, %f, %f)\n", 
-	// 	var.local_ray.point.x, var.local_ray.point.y, var.local_ray.point.z);
-	// printf("Local ray direction: (%f, %f, %f)\n", 
-	// 	var.local_ray.vect.x, var.local_ray.vect.y, var.local_ray.vect.z);
-	
 	if (ldbl_cmp(var.a, 0.0))
-	{
 		handle_single_root_case(&var, cone, xs);
-	}
 	else
-	{
 		handle_double_root_case(&var, cone, xs);
-	}
-	
-	// printf("Body intersections found: %d\n", xs->count);
-	
 	intersect_caps_cone(cone, &var.local_ray, xs);
-	
-	// printf("Total intersections after caps: %d\n", xs->count);
-	// printf("=== END DEBUG ===\n\n");
-	
 	xs->existence = xs->count > 0;
 	if (!xs->existence)
 		xs->world_inters_list = NULL;

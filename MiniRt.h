@@ -647,7 +647,14 @@ void			init_cleaner(t_cleanup *cleaner);
 void			start_asigning_objects(t_scene *scene, \
 					t_objects_fb *dispatch_table, char ***tokens, int counter);
 
-t_matrix	*create_cone_transform_v2(t_tuple *position, t_tuple *axis,
-	float angle_degrees, float height, float minimum, float maximum);
-t_matrix	*rotation_axis_angle(t_tuple *axis, float angle);
+t_matrix		*create_cone_transform_v2(t_tuple *position, t_tuple *axis,
+				float angle_degrees, float height, float minimum, float maximum);
+t_matrix		*rotation_axis_angle(t_tuple *axis, float angle);
+void			check_against_null(t_canva *canva, t_scene *scene);
+bool	check_sphere_object(t_object *obj);
+bool	check_camera_and_world(t_camera *cam, t_world *world);
+bool	check_lights(t_world *world);
+bool	check_plane_object(t_object *obj);
+bool	check_cylinder_object(t_object *obj);
+
 #endif

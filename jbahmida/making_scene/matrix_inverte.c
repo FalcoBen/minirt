@@ -56,9 +56,14 @@ static t_matrix	*create_inverse_matrix(t_matrix *c, float det, int size)
 
 static bool	is_matrix_invertible(t_matrix *m, float *det)
 {
-	*det = matrix_determinant(m);
-	if (!m || fabs(*det) < 0.0001)
+	if (!m)
 		return (false);
+	*det = matrix_determinant(m);
+	if (fabs(*det) < 0.0001)
+	{
+		printf("invertible matrix\n");
+		return (false);
+	}
 	return (true);
 }
 

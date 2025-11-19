@@ -18,7 +18,10 @@ static bool	check_object_type(t_object *obj)
 	else if (obj->type == T_CYLINDRE)
 		return (check_cylinder_object(obj));
 	else if (obj->type == T_CONE)
+	{
+		puts("cone null");
 		return (check_cone_object(obj));
+	}
 	else
 		return (true);
 }
@@ -33,9 +36,15 @@ static bool	check_objects(t_world *world)
 	{
 		obj = world->objects[i];
 		if (!obj || !obj->obj)
+		{
 			return (true);
+		}
 		if (check_object_type(obj))
+		{
+			puts("--------------\n");
+
 			return (true);
+		}
 		i++;
 	}
 	return (false);

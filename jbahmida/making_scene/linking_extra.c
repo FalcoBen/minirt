@@ -43,3 +43,15 @@ void	parsing_second_part(char ***tokens, int *counter, \
 	set_scene(scene, false);
 	jassim_mlx(scene);
 }
+
+// void	clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx)
+// {
+// 	if (canva->image)
+// 		mlx_delete_image(mlx, canva->image);
+// 	if (scene)
+// 	{
+// 		free_scene(scene);
+// 		scene = NULL;
+// 	}
+// 	mlx_terminate(mlx);
+// }

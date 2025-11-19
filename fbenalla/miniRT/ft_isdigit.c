@@ -18,3 +18,23 @@ int	ft_isdigit(int c)
 		return (0);
 	return (1);
 }
+
+int	count_digits_in_number(char *str, int start)
+{
+	int	digits;
+	int	i;
+
+	digits = 0;
+	i = start;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	while (str[i])
+	{
+		if (str[i] >= '0' && str[i] <= '9')
+			digits++;
+		else
+			break ;
+		i++;
+	}
+	return (digits);
+}

@@ -27,8 +27,7 @@ static t_matrix	*get_center_offset_translation(t_tuple *axis, \
 static t_matrix	*get_position_translation(t_tuple *position)
 {
 	return (translation(position->x, position->y, position->z));
-}
-static t_matrix *apply_cone_transforms(t_tuple *position, t_tuple *axis,
+}t_matrix *apply_cone_transforms(t_tuple *position, t_tuple *axis,
 					t_cone_params *p, t_matrix *temp)
 {
 	t_matrix	*rotation;

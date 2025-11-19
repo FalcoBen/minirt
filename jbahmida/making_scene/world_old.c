@@ -15,7 +15,7 @@
 void	write_pixel(void *c)
 {
 	t_nwrite_pixel	var;
-	
+
 	printf("=== Starting render ===\n");
 	var.canva = (t_canva *)c;
 	var.y = 0;
@@ -85,18 +85,6 @@ t_camera	*create_camera(t_scene *scene)
 	cam.fov_radians = (scene->camera->angle_view * M_PI) / 180.0;
 	cam.tran = view_transformation(&cam.cam_pos, &cam.to, &cam.up);
 	return (camera(WIDTH, HEIGHT, cam.fov_radians, &cam.tran));
-}
-
-void	clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx)
-{
-	if (canva->image)
-		mlx_delete_image(mlx, canva->image);
-	if (scene)
-	{
-		free_scene(scene);
-		scene = NULL;
-	}
-	mlx_terminate(mlx);
 }
 
 void	jassim_mlx(t_scene *scene)

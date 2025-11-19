@@ -665,20 +665,22 @@ void			init_input_data(t_objects_fb *input_data);
 void			init_cleaner(t_cleanup *cleaner);
 void			start_asigning_objects(t_scene *scene, \
 					t_objects_fb *dispatch_table, char ***tokens, int counter);
-static t_matrix *apply_cone_transforms(t_tuple *position, t_tuple *axis,
+t_matrix		*apply_cone_transforms(t_tuple *position, t_tuple *axis,
                     t_cone_params *p, t_matrix *temp);
 t_matrix		*rotation_axis_angle(t_tuple *axis, float angle);
 void			check_against_null(t_canva *canva, t_scene *scene);
-bool	check_sphere_object(t_object *obj);
-bool	check_camera_and_world(t_camera *cam, t_world *world);
-bool	check_lights(t_world *world);
-bool	check_plane_object(t_object *obj);
-bool	check_cylinder_object(t_object *obj);
-t_tuple  cap_normal_max(t_cone *cone, t_tuple *p, float dist_sq);
-t_tuple  cap_normal_min(t_cone *cone, t_tuple *p, float dist_sq);
-t_tuple  side_normal(t_tuple *p, float radius);
-int  is_aligned_with_y(t_tuple *norm_axis);
-t_matrix *handle_special_cases_cone(int align_code);
-t_matrix *rotate_to_y(t_tuple *norm_axis);
-t_matrix    *get_axis_alignment_rotation(t_tuple *axis);
+bool			check_sphere_object(t_object *obj);
+bool			check_camera_and_world(t_camera *cam, t_world *world);
+bool			check_lights(t_world *world);
+bool			check_plane_object(t_object *obj);
+bool			check_cylinder_object(t_object *obj);
+t_tuple 		cap_normal_max(t_cone *cone, t_tuple *p, float dist_sq);
+t_tuple 		cap_normal_min(t_cone *cone, t_tuple *p, float dist_sq);
+t_tuple 		side_normal(t_tuple *p, float radius);
+int 			is_aligned_with_y(t_tuple *norm_axis);
+t_matrix		*handle_special_cases_cone(int align_code);
+t_matrix		*rotate_to_y(t_tuple *norm_axis);
+t_matrix		*get_axis_alignment_rotation(t_tuple *axis);
+// void			clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx);
+
 #endif

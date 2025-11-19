@@ -58,24 +58,7 @@ void	parse_number(char *str, t_parse *p)
 		}
 	}
 }
-int		count_digits_in_number(char *str, int start)
-{
-	int digits = 0;
-	int i = start;
 
-	if (str[i] == '+' || str[i] == '-')
-		i++;
-
-	while (str[i])
-	{
-		if (str[i] >= '0' && str[i] <= '9')
-			digits++;
-		else
-			break;
-		i++;
-	}
-	return (digits);
-}
 double	ft_atoi_double(char *str, t_cleanup *clean)
 {
 	t_parse	p;

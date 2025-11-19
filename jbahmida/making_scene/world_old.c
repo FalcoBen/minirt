@@ -15,7 +15,7 @@
 void	write_pixel(void *c)
 {
 	t_nwrite_pixel	var;
-
+	
 	printf("=== Starting render ===\n");
 	var.canva = (t_canva *)c;
 	var.y = 0;
@@ -99,127 +99,6 @@ void	clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx)
 	mlx_terminate(mlx);
 }
 
-static bool	check_camera_and_world(t_camera *cam, t_world *world)
-{
-	if (!cam || !cam->tran || !cam->tran_inv || !world)
-		return (true);
-	if (world->obj_num < 0 || world->light_num < 0)
-		return (true);
-	return (false);
-}
-
-static bool	check_lights(t_world *world)
-{
-	int	i;
-
-	i = 0;
-	while (i < world->light_num)
-	{
-		if (!world->lights[i] || !world->lights[i]->intensity
-			|| !world->lights[i]->position)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-static bool	check_sphere_object(t_object *obj)
-{
-	if (!obj->obj->sphere || !obj->obj->sphere->transform
-		|| !obj->obj->sphere->inv || !obj->obj->sphere->material
-		|| !obj->obj->sphere->material->color)
-		return (true);
-	return (false);
-}
-
-static bool	check_plane_object(t_object *obj)
-{
-	if (!obj->obj->plane || !obj->obj->plane->transform
-		|| !obj->obj->plane->inv || !obj->obj->plane->material
-		|| !obj->obj->plane->material->color)
-		return (true);
-	return (false);
-}
-
-static bool	check_cylinder_object(t_object *obj)
-{
-	if (!obj->obj->cylinder || !obj->obj->cylinder->transform
-		|| !obj->obj->cylinder->inv || !obj->obj->cylinder->material
-		|| !obj->obj->cylinder->material->color)
-		return (true);
-	return (false);
-}
-
-static bool	check_cone_object(t_object *obj)
-{
-	if (!obj->obj->cone || !obj->obj->cone->transform
-		|| !obj->obj->cone->inv || !obj->obj->cone->material
-		|| !obj->obj->cone->material->color)
-		return (true);
-	return (false);
-}
-
-static bool	check_object_type(t_object *obj)
-{
-	if (obj->type == T_SPHERE)
-		return (check_sphere_object(obj));
-	else if (obj->type == T_PLAN)
-		return (check_plane_object(obj));
-	else if (obj->type == T_CYLINDRE)
-		return (check_cylinder_object(obj));
-	else if (obj->type == T_CONE)
-		return (check_cone_object(obj));
-	else
-		return (true);
-}
-
-static bool	check_objects(t_world *world)
-{
-	int			i;
-	t_object	*obj;
-
-	i = 0;
-	while (i < world->obj_num)
-	{
-		obj = world->objects[i];
-		if (!obj || !obj->obj)
-			return (true);
-		if (check_object_type(obj))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-static void	handle_null_error(t_canva *canva, t_scene *scene)
-{
-	fprintf(stderr, "Error: Null pointer detected in scene data\n");
-	if (canva->image)
-		mlx_delete_image(canva->mlx, canva->image);
-	if (scene)
-	{
-		free_scene(scene);
-		scene = NULL;
-	}
-	mlx_terminate(canva->mlx);
-	alloc(0, true);
-	exit(1);
-}
-
-void	check_against_null(t_canva *canva, t_scene *scene)
-{
-	bool	flag;
-
-	flag = false;
-	flag = check_camera_and_world(canva->cam, canva->world);
-	if (!flag && canva->world->lights)
-		flag = check_lights(canva->world);
-	if (!flag && canva->world->objects)
-		flag = check_objects(canva->world);
-	if (flag)
-		handle_null_error(canva, scene);
-}
-
 void	jassim_mlx(t_scene *scene)
 {
 	mlx_t	*mlx;
@@ -236,8 +115,6 @@ void	jassim_mlx(t_scene *scene)
 	w = s_world(scene);
 	canva.world = &w;
 	canva.cam = create_camera(scene);
-	check_against_null(&canva, scene);
-	printf("%p\n", canva.cam->tran_inv);
 	write_pixel((void *)&canva);
 	mlx_image_to_window(canva.mlx, canva.image, 0, 0);
 	mlx_key_hook(mlx, &close_window, &canva);

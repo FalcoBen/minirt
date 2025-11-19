@@ -9,7 +9,6 @@ INCLUDES	= -I. -I../../ -I../tupeles_test_rm
 # MLX42 library
 MLX42		= ../libmlx42.a
 MLX_FLAGS	= -ldl -lglfw -pthread -lm
-
 # Source files
 SRCS		= making_scene/world.c \
 			  making_scene/world_2.c \
@@ -105,7 +104,7 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(OBJS) $(MLX42) $(MLX_FLAGS) -o $(NAME)
 	@echo "$(GREEN)✓ $(NAME) compiled successfully!$(RESET)"
 
-%.o: %.c
+%.o: %.c  
 	@echo "$(YELLOW)Compiling $<...$(RESET)"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
@@ -114,7 +113,7 @@ clean:
 	@rm -f $(OBJS)
 	@echo "$(GREEN)✓ Object files cleaned!$(RESET)"
 
-fclean: clean
+fclean: clean 
 	@echo "$(RED)Removing $(NAME)...$(RESET)"
 	@rm -f $(NAME)
 	@echo "$(GREEN)✓ $(NAME) removed!$(RESET)"

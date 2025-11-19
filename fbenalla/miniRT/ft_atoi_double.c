@@ -58,16 +58,37 @@ void	parse_number(char *str, t_parse *p)
 		}
 	}
 }
+int		count_digits_in_number(char *str, int start)
+{
+	int digits = 0;
+	int i = start;
 
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+
+	while (str[i])
+	{
+		if (str[i] >= '0' && str[i] <= '9')
+			digits++;
+		else
+			break;
+		i++;
+	}
+	return (digits);
+}
 double	ft_atoi_double(char *str, t_cleanup *clean)
 {
 	t_parse	p;
+	int		total_digits;
 
 	if (!str)
 		return (clean->flag_exit = true, -1);
 	init_parse(&p);
 	while ((str[p.i] >= 9 && str[p.i] <= 13) || str[p.i] == 32)
 		p.i++;
+	total_digits = count_digits_in_number(str, p.i);
+	if (total_digits > 7)
+		return (clean->flag_exit = true, -1);
 	if (str[p.i] == '+' || str[p.i] == '-')
 		if (str[p.i++] == '-')
 			p.signe++;

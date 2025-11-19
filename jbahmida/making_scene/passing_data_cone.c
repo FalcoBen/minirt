@@ -67,31 +67,6 @@ void	assign_coor_and_vects_cone(t_tuple *origin, \
 	normal->w = 0;
 }
 
-// void	obj_creator_cone(t_obj *obj, t_cone_fb *src, \
-// 		t_ambient_light_fb *ambient_light)
-// {
-// 	float		radius;
-// 	float		height;
-// 	t_tuple		*origin;
-// 	t_tuple		*normal;
-// 	t_matrix	*transform;
-
-// 	if (!obj || !src)
-// 		return ;
-// 	cone(&obj->cone, NULL, false);
-// 	radius = src->maximum / 2.0;
-// 	obj->cone->angle = src->angle;
-// 	origin = alloc(sizeof(t_tuple), false);
-// 	normal = alloc(sizeof(t_tuple), false);
-// 	assign_coor_and_vects_cone(origin, normal, src);
-// 	height = src->maximum - src->minimum;
-// 	obj->cone->origin = origin;
-// 	transform = create_cone_transform(origin, normal, obj->cone->angle, height);
-// 	cone(&obj->cone, transform, true);
-// 	assigne_cone_object(obj, src, ambient_light);
-// 	copy_matrix_contant(obj->cone->inv);
-// 	copy_matrix_contant(obj->cone->transform);
-// }
 void	obj_creator_cone(t_obj *obj, t_cone_fb *src, \
 		t_ambient_light_fb *ambient_light)
 {
@@ -102,94 +77,99 @@ void	obj_creator_cone(t_obj *obj, t_cone_fb *src, \
 
 	if (!obj || !src)
 		return ;
-	
-	// printf("\n### CREATING CONE ###\n");
-	// printf("Position: (%f, %f, %f)\n", 
-	// 	src->coor_cone->x, src->coor_cone->y, src->coor_cone->z);
-	// printf("Direction: (%f, %f, %f)\n",
-	// 	src->vector_cone->x, src->vector_cone->y, src->vector_cone->z);
-	// printf("Min: %f, Max: %f, Angle: %f, Closed: %d\n",
-	// 	src->minimum, src->maximum, src->angle, src->closed_flag);
-	
 	cone(&obj->cone, NULL, false);
-	
-	// First set the min/max on the cone object
 	obj->cone->minimum = src->minimum;
 	obj->cone->maximum = src->maximum;
 	obj->cone->closed = src->closed_flag;
-	
 	origin = alloc(sizeof(t_tuple), false);
 	normal = alloc(sizeof(t_tuple), false);
 	assign_coor_and_vects_cone(origin, normal, src);
 	height = src->maximum - src->minimum;
 	obj->cone->origin = origin;
-	
-	// Now create transform with access to min/max
-	transform = create_cone_transform_v2(origin, normal, src->angle, 
+	transform = create_cone_transform_v2(origin, normal, src->angle, \
 		height, src->minimum, src->maximum);
-	
 	cone(&obj->cone, transform, true);
 	assigne_cone_object(obj, src, ambient_light);
-	
-	// printf("Final cone: min=%f, max=%f, closed=%d\n",
-	// 	obj->cone->minimum, obj->cone->maximum, obj->cone->closed);
-	// printf("### END CONE CREATION ###\n\n");
-	
 	copy_matrix_contant(obj->cone->inv);
 	copy_matrix_contant(obj->cone->transform);
 }
 
-t_matrix	*create_cone_transform_v2(t_tuple *position, t_tuple *axis,
-	float angle_degrees, float height, float minimum, float maximum)
+static t_matrix	*get_axis_alignment_rotation(t_tuple *axis)
 {
-	t_nor_cone_tran	var;
-	float			angle_radians;
-	float			scale_xz;
-	float			center_offset;
-	t_tuple			offset_vec;
+	t_tuple		default_y = {0, 1, 0, 0};
+	t_tuple		norm_axis = *axis;
+	float		dot;
 
-	var.normalized_axis = *axis;
-	s_vec_norm(&var.normalized_axis);
-	
-	var.default_y = (t_tuple){0, 1, 0, 0};
-	var.dot = dot_product(&var.default_y, &var.normalized_axis);
-	var.dot = fmax(fmin(var.dot, 1.0), -1.0);
-	
-	var.rotation = NULL;
-	if (fabs(var.dot - 1.0) < 1e-3)
-		var.rotation = identity_matrix(4, 4);
-	else if (fabs(var.dot + 1.0) < 1e-3)
-		var.rotation = rotation_x(M_PI);
+	s_vec_norm(&norm_axis);
+	dot = dot_product(&default_y, &norm_axis);
+	dot = fmax(fmin(dot, 1.0), -1.0);
+
+	if (fabs(dot - 1.0) < 1e-3)
+		return (identity_matrix(4, 4));
+	else if (fabs(dot + 1.0) < 1e-3)
+		return (rotation_x(M_PI));
 	else
 	{
-		var.rot_axis = *cross_product(&var.default_y, &var.normalized_axis);
-		s_vec_norm(&var.rot_axis);
-		var.angle = acos(var.dot);
-		var.rotation = rotation_axis_angle(&var.rot_axis, var.angle);
+		t_tuple	cross = *cross_product(&default_y, &norm_axis);
+		t_tuple	rot_axis;
+		float	angle;
+
+		s_vec_norm(&cross);
+		rot_axis = cross;
+		angle = acos(dot);
+		return (rotation_axis_angle(&rot_axis, angle));
 	}
-	
-	angle_radians = angle_degrees * M_PI / 180.0;
-	scale_xz = tanf(angle_radians);
-	
-	var.scale = scaling(scale_xz, height / 2.0, scale_xz);
-	
-	// The cone in object space goes from minimum to maximum
-	// Its center is at (minimum + maximum) / 2
-	center_offset = (maximum + minimum) / 2.0;
-	offset_vec = var.normalized_axis;
-	s_scalar_mult(&offset_vec, offset_vec, center_offset * (height / 2.0));
-	
-	var.trans = translation(
-		position->x + offset_vec.x, 
-		position->y + offset_vec.y, 
-		position->z + offset_vec.z
-	);
-	
-	var.temp = matrix_multi(var.trans, var.rotation);
-	var.result = matrix_multi(var.temp, var.scale);
-	copy_matrix_contant(var.result);
-	return (var.result);
 }
+
+static t_matrix	*get_cone_scale_matrix(float angle_degrees, float height)
+{
+	float	angle_radians = angle_degrees * M_PI / 180.0f;
+	float	scale_xz = tanf(angle_radians);
+
+	return (scaling(scale_xz, height / 2.0f, scale_xz));
+}
+
+static t_matrix	*get_center_offset_translation(t_tuple *axis, float minimum, float maximum, float height)
+{
+	float	center_offset = (maximum + minimum) / 2.0f;
+	t_tuple	offset_vec = *axis;
+
+	s_vec_norm(&offset_vec);
+	s_scalar_mult(&offset_vec, offset_vec, center_offset * (height / 2.0f));
+
+	return (translation(offset_vec.x, offset_vec.y, offset_vec.z));
+}
+
+static t_matrix	*get_position_translation(t_tuple *position)
+{
+	return (translation(position->x, position->y, position->z));
+}
+
+t_matrix	*create_cone_transform_v2(t_tuple *position, t_tuple *axis,
+		float angle_degrees, float height, float minimum, float maximum)
+{
+	t_matrix	*rotation;
+	t_matrix	*scale;
+	t_matrix	*center_offset;
+	t_matrix	*trans_to_pos;
+	t_matrix	*temp;
+
+	rotation       = get_axis_alignment_rotation(axis);
+	scale          = get_cone_scale_matrix(angle_degrees, height);
+	center_offset  = get_center_offset_translation(axis, minimum, maximum, height);
+	trans_to_pos   = get_position_translation(position);
+
+	// T_position + T_center_offset
+	temp   = matrix_multi(trans_to_pos, center_offset);
+	// (T_position + T_center_offset) × Rotation
+	temp   = matrix_multi(temp, rotation);
+	// Final: (T_position + T_center_offset) × R × S
+	temp   = matrix_multi(temp, scale);
+
+	copy_matrix_contant(temp);
+	return (temp);
+}
+
 
 void	s_world_cone_constractor(t_world *world, t_scene *scene, int *i)
 {

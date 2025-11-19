@@ -1,5 +1,5 @@
-#include "MiniRt.h"
-#include "garbage_collector/my_malloc.h"
+#include "../../MiniRt.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	reading_from_scene(int fd, t_container **head, int *counter)
 {

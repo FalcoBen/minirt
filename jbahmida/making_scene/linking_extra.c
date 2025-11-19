@@ -1,5 +1,5 @@
-#include "MiniRt.h"
-#include "garbage_collector/my_malloc.h"
+#include "../../MiniRt.h"
+#include "../../garbage_collector/my_malloc.h"
 
 void	init_input_data(t_objects_fb *input_data)
 {

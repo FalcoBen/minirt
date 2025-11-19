@@ -16,11 +16,11 @@
 # include "../../MLX42.h"
 # include "../get_next_line/get_next_line.h"
 
+
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
 # include <limits.h>
-// # include <string.h>
 # include <stdio.h>
 # include <stdbool.h>
 

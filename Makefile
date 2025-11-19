@@ -7,7 +7,8 @@ CFLAGS		= -g3 -O3 -Ofast -ffast-math -mfpmath=sse -fno-math-errno
 # INCLUDES	= -I. -I../../ -I../tupeles_test_rm
 
 # MLX42 library
-HEADER = miniRT.h
+HEADER = MiniRt.h \
+		 fbenalla/miniRT/parsing.h
 MLX42		= libmlx42.a
 MLX_FLAGS	= -ldl -lglfw -pthread -lm
 # Source files
@@ -58,7 +59,8 @@ SRCS		= jbahmida/making_scene/world.c \
 				fbenalla/miniRT/split_white_apces.c \
 				fbenalla/get_next_line/get_next_line_utils.c \
 				fbenalla/get_next_line/get_next_line.c \
-				linking.c \
+				jbahmida/making_scene/linking.c \
+				jbahmida/making_scene/linking_extra.c \
 				jbahmida/making_scene/passing_data.c\
 				fbenalla/miniRT/textures.c \
 				fbenalla/miniRT/plane_create.c \
@@ -86,7 +88,6 @@ SRCS		= jbahmida/making_scene/world.c \
 				jbahmida/making_scene/passing_data_pl.c \
 				jbahmida/making_scene/passing_data_sp.c \
 				jbahmida/making_scene/bump_map_extra.c \
-				linking_extra.c \
 				jbahmida/making_scene/passing_data_cone_extra.c \
 				jbahmida/making_scene/null_check_extra.c \
 				jbahmida/making_scene/null_check.c \
@@ -103,9 +104,9 @@ YELLOW		= \033[0;33m
 RESET		= \033[0m
 
 # Rules
-all: $(NAME)
+all: $(NAME) 
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) 
 	@echo "$(BLUE)Linking $(NAME)...$(RESET)"
 	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(OBJS) $(MLX42) $(MLX_FLAGS) -o $(NAME)
 	@echo "$(GREEN)✓ $(NAME) compiled successfully!$(RESET)"

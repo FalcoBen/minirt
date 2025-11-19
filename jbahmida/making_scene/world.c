@@ -14,9 +14,9 @@
 
 void	write_pixel(void *c)
 {
-	printf("=== Starting render ===\n");
 	t_nwrite_pixel	var;
-
+	
+	printf("=== Starting render ===\n");
 	var.canva = (t_canva *)c;
 	var.y = 0;
 	while (var.y < var.canva->cam->vsize)
@@ -56,6 +56,7 @@ void	close_window(mlx_key_data_t keydata, void *param)
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
 		mlx_close_window(d->mlx);
+		printf("Closing window normally.\n");
 	}
 }
 
@@ -86,6 +87,18 @@ t_camera	*create_camera(t_scene *scene)
 	return (camera(WIDTH, HEIGHT, cam.fov_radians, &cam.tran));
 }
 
+void	clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx)
+{
+	if (canva->image)
+		mlx_delete_image(mlx, canva->image);
+	if (scene)
+	{
+		free_scene(scene);
+		scene = NULL;
+	}
+	mlx_terminate(mlx);
+}
+
 void	jassim_mlx(t_scene *scene)
 {
 	mlx_t	*mlx;
@@ -106,14 +119,6 @@ void	jassim_mlx(t_scene *scene)
 	mlx_image_to_window(canva.mlx, canva.image, 0, 0);
 	mlx_key_hook(mlx, &close_window, &canva);
 	mlx_loop(mlx);
-	printf("Closing window normally.\n");
-	if (canva.image)
-		mlx_delete_image(mlx, canva.image);
-	if (scene)
-	{
-		free_scene(scene);
-		scene = NULL;
-	}
-	mlx_terminate(mlx);
+	clean_textures(scene, &canva, mlx);
 	alloc(0, true);
 }

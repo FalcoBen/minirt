@@ -71,6 +71,25 @@ static void	p_c_normalev(t_comp *new)
 	return ;
 }
 
+// t_comp	prepare_computations(t_inters *intersection, t_stack_ray *ray)
+// {
+// 	t_comp	new;
+// 	t_tuple	scaled_normal;
+
+// 	new = (t_comp){NULL, T_SPHERE, {0, 0, 0, 0}, {0, 0, 0, 0},
+// 	{0, 0, 0, 0}, {0, 0, 0, 0}, NULL, 0, false};
+// 	if (!intersection || !ray)
+// 		return (new);
+// 	decide_object(&new, intersection);
+// 	new.point = s_position(ray, intersection->inters_value);
+// 	new.eyev = s_neg_t(ray->vect);
+// 	p_c_normalev(&new);
+// 	s_scalar_mult(&scaled_normal, new.normalv, SHADOW_EPSILON);
+// 	s_add_t(&new.over_point, new.point, scaled_normal);
+// 	return (new);
+// }
+
+
 t_comp	prepare_computations(t_inters *intersection, t_stack_ray *ray)
 {
 	t_comp	new;
@@ -84,6 +103,8 @@ t_comp	prepare_computations(t_inters *intersection, t_stack_ray *ray)
 	new.point = s_position(ray, intersection->inters_value);
 	new.eyev = s_neg_t(ray->vect);
 	p_c_normalev(&new);
+	
+	// DEBUG: Print the epsilon offset
 	s_scalar_mult(&scaled_normal, new.normalv, SHADOW_EPSILON);
 	s_add_t(&new.over_point, new.point, scaled_normal);
 	return (new);

@@ -36,8 +36,8 @@
 
 // # define WIDTH 4480
 // # define HEIGHT 2520
-# define WIDTH 100
-# define HEIGHT 100
+# define WIDTH 1800
+# define HEIGHT 1400
 // # define WIDTH 2200
 // # define HEIGHT 1800
 // #define WIDTH 100
@@ -121,6 +121,7 @@ typedef struct s_cone
 	t_matrix	*inv;
 	t_material	*material;
 	bool		closed;
+    float       angle;
 }	t_cone;
 
 typedef union s_obj
@@ -341,8 +342,9 @@ typedef struct n_nor_cy_tran
 	t_matrix	*trans;
 	t_matrix	*temp;
 	t_matrix	*result;
-	float		dot;
 	float		angle;
+	float		dot;
+
 }t_nor_cy_tran;
 
 typedef struct n_nor_cy_nor
@@ -398,12 +400,15 @@ typedef struct n_nor_roft
 typedef struct n_nor_cone_tran
 {
 	t_tuple		normalized_axis;
+	t_tuple		rot_axis;
 	t_tuple		default_y;
 	t_matrix	*rotation;
 	t_matrix	*scale;
 	t_matrix	*trans;
 	t_matrix	*temp;
 	t_matrix	*result;
+		float		dot;
+	float		angle;
 }	t_nor_cone_tran;
 
 typedef struct n_nor_lighting
@@ -642,4 +647,7 @@ void			init_cleaner(t_cleanup *cleaner);
 void			start_asigning_objects(t_scene *scene, \
 					t_objects_fb *dispatch_table, char ***tokens, int counter);
 
+t_matrix	*create_cone_transform_v2(t_tuple *position, t_tuple *axis,
+	float angle_degrees, float height, float minimum, float maximum);
+t_matrix	*rotation_axis_angle(t_tuple *axis, float angle);
 #endif

@@ -24,7 +24,6 @@ bool	verify_double_number(char *str, int i)
 {
 	if (!count_dot(str, i))
 	{
-		puts("here\n");
 		return (false);
 	}
 	while (str[i])

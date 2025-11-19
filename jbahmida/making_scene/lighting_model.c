@@ -78,3 +78,50 @@ t_color	s_lighting(t_world *world, t_comp *comp, t_nor_shade_hit var)
 	local.tmp = s_color_add(&local.ambient, &local.diffuse);
 	return (s_color_add(&local.tmp, &local.specular));
 }
+
+
+// t_color	s_lighting(t_world *world, t_comp *comp, t_nor_shade_hit var)
+// {
+// 	t_nor_s_lighting	local;
+
+// 	local.material = var.temp_material;
+// 	local.light = *(world->lights[var.i]);
+// 	local.effective_color = s_hadamard(local.material.color,
+// 			local.light.intensity);
+// 	local.normalv = comp->normalv;
+// 	local.eyev = comp->eyev;
+	
+// 	// Debug: Check for problematic normals
+// 	float normal_mag = sqrtf(local.normalv.x * local.normalv.x + 
+// 							 local.normalv.y * local.normalv.y + 
+// 							 local.normalv.z * local.normalv.z);
+// 	if (normal_mag < 0.99 || normal_mag > 1.01)
+// 	{
+// 		printf("⚠️ WARNING: Normal not normalized! mag=%f, normal=(%f,%f,%f)\n",
+// 			normal_mag, local.normalv.x, local.normalv.y, local.normalv.z);
+// 	}
+	
+// 	if (var.shadowed)
+// 	{
+// 		printf("🔴 Point is shadowed at (%f,%f,%f), normal=(%f,%f,%f)\n",
+// 			comp->point.x, comp->point.y, comp->point.z,
+// 			local.normalv.x, local.normalv.y, local.normalv.z);
+// 		return (calculate_ambient(&local.effective_color, &local.material));
+// 	}
+	
+// 	get_light_vector(&local, &comp->over_point);
+	
+// 	float light_dot_normal = dot_product(&local.lightv, &local.normalv);
+// 	if (light_dot_normal < 0)
+// 	{
+// 		printf("🔴 Negative dot product! dot=%f, normal=(%f,%f,%f), lightv=(%f,%f,%f)\n",
+// 			light_dot_normal, local.normalv.x, local.normalv.y, local.normalv.z,
+// 			local.lightv.x, local.lightv.y, local.lightv.z);
+// 	}
+	
+// 	local.ambient = calculate_ambient(&local.effective_color, &local.material);
+// 	local.diffuse = calculate_diffuse(&local);
+// 	local.specular = calculate_specular(&local);
+// 	local.tmp = s_color_add(&local.ambient, &local.diffuse);
+// 	return (s_color_add(&local.tmp, &local.specular));
+// }

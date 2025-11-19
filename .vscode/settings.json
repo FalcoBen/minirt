@@ -73,7 +73,8 @@
     "fcntl.h": "c",
     "limits.h": "c",
     "parsing.h": "c",
-    "my_malloc.h": "c"
+    "my_malloc.h": "c",
+    "random": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }

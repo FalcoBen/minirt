@@ -18,7 +18,6 @@ void	sphere_linked_list(t_sphere_fb *new_sphere, t_scene *scene)
 
 	if (scene->sphere == NULL)
 	{
-		puts("in if spher\n");
 		scene->sphere = new_sphere;
 	}
 	else

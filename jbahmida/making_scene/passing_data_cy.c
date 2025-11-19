@@ -99,18 +99,8 @@ void	s_world_cylinder_constractor(t_world *world, t_scene *scene, int *i)
 	while (cuurent_cylinder && *i < world->obj_num)
 	{
 		world->objects[*i] = alloc(sizeof(t_object), false);
-		if (!world->objects[*i])
-		{
-			fprintf(stderr, "Failed to allocate object  cylinder %d\n", *i);
-			exit(1);
-		}
 		world->objects[*i]->type = T_CYLINDRE;
 		world->objects[*i]->obj = alloc(sizeof(t_obj), false);
-		if (!world->objects[*i]->obj)
-		{
-			fprintf(stderr, "Failed to allocate obj  cylinder %d\n", *i);
-			exit(1);
-		}
 		obj_creator_cylinder(world->objects[*i]->obj, \
 				cuurent_cylinder, scene->ambient_light);
 		world->objects[*i]->obj->cylinder->id = *i;

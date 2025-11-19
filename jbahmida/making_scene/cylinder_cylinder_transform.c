@@ -116,4 +116,3 @@ t_matrix	*create_cylinder_transform(t_tuple *position, t_tuple *axis,
 	copy_matrix_contant(var.result);
 	return (var.result);
 }
-

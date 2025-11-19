@@ -92,18 +92,8 @@ void	s_world_plane_constractor(t_world *world, t_scene *scene, int *i)
 	while (current_plane && *i < world->obj_num)
 	{
 		world->objects[*i] = alloc(sizeof(t_object), false);
-		if (!world->objects[*i])
-		{
-			fprintf(stderr, "Failed to allocate object  plane %d\n", *i);
-			exit(1);
-		}
 		world->objects[*i]->type = T_PLAN;
 		world->objects[*i]->obj = alloc(sizeof(t_obj), false);
-		if (!world->objects[*i]->obj)
-		{
-			fprintf(stderr, "Failed to allocate obj  plane %d\n", *i);
-			exit(1);
-		}
 		obj_creator_plane(world->objects[*i]->obj, \
 				current_plane, scene->ambient_light);
 		world->objects[*i]->obj->plane->id = *i;

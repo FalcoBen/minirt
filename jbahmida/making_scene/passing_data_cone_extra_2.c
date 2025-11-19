@@ -1,21 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   passing_data_cone_extra_2.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbahmida <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:35:05 by jbahmida          #+#    #+#             */
+/*   Updated: 2025/11/19 19:35:06 by jbahmida         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../MiniRt.h"
 #include "../../fbenalla/miniRT/parsing.h"
 
-int  is_aligned_with_y(t_tuple *norm_axis)
+int	is_aligned_with_y(t_tuple *norm_axis)
 {
-	t_tuple	default_y = {0, 1, 0, 0};
+	t_tuple	default_y;
 	float	dot;
 
+	default_y = (t_tuple){0, 1, 0, 0};
 	dot = dot_product(&default_y, norm_axis);
 	dot = fmax(fmin(dot, 1.0), -1.0);
-	if (fabsf(dot - 1.0f) < (1e-3f))
+	if (fabsf(dot - 1.0f) < (1e-3))
 		return (1);
-	if (fabsf(dot + 1.0f) < 1e-3f)
+	if (fabsf(dot + 1.0f) < 1e-3)
 		return (-1);
 	return (0);
 }
 
-t_matrix *handle_special_cases_cone(int align_code)
+t_matrix	*handle_special_cases_cone(int align_code)
 {
 	if (align_code == 1)
 		return (identity_matrix(4, 4));
@@ -24,13 +37,14 @@ t_matrix *handle_special_cases_cone(int align_code)
 	return (NULL);
 }
 
-t_matrix *rotate_to_y(t_tuple *norm_axis)
+t_matrix	*rotate_to_y(t_tuple *norm_axis)
 {
-	t_tuple	default_y = {0, 1, 0, 0};
+	t_tuple	default_y;
 	t_tuple	cross;
 	t_tuple	rot_axis;
 	float	angle;
 
+	default_y = (t_tuple){0, 1, 0, 0};
 	cross = *cross_product(&default_y, norm_axis);
 	s_vec_norm(&cross);
 	rot_axis = cross;

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../fbenalla/miniRT/parsing.h"
-#include "../MiniRt.h"
+#include "../../MiniRt.h"
 
 void	checker_textures_sp(t_obj *obj, t_sphere_fb *src)
 {

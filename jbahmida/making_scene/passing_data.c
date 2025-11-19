@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../MiniRt.h"
+#include "../../MiniRt.h"
 #include "../../fbenalla/miniRT/parsing.h"
 
 void	loop_lights(t_world *world, t_light_fb *current_light, int *i)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../MiniRt.h"
+#include "../../MiniRt.h"
 #include "../../fbenalla/miniRT/parsing.h"
 
 void	checker_textures_cone(t_obj *obj, t_cone_fb *src)

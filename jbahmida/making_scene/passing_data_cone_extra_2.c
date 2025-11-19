@@ -1,4 +1,4 @@
-#include "../MiniRt.h"
+#include "../../MiniRt.h"
 #include "../../fbenalla/miniRT/parsing.h"
 
 int  is_aligned_with_y(t_tuple *norm_axis)

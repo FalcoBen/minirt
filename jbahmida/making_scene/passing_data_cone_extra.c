@@ -1,4 +1,4 @@
-#include "../MiniRt.h"
+#include "../../MiniRt.h"
 #include "../../fbenalla/miniRT/parsing.h"
 
 static t_matrix	*get_cone_scale_matrix(float angle_degrees, float height)

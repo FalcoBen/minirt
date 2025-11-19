@@ -118,7 +118,6 @@ void	jassim_mlx(t_scene *scene)
 	canva.world = &w;
 	canva.cam = create_camera(scene);
 	check_against_null(&canva, scene);
-	printf("%p\n", canva.cam->tran_inv);
 	write_pixel((void *)&canva);
 	mlx_image_to_window(canva.mlx, canva.image, 0, 0);
 	mlx_key_hook(mlx, &close_window, &canva);

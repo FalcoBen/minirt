@@ -13,7 +13,7 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-# include "../../MLX42/include/MLX42/MLX42.h"
+# include "../../MLX42.h"
 # include "../get_next_line/get_next_line.h"
 
 # include <unistd.h>

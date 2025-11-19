@@ -7,7 +7,7 @@ int  is_aligned_with_y(t_tuple *norm_axis)
 	float	dot;
 
 	dot = dot_product(&default_y, norm_axis);
-	dot = fmax(fmin(dot, 1.0f), -1.0f);
+	dot = fmax(fmin(dot, 1.0), -1.0);
 	if (fabsf(dot - 1.0f) < (1e-3f))
 		return (1);
 	if (fabsf(dot + 1.0f) < 1e-3f)

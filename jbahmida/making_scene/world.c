@@ -87,20 +87,6 @@ t_camera	*create_camera(t_scene *scene)
 	return (camera(WIDTH, HEIGHT, cam.fov_radians, &cam.tran));
 }
 
-void	clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx)
-{
-	if (canva->image)
-		mlx_delete_image(mlx, canva->image);
-	if (scene)
-	{
-		free_scene(scene);
-		scene = NULL;
-	}
-	mlx_terminate(mlx);
-}
-
-
-
 void	jassim_mlx(t_scene *scene)
 {
 	mlx_t	*mlx;

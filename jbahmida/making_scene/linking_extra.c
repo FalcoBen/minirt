@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   linking_extra.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbenalla <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 18:28:16 by fbenalla          #+#    #+#             */
+/*   Updated: 2025/11/19 18:28:18 by fbenalla         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../MiniRt.h"
 #include "../../garbage_collector/my_malloc.h"
 
@@ -44,14 +56,14 @@ void	parsing_second_part(char ***tokens, int *counter, \
 	jassim_mlx(scene);
 }
 
-// void	clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx)
-// {
-// 	if (canva->image)
-// 		mlx_delete_image(mlx, canva->image);
-// 	if (scene)
-// 	{
-// 		free_scene(scene);
-// 		scene = NULL;
-// 	}
-// 	mlx_terminate(mlx);
-// }
+void	clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx)
+{
+	if (canva->image)
+		mlx_delete_image(mlx, canva->image);
+	if (scene)
+	{
+		free_scene(scene);
+		scene = NULL;
+	}
+	mlx_terminate(mlx);
+}

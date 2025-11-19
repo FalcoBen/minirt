@@ -21,7 +21,7 @@
 #  define M_PI 3.1415926535897932384626433
 # endif
 # define SHADOW_EPSILON 0.00020f
-
+// # define ALIGNMENT_EPSILON 1e-3F
 # define INTER_EPSILON 1e-6
 # include <stdio.h>
 # include <stdlib.h>
@@ -681,6 +681,6 @@ int 			is_aligned_with_y(t_tuple *norm_axis);
 t_matrix		*handle_special_cases_cone(int align_code);
 t_matrix		*rotate_to_y(t_tuple *norm_axis);
 t_matrix		*get_axis_alignment_rotation(t_tuple *axis);
-// void			clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx);
+void			clean_textures(t_scene *scene, t_canva *canva, mlx_t *mlx);
 
 #endif

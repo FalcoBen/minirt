@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   null_check.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbenalla <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 18:28:58 by fbenalla          #+#    #+#             */
+/*   Updated: 2025/11/19 18:29:00 by fbenalla         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../MiniRt.h"
 
 static bool	check_cone_object(t_object *obj)
@@ -41,8 +53,6 @@ static bool	check_objects(t_world *world)
 		}
 		if (check_object_type(obj))
 		{
-			puts("--------------\n");
-
 			return (true);
 		}
 		i++;
@@ -52,7 +62,7 @@ static bool	check_objects(t_world *world)
 
 static void	handle_null_error(t_canva *canva, t_scene *scene)
 {
-	fprintf(stderr, "Error: Null pointer detected in scene data\n");
+	printf("Error: Null pointer detected in scene data\n");
 	if (canva->image)
 		mlx_delete_image(canva->mlx, canva->image);
 	if (scene)
